@@ -16,6 +16,8 @@ import math
 import re
 from typing import Dict, Any, Optional, List
 
+from services.sequence_metrics import gc_content as _compute_gc_content
+
 logger = logging.getLogger(__name__)
 
 
@@ -26,14 +28,6 @@ def _classify_score(value: float, low_thresh: float, high_thresh: float) -> str:
         return "Moderate"
     else:
         return "Low"
-
-
-def _compute_gc_content(seq: str) -> float:
-    if not seq:
-        return 0.0
-    seq = seq.upper()
-    gc = seq.count("G") + seq.count("C")
-    return round((gc / len(seq)) * 100, 1) if seq else 0.0
 
 
 
@@ -273,7 +267,6 @@ def _project_to_2d(descriptors: Dict[str, Any]) -> Dict[str, Any]:
         "x": max(-2.5, min(2.5, x)),
         "y": max(-2.5, min(2.5, y)),
         "method": "descriptor-projection",
-        "varianceExplained": {"axis1": 0.60, "axis2": 0.25},
     }
 
 def _compute_immunogenicity_risk(seq: str) -> Dict[str, Any]:

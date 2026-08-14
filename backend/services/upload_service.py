@@ -8,6 +8,8 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
+from services.sequence_metrics import gc_content as _gc_content
+
 # ---------------------------------------------------------------------------
 # IUPAC sets
 # ---------------------------------------------------------------------------
@@ -44,11 +46,6 @@ def _detect_type(seq: str) -> str:
             return "protein"
         return "dna"
     return "unknown"
-
-
-def _gc_content(seq: str) -> float:
-    gc = sum(1 for b in seq if b in "GCgc")
-    return round(gc / len(seq) * 100, 1) if seq else 0.0
 
 
 def _find_invalid_chars(seq: str, seq_type: str) -> List[str]:

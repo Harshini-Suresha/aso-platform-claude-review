@@ -7,6 +7,8 @@ from typing import Optional
 
 import requests
 
+from services.sequence_metrics import gc_content as _gc_content
+
 logger = logging.getLogger(__name__)
 
 
@@ -288,9 +290,8 @@ def _compute_aso_metrics_from_sequence(seq: str, result: dict) -> None:
 
     result["codonUsageBias"] = _compute_codon_usage_bias(seq)
 
-    gc_count = seq.count("G") + seq.count("C")
-    gc_content = (gc_count / seq_len) * 100 if seq_len > 0 else 50
-    accessibility = max(0, min(100, 100 - gc_content + 20))
+    gc_pct = _gc_content(seq) if seq_len > 0 else 50
+    accessibility = max(0, min(100, 100 - gc_pct + 20))
     if accessibility >= 60:
         result["structuralAccessibility"] = f"{accessibility:.0f}% (Favorable)"
     elif accessibility >= 45:

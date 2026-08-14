@@ -728,6 +728,13 @@ export default function MechanismSelectionPage() {
                 deliveryContext,
               }
             : {}),
+          ...(selectedGoal === "TG04"
+            ? {
+                spliceDefectType,
+                targetExon,
+                deliveryContext,
+              }
+            : {}),
           ...(selectedGoal === "TG03"
             ? {
                 editType,

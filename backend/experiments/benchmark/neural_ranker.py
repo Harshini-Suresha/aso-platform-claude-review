@@ -86,23 +86,49 @@ class ChemConditionedRanker(nn.Module):
         return self.head(x).squeeze(-1)
 
 
-def build_pairs(df: pd.DataFrame, rng: np.random.Generator, n_pairs: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Sample within-table pairs (i, j) where rank_label_i > rank_label_j."""
+def build_pairs(df: pd.DataFrame, rng: np.random.Generator, n_pairs: int) -> tuple[np.ndarray, np.ndarray]:
+    """Sample within-table pairs (i, j) where rank_label_i > rank_label_j.
+
+    Tables are drawn stratified by modality — a modality is chosen uniformly
+    first, then a table uniformly within it — rather than uniformly across
+    all tables. rnase_h accounts for ~96% of tables, so uniform table
+    sampling still produces an overwhelmingly rnase_h pair set even though
+    sampling by table (not by row) already avoids row-count imbalance.
+    Without this, near-chance performance on sirna/splice_switching is
+    confounded with "the model barely saw those mechanisms" and can't be
+    read as evidence about cross-mechanism transfer difficulty.
+    """
     tables = df.groupby("custom_id", sort=False).indices
     keep_tables = {t: idx for t, idx in tables.items() if len(idx) >= 5}
+    if not keep_tables:
+        return np.array([], dtype=np.int64), np.array([], dtype=np.int64)
+
+    table_modality = df.groupby("custom_id", sort=False)["modality"].first()
+    modality_tables: dict = {}
+    for t in keep_tables:
+        modality_tables.setdefault(table_modality[t], []).append(t)
+    modalities = list(modality_tables.keys())
+
     pair_i, pair_j = [], []
+    skipped = 0
     for _ in range(n_pairs):
-        tidx = keep_tables[rng.choice(list(keep_tables.keys()))]
+        candidates = modality_tables[modalities[rng.integers(len(modalities))]]
+        tidx = keep_tables[candidates[rng.integers(len(candidates))]]
         if len(tidx) < 2:
+            skipped += 1
             continue
         a, b = rng.choice(len(tidx), size=2, replace=False)
         ia, ib = tidx[a], tidx[b]
         if df["rank_label"].iloc[ia] == df["rank_label"].iloc[ib]:
+            skipped += 1
             continue
         if df["rank_label"].iloc[ia] > df["rank_label"].iloc[ib]:
             pair_i.append(ia); pair_j.append(ib)
         else:
             pair_i.append(ib); pair_j.append(ia)
+    if skipped:
+        print(f"build_pairs: skipped {skipped}/{n_pairs} draws (tie or table too "
+              f"small), produced {len(pair_i)} pairs")
     return np.array(pair_i, dtype=np.int64), np.array(pair_j, dtype=np.int64)
 
 

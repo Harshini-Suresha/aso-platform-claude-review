@@ -243,10 +243,15 @@ def conformal_topk(group_scores, group_true_topk, group_sizes, k: int,
 
     Nonconformity per group: the predicted score of the *weakest* true
     top-k member (tau_g = min over true-top-k of s_i). The selected set at
-    threshold q is {i: s_i >= q}. Calibration computes the (1-alpha)
-    quantile of tau_g; the guarantee P(selected ⊇ true top-k) >= 1-alpha
-    holds under exchangeability, and under covariate shift when a likelihood
-    ratio weight is supplied (weighted conformal, Tibshirani et al. 2019).
+    threshold q is {i: s_i >= q}. Coverage (P(selected ⊇ true top-k) holds)
+    happens exactly when q_hat <= tau_test, so q_hat must be a LOW (alpha)
+    quantile of the calibration taus, not a high one — a high threshold
+    excludes the very candidates coverage depends on. With the standard
+    finite-sample split-conformal correction, q_hat is the
+    ceil((n_cal+1)*alpha)-th smallest calibration tau, which guarantees
+    P(selected ⊇ true top-k) >= 1-alpha under exchangeability, and under
+    covariate shift when a likelihood ratio weight is supplied (weighted
+    conformal, Tibshirani et al. 2019).
 
     group_scores    : dict exp_id -> np.array of scores
     group_true_topk : dict exp_id -> bool mask (True = in true top-k)
@@ -267,10 +272,21 @@ def conformal_topk(group_scores, group_true_topk, group_sizes, k: int,
     w = w / w.sum()
 
     order = np.argsort(taus)
-    cum = np.cumsum(w[order])
-    idx = np.searchsorted(cum, 1.0 - alpha)
-    idx = min(idx, len(order) - 1)
-    q_hat = taus[order[idx]]
+    sorted_taus = taus[order]
+    if weights is None:
+        # Unweighted split conformal: q_hat is the ceil((n+1)*alpha)-th
+        # smallest calibration tau (1-indexed). Below that (alpha*(n+1) < 1)
+        # no threshold gives the guarantee, so select everyone.
+        m = int(np.ceil(alpha * (len(cal) + 1)))
+        if m < 1:
+            q_hat = -np.inf
+        else:
+            q_hat = sorted_taus[min(m, len(cal)) - 1]
+    else:
+        cum = np.cumsum(w[order])
+        idx = np.searchsorted(cum, alpha, side="left")
+        idx = min(idx, len(order) - 1)
+        q_hat = sorted_taus[idx]
 
     covs, sizes = [], []
     for e in test:
