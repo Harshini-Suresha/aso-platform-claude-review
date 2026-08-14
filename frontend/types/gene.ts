@@ -341,7 +341,6 @@ export interface GeneTargetObject {
     x: number | null;
     y: number | null;
     method: string | null;
-    varianceExplained: { axis1: number | null; axis2: number | null };
   } | null;
   onTargetToxicityRisk: number | null;
   onTargetToxicityLevel: string | null;

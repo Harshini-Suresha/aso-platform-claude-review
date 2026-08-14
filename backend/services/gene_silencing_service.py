@@ -89,13 +89,14 @@ def _parse_exons_from_transcript(transcript: dict) -> list[dict]:
     ]
 
 
-def _fetch_transcript_utrs(tid: str, cds_seq: str) -> tuple[str | None, str | None]:
-    """Fetch the full spliced transcript (cdna) and derive 5'/3' UTR sequences.
+def _fetch_cdna_with_cds_offset(tid: str, cds_seq: str) -> tuple[str | None, int | None]:
+    """Fetch the full spliced transcript (cdna) and locate the CDS within it.
 
     Ensembl's REST API exposes ``type=cdna`` (5'UTR + CDS + 3'UTR) and
-    ``type=cds`` but no direct UTR type, so the UTRs are derived by locating
-    the CDS substring within the cdna. Returns (utr5, utr3), or (None, None)
-    when the cdna fetch fails or the CDS cannot be located within it.
+    ``type=cds`` but no direct UTR type or per-exon CDS offsets, so the CDS
+    is located by substring search within the cdna. Returns (cdna, cds_at)
+    — cds_at is the 0-based offset of the CDS start within the cdna — or
+    (None, None) when the fetch fails or the CDS cannot be located within it.
     """
     try:
         resp = _ensembl_get(f"{ENSEMBL_REST}/sequence/id/{tid}?type=cdna")
@@ -107,10 +108,38 @@ def _fetch_transcript_utrs(tid: str, cds_seq: str) -> tuple[str | None, str | No
         cds_at = cdna.find(cds_seq)
         if cds_at < 0:
             return None, None
-        return cdna[:cds_at], cdna[cds_at + len(cds_seq):]
+        return cdna, cds_at
     except Exception as exc:
         logger.warning("cDNA sequence fetch failed for %s: %s", tid, exc)
         return None, None
+
+
+def _map_exons_to_cds(exons: list[dict], cdna: str, cds_seq: str, cds_at: int) -> None:
+    """Attach exact CDS-relative (cdsStart, cdsEnd) offsets to each exon, in place.
+
+    An exon's genomic length (end - start + 1) is exactly the number of
+    nucleotides it contributes to the spliced transcript — introns are
+    already removed. So walking the exon list (already ordered 5'->3' by
+    ``_parse_exons_from_transcript``) while accumulating cDNA offsets gives
+    each exon's exact position in the cDNA, with no proportional estimate.
+    Intersecting that with the CDS's [cds_at, cds_at + len(cds_seq)) window
+    — in the same cDNA coordinate system — gives an exact CDS-relative
+    range. Exons that fall entirely in the 5'/3' UTR get a zero-width range
+    clamped to the nearest CDS boundary (0 or the CDS length), so candidate
+    generation naturally skips them without needing a special case.
+    """
+    cds_end_offset = cds_at + len(cds_seq)
+    cursor = 0
+    for exon in exons:
+        exon_len = exon.get("length", 0)
+        exon_cdna_start = cursor
+        exon_cdna_end = cursor + exon_len
+        cursor = exon_cdna_end
+
+        start = min(max(exon_cdna_start, cds_at), cds_end_offset) - cds_at
+        end = min(max(exon_cdna_end, cds_at), cds_end_offset) - cds_at
+        exon["cdsStart"] = start
+        exon["cdsEnd"] = end
 
 
 # ---------------------------------------------------------------------------
@@ -179,10 +208,11 @@ def get_target_analysis(ensembl_gene_id: str, gene_symbol: str = "", organism: s
                 # upregulation mechanisms can target real UTR context
                 # instead of CDS approximations.
                 if result.get("mrnaSequence"):
-                    utr5, utr3 = _fetch_transcript_utrs(tid, result["mrnaSequence"])
-                    if utr5 is not None:
-                        result["utr5Sequence"] = utr5
-                        result["utr3Sequence"] = utr3
+                    cdna, cds_at = _fetch_cdna_with_cds_offset(tid, result["mrnaSequence"])
+                    if cdna is not None:
+                        result["utr5Sequence"] = cdna[:cds_at]
+                        result["utr3Sequence"] = cdna[cds_at + len(result["mrnaSequence"]):]
+                        _map_exons_to_cds(result["exons"], cdna, result["mrnaSequence"], cds_at)
         else:
             logger.warning("Ensembl ID lookup returned HTTP %d for %s", resp.status_code, ensembl_gene_id)
     except Exception as exc:
@@ -227,10 +257,11 @@ def get_target_analysis(ensembl_gene_id: str, gene_symbol: str = "", organism: s
 
                     if result.get("mrnaSequence"):
                         tid = canonical.get("id", "").split(".")[0]
-                        utr5, utr3 = _fetch_transcript_utrs(tid, result["mrnaSequence"])
-                        if utr5 is not None:
-                            result["utr5Sequence"] = utr5
-                            result["utr3Sequence"] = utr3
+                        cdna, cds_at = _fetch_cdna_with_cds_offset(tid, result["mrnaSequence"])
+                        if cdna is not None:
+                            result["utr5Sequence"] = cdna[:cds_at]
+                            result["utr3Sequence"] = cdna[cds_at + len(result["mrnaSequence"]):]
+                            _map_exons_to_cds(result["exons"], cdna, result["mrnaSequence"], cds_at)
             else:
                 logger.warning("Ensembl symbol lookup returned HTTP %d for %s", sym_resp.status_code, gene_symbol)
         except Exception as exc:
@@ -984,10 +1015,16 @@ def generate_candidates(
 ) -> list[dict]:
     """Generate candidate ASOs for the selected mechanism and target region.
 
-    Uses real exon coordinates (start/end/length) from Ensembl rather than
-    splitting the CDS evenly, so a candidate labeled "Exon 5" targets that
-    exon. When no exon list is supplied, candidates are generated across all
-    exons for total-transcript knockdown.
+    Uses each exon's exact CDS-relative offset (``cdsStart``/``cdsEnd``, as
+    computed by ``_map_exons_to_cds`` from the real cDNA-to-CDS alignment) so
+    a candidate labeled "Exon 5" targets that exon. If that mapping is
+    unavailable — the cDNA fetch failed upstream — falls back to a
+    proportional genomic-length estimate and marks every candidate with
+    ``exonMappingSource: "estimated_proportional"`` so callers can tell the
+    two apart; this fallback should not be trusted for position-critical
+    mechanisms (e.g. splice-junction-relative targeting). When no exon list
+    is supplied, candidates are generated across all exons for
+    total-transcript knockdown.
     """
     candidates = []
     if not mrna_sequence or len(exons) < 2:
@@ -1008,36 +1045,46 @@ def generate_candidates(
     seq = mrna_sequence.upper()
     seq_len = len(seq)
 
-    # Compute CDS-relative offsets for each exon using real genomic lengths.
-    # Ensembl exon lengths include UTR regions, so we proportionally map
-    # each exon's share of the CDS based on its genomic length relative
-    # to the total genomic span of all exons.
-    total_genomic = sum(e.get("length", 0) for e in exons)
-    if total_genomic == 0:
-        return candidates
+    # Prefer each exon's exact CDS-relative offset, computed upstream by
+    # _map_exons_to_cds from the real cDNA-to-CDS alignment. Only fall back
+    # to a proportional genomic-length estimate if that mapping is missing
+    # (e.g. the cDNA fetch failed) — and mark candidates accordingly, since
+    # a proportional estimate wrongly assumes UTR is spread evenly across
+    # all exons rather than concentrated at the 5' and 3' ends.
+    has_real_cds_map = all(
+        e.get("cdsStart") is not None and e.get("cdsEnd") is not None for e in exons
+    )
 
-    # Build cumulative CDS offset map: exon_index -> (cds_start, cds_end)
     exon_cds_map: list[tuple[int, int]] = []
-    cursor = 0
-    remaining_seq = seq_len
-    for i, exon in enumerate(exons):
-        exon_genomic_len = exon.get("length", 0)
-        remaining_exons = len(exons) - i
-        # Proportional CDS contribution for this exon
-        if i == len(exons) - 1:
-            # Last exon gets all remaining sequence
-            cds_contribution = remaining_seq
-        else:
-            cds_contribution = round(seq_len * exon_genomic_len / total_genomic)
-            # Ensure each exon gets enough room for at least one ASO binding site
-            min_contribution = min(aso_length * 2, remaining_seq // remaining_exons)
-            cds_contribution = max(min_contribution, cds_contribution)
-            cds_contribution = min(cds_contribution, remaining_seq - (remaining_exons - 1))
-        cds_start = cursor
-        cds_end = cursor + cds_contribution
-        exon_cds_map.append((cds_start, cds_end))
-        cursor = cds_end
-        remaining_seq -= cds_contribution
+    if has_real_cds_map:
+        exon_mapping_source = "ensembl_cdna"
+        exon_cds_map = [(e["cdsStart"], e["cdsEnd"]) for e in exons]
+    else:
+        exon_mapping_source = "estimated_proportional"
+        total_genomic = sum(e.get("length", 0) for e in exons)
+        if total_genomic == 0:
+            return candidates
+
+        cursor = 0
+        remaining_seq = seq_len
+        for i, exon in enumerate(exons):
+            exon_genomic_len = exon.get("length", 0)
+            remaining_exons = len(exons) - i
+            # Proportional CDS contribution for this exon
+            if i == len(exons) - 1:
+                # Last exon gets all remaining sequence
+                cds_contribution = remaining_seq
+            else:
+                cds_contribution = round(seq_len * exon_genomic_len / total_genomic)
+                # Ensure each exon gets enough room for at least one ASO binding site
+                min_contribution = min(aso_length * 2, remaining_seq // remaining_exons)
+                cds_contribution = max(min_contribution, cds_contribution)
+                cds_contribution = min(cds_contribution, remaining_seq - (remaining_exons - 1))
+            cds_start = cursor
+            cds_end = cursor + cds_contribution
+            exon_cds_map.append((cds_start, cds_end))
+            cursor = cds_end
+            remaining_seq -= cds_contribution
 
     exon_count = len(exons)
 
@@ -1301,6 +1348,7 @@ def generate_candidates(
                 "modifications": modifications,
                 "exonNumber": exon_num,
                 "exonLength": exon_len,
+                "exonMappingSource": exon_mapping_source,
                 "deliveryContext": delivery_context or "",
                 "defectType": defect_type or "",
                 "silencingScope": silencing_scope or "",
