@@ -38,10 +38,16 @@ const ANALYSIS_MODULES = [
   "Final Report Generation",
 ];
 
+// status: "live" cards are the shipped product surface and link to their own
+// page; "coming_soon" cards render greyed-out with a contact affordance
+// instead of navigating. Covers all 9 therapeutic goals (therapeutic-goals.json)
+// — TG06/TG07 have working pages/routes but are deliberately not surfaced here
+// yet, rather than being reachable-by-URL-but-invisible.
 const MECHANISM_CATEGORIES = [
   {
     category: "Gene Silencing",
     href: "/gene-silencing",
+    status: "live" as const,
     items: [
       "RNase H-mediated Gapmer Knockdown",
       "Steric-blocking Translation Inhibition",
@@ -53,6 +59,7 @@ const MECHANISM_CATEGORIES = [
   {
     category: "Gene Upregulation",
     href: "/gene-upregulation",
+    status: "live" as const,
     items: [
       "Poison Exon Blocking",
       "AntagoNAT",
@@ -65,6 +72,7 @@ const MECHANISM_CATEGORIES = [
   {
     category: "RNA Editing / Correction",
     href: "/rna-editing",
+    status: "coming_soon" as const,
     items: [
       "ADAR-mediated RNA Editing",
       "Endogenous ADAR Recruitment",
@@ -75,7 +83,8 @@ const MECHANISM_CATEGORIES = [
   },
   {
     category: "RNA Processing Modulation",
-    href: "/mechanisms",
+    href: "/rna-processing",
+    status: "live" as const,
     items: [
       "Exon Skipping",
       "Exon Inclusion",
@@ -87,11 +96,35 @@ const MECHANISM_CATEGORIES = [
   {
     category: "RNA Neutralization",
     href: "/rna-neutralization",
+    status: "coming_soon" as const,
     items: ["Toxic RNA Neutralization"],
+  },
+  {
+    category: "Translational Regulation",
+    href: "/translational-regulation",
+    status: "coming_soon" as const,
+    items: [
+      "Steric-Blocking Translation Inhibition",
+      "uORF Blocking",
+      "miRNA Binding Site Blocking",
+      "Riboswitch / RNA Structure Targeting",
+    ],
+  },
+  {
+    category: "Isoform Engineering",
+    href: "/isoform-engineering",
+    status: "coming_soon" as const,
+    items: [
+      "Exon Skipping",
+      "Exon Inclusion",
+      "Pseudoexon Suppression",
+      "Cryptic Splice-site Blocking",
+    ],
   },
   {
     category: "Protein Replacement",
     href: "/protein-replacement",
+    status: "coming_soon" as const,
     items: [
       "mRNA Replacement Therapy",
       "circRNA-mediated Protein Replacement",
@@ -100,9 +133,12 @@ const MECHANISM_CATEGORIES = [
   {
     category: "Protein Function Modulation",
     href: "/rna-engineering",
+    status: "coming_soon" as const,
     items: ["RNA Aptamer Therapeutics"],
   },
 ];
+
+const CONTACT_EMAIL = "mail@koshkey.com";
 
 const ARCHITECTURE_STEPS = [
   { label: "Biological Information", icon: Database },
@@ -599,22 +635,49 @@ export default function NewProjectPage() {
                   </div>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
                     {MECHANISM_CATEGORIES.map((cat, catIdx) => (
-                      <Link
-                        key={cat.category}
-                        href={cat.href}
-                        className="rounded-lg border border-[#E5E7EB] px-3 py-2.5 transition-all duration-200 hover:border-brand/30 hover:shadow-sm hover:-translate-y-0.5 group block"
-                      >
-                        <p className="mb-1 text-[10.5px] font-bold text-[#0F172A] group-hover:text-brand transition-colors duration-150">
-                          {cat.category} <span className="ml-1 text-slate-400 font-normal">({cat.items.length})</span>
-                        </p>
-                        <ul className="space-y-0">
-                          {cat.items.map((item) => (
-                            <li key={item} className="py-[2px] text-[10px] leading-snug text-[#64748B] group-hover:text-slate-600 transition-colors duration-150">
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </Link>
+                      cat.status === "live" ? (
+                        <Link
+                          key={cat.category}
+                          href={cat.href}
+                          className="rounded-lg border border-[#E5E7EB] px-3 py-2.5 transition-all duration-200 hover:border-brand/30 hover:shadow-sm hover:-translate-y-0.5 group block"
+                        >
+                          <p className="mb-1 text-[10.5px] font-bold text-[#0F172A] group-hover:text-brand transition-colors duration-150">
+                            {cat.category} <span className="ml-1 text-slate-400 font-normal">({cat.items.length})</span>
+                          </p>
+                          <ul className="space-y-0">
+                            {cat.items.map((item) => (
+                              <li key={item} className="py-[2px] text-[10px] leading-snug text-[#64748B] group-hover:text-slate-600 transition-colors duration-150">
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </Link>
+                      ) : (
+                        <div
+                          key={cat.category}
+                          className="rounded-lg border border-dashed border-[#E5E7EB] px-3 py-2.5 opacity-60"
+                        >
+                          <p className="mb-1 flex items-center gap-1.5 text-[10.5px] font-bold text-[#0F172A]">
+                            {cat.category} <span className="ml-1 text-slate-400 font-normal">({cat.items.length})</span>
+                            <span className="rounded-full bg-slate-100 px-1.5 py-[1px] text-[8.5px] font-semibold uppercase tracking-wide text-slate-500">
+                              Coming soon
+                            </span>
+                          </p>
+                          <ul className="space-y-0">
+                            {cat.items.map((item) => (
+                              <li key={item} className="py-[2px] text-[10px] leading-snug text-[#64748B]">
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                          <a
+                            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Early access: ${cat.category}`)}`}
+                            className="mt-1.5 inline-block text-[10px] font-medium text-brand hover:underline"
+                          >
+                            Contact us for early access
+                          </a>
+                        </div>
+                      )
                     ))}
                   </div>
                 </div>

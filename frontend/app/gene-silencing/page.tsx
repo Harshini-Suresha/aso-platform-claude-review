@@ -73,6 +73,10 @@ export default function GeneSilencingPage() {
   const [variantsLoading, setVariantsLoading] = useState(false);
 
   const isAlleleSpecific = silencingScope === "allele_specific";
+  // A11 (APA Modulation) targets the 3'UTR / polyadenylation signal, not an
+  // exon — exon selection doesn't apply, same as A2's translation-start-only
+  // targeting.
+  const requiresExonSelection = mechanism?.id !== "A2" && mechanism?.id !== "A11";
 
   const [results, setResults] = useState<GenerateResponse | null>(null);
   const [genLoading, setGenLoading] = useState(false);
@@ -352,7 +356,7 @@ export default function GeneSilencingPage() {
       const res = await generateCandidates({
         ensemblGeneId: gene.geneId,
         mechanismId: mechanism.id,
-        targetExonIndices: isTotalKnockdown || isAlleleSpecific ? null : selectedExons,
+        targetExonIndices: isTotalKnockdown || isAlleleSpecific || !requiresExonSelection ? null : selectedExons,
         asoLength,
         chemistry,
         modifications: selectedMods,
@@ -462,12 +466,12 @@ export default function GeneSilencingPage() {
               selectedExons={selectedExons}
               isTotalKnockdown={isTotalKnockdown}
               onToggleTotalKnockdown={handleToggleTotalKnockdown}
-              showTargetingMode={!isAlleleSpecific}
+              showTargetingMode={!isAlleleSpecific && therapeuticGoal !== "TG04"}
             />
           ) : null}
 
           {/* Step 1a: Target Selection — Exon picker */}
-          {target && !targetLoading && !isTotalKnockdown && !isAlleleSpecific && mechanism?.id !== "A2" && (
+          {target && !targetLoading && !isTotalKnockdown && !isAlleleSpecific && requiresExonSelection && (
             <Card className="p-5">
               <SectionHeader step="1a" title="Target Selection" />
               <div className="px-5 pb-5">
@@ -637,7 +641,7 @@ export default function GeneSilencingPage() {
                     onToggleMod={handleToggleMod}
                      onGenerate={handleGenerate}
                      loading={genLoading}
-                     disabled={!target || mechanism?.id === "A21" || (!isTotalKnockdown && !isAlleleSpecific && selectedExons.length === 0)}
+                     disabled={!target || mechanism?.id === "A21" || (requiresExonSelection && !isTotalKnockdown && !isAlleleSpecific && selectedExons.length === 0)}
                      hasResults={!!results}
                    />
                   {results && (
@@ -688,6 +692,8 @@ export default function GeneSilencingPage() {
                   <p className="mt-3 text-[13px] font-medium text-slate-500">
                   {isAlleleSpecific
                     ? `Click Generate to create allele-specific ASO candidates${knownVariant ? ` for ${knownVariant}` : ""}`
+                    : !requiresExonSelection
+                    ? "Click Generate to create ASO candidates"
                     : isTotalKnockdown
                     ? "Click Generate to create ASO candidates for total transcript knockdown"
                     : "Select exon(s) and click Generate to create ASO candidates"}

@@ -18,6 +18,10 @@ from services.gene_silencing_service import (
     MODIFICATION_OPTIONS,
     LENGTH_RANGE,
 )
+from services.rna_processing_service import (
+    generate_rna_processing_candidates,
+    RNA_PROCESSING_MECHANISMS,
+)
 from services.variant_details_service import get_clinvar_variants
 from services.notification_service import add_notification
 from services.admet_service import get_admet_prediction
@@ -72,25 +76,45 @@ async def design_options():
 
 @router.post("/api/gene-silencing/generate")
 async def generate_aso_candidates(payload: CandidateRequest):
-    """Generate ranked candidates using the selected mechanism's design rules."""
+    """Generate ranked candidates using the selected mechanism's design rules.
+
+    A7-A11 (TG04, RNA Processing Modulation) dispatch to
+    rna_processing_service instead of the RNase H-oriented gene-silencing
+    designer — they are steric-blocking, splice-/3'-end-processing
+    mechanisms with a different targeting geometry (splice junctions /
+    polyadenylation signal), not CDS-region knockdown.
+    """
     target = get_target_analysis(payload.ensembl_gene_id)
     if not target.get("mrnaSequence"):
         raise HTTPException(status_code=404, detail="Could not fetch mRNA sequence.")
 
     try:
-        candidates = generate_candidates(
-            target_exon_indices=payload.target_exon_indices,
-            aso_length=payload.aso_length,
-            chemistry=payload.chemistry,
-            modifications=payload.modifications,
-            mrna_sequence=target["mrnaSequence"],
-            exons=target.get("exons", []),
-            mechanism_id=payload.mechanism_id,
-            delivery_context=payload.delivery_context,
-            defect_type=payload.defect_type,
-            silencing_scope=payload.silencing_scope,
-            known_variant=payload.known_variant,
-        )
+        if payload.mechanism_id in RNA_PROCESSING_MECHANISMS:
+            candidates = generate_rna_processing_candidates(
+                target_exon_indices=payload.target_exon_indices,
+                aso_length=payload.aso_length,
+                chemistry=payload.chemistry,
+                modifications=payload.modifications,
+                exons=target.get("exons", []),
+                canonical_transcript=target.get("canonicalTranscript"),
+                mechanism_id=payload.mechanism_id,
+                utr3_sequence=target.get("utr3Sequence"),
+                delivery_context=payload.delivery_context,
+            )
+        else:
+            candidates = generate_candidates(
+                target_exon_indices=payload.target_exon_indices,
+                aso_length=payload.aso_length,
+                chemistry=payload.chemistry,
+                modifications=payload.modifications,
+                mrna_sequence=target["mrnaSequence"],
+                exons=target.get("exons", []),
+                mechanism_id=payload.mechanism_id,
+                delivery_context=payload.delivery_context,
+                defect_type=payload.defect_type,
+                silencing_scope=payload.silencing_scope,
+                known_variant=payload.known_variant,
+            )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
