@@ -178,15 +178,19 @@ ADDITIONAL CONTEXT AND REQUESTS:
     first," say so plainly. Name real files; no hand-waving.
 
 11. DELIVERY OF CHANGES — implement every accepted fix by editing the actual
-    files in this repo. Commit your changes to a branch named `claude-review`
-    (never touch `main`), push that branch, and report the branch URL plus a
-    per-change log: file, line(s), before → after, reason, and — for any new
-    number you introduce — which of the four categories it falls under
-    (Computed / Learned / Real Precedent / Heuristic). If a change requires a
-    number you cannot compute from the committed code/data or trace to a real
-    precedent, say so and leave it out rather than inventing it. If a change
-    requires re-running an experiment, note the exact command; do not report
-    results you did not actually run.
+    files. The working repo for this review is
+    https://github.com/Harshini-Suresha/aso-platform-claude-review — a private
+    review copy; the original repo is intentionally not exposed to you. It is
+    already cloned in this workbench with origin set to that URL. Authenticate
+    git with the GitHub account you were granted access under, then commit your
+    changes to a branch named `claude-review` (never touch `main`), push that
+    branch, and report the branch URL plus a per-change log: file, line(s),
+    before → after, reason, and — for any new number you introduce — which of
+    the four categories it falls under (Computed / Learned / Real Precedent /
+    Heuristic). If a change requires a number you cannot compute from the
+    committed code/data or trace to a real precedent, say so and leave it out
+    rather than inventing it. If a change requires re-running an experiment,
+    note the exact command; do not report results you did not actually run.
 
 Give me a triaged CUT LIST too, not just a fix list — given the real ICLR 2027
 deadlines (mandatory informative abstract Sep 18, 2026 AOE; full paper Sep 25,
