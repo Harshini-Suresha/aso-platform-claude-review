@@ -1,4 +1,5 @@
 {
+  "_STALE_WARNING": "The 'conformal' blocks in this file were produced by conformal_topk() BEFORE the quantile-inversion fix and are INVALID. They are retained only so the regenerated values can be diffed against them. Do not cite them. Regenerate with the corrected code before use. See docs/iclr_benchmark_plan.md section 3.",
   "ranker_mode": "conditioned",
   "generation": "gc_steered_at_source (mechanism training mean GC)",
   "results": [

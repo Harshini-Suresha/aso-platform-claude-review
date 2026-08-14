@@ -38,10 +38,12 @@ generated candidates match the seen GC distribution by construction — and afte
 removing a counterproductive invariance-regularization head, generated candidates
 are ranked above random for all three trained mechanisms (lift +0.03…+0.06,
 top-20 ≈ 0.21–0.25 vs 0.2 chance) while the truly unseen mechanism stays at chance
-(+0.009, top-20 0.203). The conformal acceptance stage still falls short of target
-coverage, which we report openly with confidence intervals (k=2; scarce mechanisms
-have n=6–12 groups). We release the benchmark, models, and evaluation scaffold as
-a falsifiable basis for cross-modality RNA design.
+(+0.009, top-20 0.203). [PENDING: the conformal acceptance stage's results are
+withdrawn and awaiting regeneration — the previously reported under-coverage was
+a quantile-inversion bug in our implementation, not a finding. Do not restate a
+coverage claim here until the corrected pipeline has been re-run; see §4.5.] We
+release the benchmark, models, and evaluation scaffold as a falsifiable basis
+for cross-modality RNA design.
 
 ## 1. Introduction
 
@@ -434,24 +436,40 @@ destroys the rank correlation (Spearman 0.003) while leaving the top-10 Jaccard 
 conditioning via an embedding fed to the score head is the most effective
 configuration, and the sequence-only ranker already exceeds the GBM ceiling.
 
-### 4.5 Conformal acceptance under-reaches nominal coverage
+### 4.5 Conformal acceptance — RESULT WITHDRAWN, PENDING REGENERATION
 
-**Table 4. Conformal selection (k=2, α=0.1, target coverage 0.9).**
-
-| mechanism | coverage | 95% CI (Wilson) | n groups |
-|---|---|---|---|
-| rnase_h | 0.04 | [0.016, 0.098] | 100 |
-| sirna | 0.17 | [0.030, 0.564] | 6 |
-| splice_switching | 0.00 | [0.000, 0.243] | 12 |
-
-(Figure A.3 in Appendix A plots the same result with the Wilson intervals.)
-
-Even with the mildest top-$k$ guarantee ($k=2$), coverage is far below the nominal
-0.9, and the Wilson intervals at $n=6$–12 are wide. The selected-set sizes are
-correspondingly unstable (sirna mean 60.3 with bootstrap CI [31.7, 92.9] at
-$n=6$). We report this openly: the ranker's weak cross-gene signal (top-10 ≈ 0.30)
-does not transfer to calibrated top-$k$ selection, and on this benchmark the
-conformal stage is not yet usable for acceptance decisions.
+> **This section previously reported measured coverage of 0.04 (rnase_h), 0.17
+> (sirna) and 0.00 (splice_switching) against a nominal 0.9, and interpreted
+> that under-coverage as a substantive negative finding about the ranker's
+> signal. That interpretation was wrong. The under-coverage was a sign error
+> in our own implementation, not a property of the method or the data.**
+>
+> `conformal_topk()` took the $1-\alpha$ quantile of the calibration
+> nonconformity scores where the guarantee requires the $\alpha$ quantile.
+> Coverage holds exactly when $\hat q \le \tau_{\text{test}}$, so $\hat q$ must
+> be a *low* quantile; taking a high one sets the acceptance threshold above
+> the very candidates coverage depends on. The observed 0.04–0.17 is
+> approximately $\alpha$ — the signature of this specific inversion.
+>
+> The implementation has been corrected (`alpha` quantile with the standard
+> finite-sample split-conformal correction, $\hat q$ = the
+> $\lceil (n_{\text{cal}}+1)\alpha \rceil$-th smallest calibration $\tau$).
+> On synthetic exchangeable data where coverage must hold by construction, the
+> corrected code attains 0.905 at $\alpha=0.1$ and 0.810 at $\alpha=0.2$; the
+> pre-fix code attained 0.135 and 0.180 on the same data.
+>
+> **The pipeline has not yet been re-run on the real benchmark with the
+> corrected code**, so no coverage numbers are stated here. When it is,
+> expect selected-set sizes to grow substantially (they were produced by an
+> inflated threshold), which is a materially weaker — but honest — claim about
+> the usability of the acceptance stage than small sets at high coverage would
+> have been. Whatever the corrected numbers turn out to be, they must be
+> presented as the result of a bug fix, not as an improvement in method.
+>
+> Any claim elsewhere in this draft that the conformal stage "reports
+> under-coverage openly" describes the bug, not the method, and needs
+> rewriting once the corrected numbers exist. See §3 of
+> `docs/iclr_benchmark_plan.md`.
 
 ## 5. Limitations
 

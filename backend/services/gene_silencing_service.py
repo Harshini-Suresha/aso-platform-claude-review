@@ -108,6 +108,19 @@ def _fetch_cdna_with_cds_offset(tid: str, cds_seq: str) -> tuple[str | None, int
         cds_at = cdna.find(cds_seq)
         if cds_at < 0:
             return None, None
+        # The CDS must occur exactly once in the cDNA for its offset to be
+        # unambiguous. If it occurs more than once, find() silently returns
+        # the first match, which may not be the real CDS — and every exon
+        # offset derived from it would then be wrong while looking fine.
+        # Treat that as a failed fetch so the caller falls back to the
+        # labelled proportional estimate rather than trusting a guess.
+        if cdna.count(cds_seq) > 1:
+            logger.warning(
+                "CDS sequence occurs %d times in cDNA for %s; offset is "
+                "ambiguous, falling back to estimated exon mapping",
+                cdna.count(cds_seq), tid,
+            )
+            return None, None
         return cdna, cds_at
     except Exception as exc:
         logger.warning("cDNA sequence fetch failed for %s: %s", tid, exc)
