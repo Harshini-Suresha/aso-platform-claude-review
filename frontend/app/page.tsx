@@ -83,7 +83,11 @@ const MECHANISM_CATEGORIES = [
   },
   {
     category: "RNA Processing Modulation",
-    href: "/rna-processing",
+    // TG04 has no dedicated top-level route. Its flow is /mechanisms (select
+    // TG04 + splice defect type) -> /gene-silencing, which branches its UI on
+    // therapeuticGoal === "TG04" and dispatches to rna_processing_service via
+    // /api/gene-silencing/generate. Pointing this at "/rna-processing" 404s.
+    href: "/mechanisms",
     status: "live" as const,
     items: [
       "Exon Skipping",

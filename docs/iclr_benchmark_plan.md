@@ -610,7 +610,9 @@ conformal_topk() now reports:
 - selected_size_mean_ci / selected_size_median_ci: percentile bootstrap
   (10k resamples, seed 0).
 
-Pipeline re-run with --conformal_k 2 --conformal_alpha 0.1:
+!! WITHDRAWN — THESE NUMBERS ARE A BUG, NOT A RESULT !!
+
+Pipeline re-run with --conformal_k 2 --conformal_alpha 0.1 gave:
 
   mechanism        coverage   95% CI            n groups
   rnase_h          0.04       [0.02, 0.10]      100
@@ -618,10 +620,27 @@ Pipeline re-run with --conformal_k 2 --conformal_alpha 0.1:
   splice_switching 0.00       [0.00, 0.24]      12
   (mechanism_oov: no labeled target groups -> conformal N/A)
 
-Even k=2 does not reach nominal 0.9 coverage; the CIs make clear the n is
-too small for sirna/splice to claim anything except "below target". Story
-stands: ranker's weak cross-gene signal (top-10 ~0.30) does not transfer to
-calibrated top-k selection; reported openly.
+These were produced by an inverted quantile in conformal_topk(): it took the
+(1-alpha) quantile of the calibration taus where the guarantee requires the
+alpha quantile. Coverage holds exactly when q_hat <= tau_test, so q_hat must
+be a LOW quantile; taking a high one sets the threshold above the candidates
+coverage depends on. Observed coverage ~= alpha is the signature of exactly
+this inversion.
+
+Fixed: alpha quantile with the standard finite-sample split-conformal
+correction (q_hat = ceil((n_cal+1)*alpha)-th smallest tau). Verified on
+synthetic exchangeable data where coverage must hold by construction —
+corrected code gives 0.905 @ alpha=0.1 and 0.810 @ alpha=0.2; the old code
+gave 0.135 and 0.180 on the same data.
+
+STILL TO DO: re-run the real pipeline with the fixed code and replace the
+table above. backend/results/benchmark/final_conditioned_gcmatched.json still
+holds the pre-fix values and must be regenerated too. Expect selected-set
+sizes to grow materially (the old sizes came from an inflated threshold) —
+that is a weaker but honest claim about whether the acceptance stage is
+usable. The earlier conclusion ("ranker's weak signal does not transfer to
+calibrated top-k selection") is NOT currently supported by evidence and must
+not be restated until the corrected numbers exist.
 
 Code touched: backend/experiments/benchmark/generative_design.py (GC-steered
 sampling, gc_mean, --gc_target/--gc_auto), invariant_ranker.py (Wilson CI +
