@@ -1,0 +1,50 @@
+{
+  "id": "A18",
+  "enabled": true,
+  "name": "CIRTS (CRISPR–Cas-Inspired RNA Targeting System)",
+  "category": "Programmable RNA Editing / RNA Engineering",
+  "therapeuticGoalIds": [
+    "TG03"
+  ],
+  "therapeuticGoalDescription": "Recruit programmable RNA effectors to specific transcripts for RNA editing, degradation, translation control, or imaging without altering genomic DNA.",
+  "molecularDefect": "Pathogenic RNA sequence requiring programmable editing or transcript-specific regulation.",
+  "diseaseMechanism": "A guide RNA directs the CIRTS effector complex to the target RNA. The effector domain (e.g., ADAR deaminase) performs site-specific RNA editing or other RNA modifications.",
+  "suitableVariantTypes": "Single-nucleotide variants amenable to A→I editing; selected missense variants; nonsense variants; splice-site variants; RNA-level regulatory defects.",
+  "typicalDiseases": "Experimental proof-of-concept only; proposed for monogenic neurological, metabolic, and retinal disorders. No disease-specific clinical program established.",
+  "rnaTargetRegion": "Exonic or splice-site regions complementary to the guide RNA.",
+  "transcriptRequirement": "Accessible target RNA with an appropriate guide-binding region.",
+  "asoChemistry": null,
+  "typicalLength": "Guide RNA length varies depending on construct design.",
+  "designRules": "Design a guide RNA complementary to the target transcript; choose an appropriate effector domain (e.g., ADAR); experimentally validate editing efficiency and specificity.",
+  "secondaryStructureRequirement": "Accessible RNA target region; excessive secondary structure may reduce guide binding.",
+  "offTargetConsiderations": "Guide RNA cross-reactivity; bystander editing; unintended RNA binding; effector-specific off-target activity.",
+  "advantages": "Modular platform; programmable; supports multiple RNA functions (editing, degradation, localization, imaging); no genomic DNA modification.",
+  "limitations": "Early-stage technology; requires engineered protein delivery; no clinical trials; delivery remains challenging.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified.",
+  "evidenceLevel": {
+    "rating": "Low–Moderate (preclinical platform).",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Rauch S. et al. Programmable RNA-Guided RNA Effector Proteins Built from Human Parts. Cell (2019)",
+      "doi": "PMID: 31422867; DOI: 10.1016/j.cell.2019.07.025",
+      "usedFor": "Original description of the CIRTS platform."
+    },
+    {
+      "refId": "R2",
+      "paper": "Subsequent CIRTS engineering studies",
+      "doi": "Needs verification",
+      "usedFor": "Improved programmable RNA editing and targeting."
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on programmable RNA editing technologies",
+      "doi": "Needs verification",
+      "usedFor": "Comparison of CIRTS, LEAPER, CRISPR-Cas13, and engineered ADAR systems."
+    }
+  ]
+}

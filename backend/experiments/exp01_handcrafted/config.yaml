@@ -1,0 +1,22 @@
+experiment: exp01_handcrafted
+description: Handcrafted features only (9-dim)
+feature_families:
+- handcrafted
+input_dim: 9
+hyperparameters:
+  learning_rate: 0.001
+  dropout: 0.2
+  weight_decay: 1.0e-05
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  n_folds: 5
+  seed: 42
+architecture:
+- 64
+- 32
+results:
+  pearson_mean: 0.296698126310019
+  pearson_sd: 0.051169142703072684
+  r2_mean: 0.085536527633667
+  r2_sd: 0.030089319167924403

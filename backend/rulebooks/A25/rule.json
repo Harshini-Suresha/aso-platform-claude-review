@@ -1,0 +1,57 @@
+{
+  "id": "A25",
+  "enabled": true,
+  "name": "RNA Aptamer Therapeutics",
+  "category": "Ligand Binding / Molecular Inhibition",
+  "therapeuticGoalIds": [
+    "TG09",
+    "TG05"
+  ],
+  "therapeuticGoalDescription": "Modulate disease by specifically binding and inhibiting (or occasionally activating) extracellular or intracellular target molecules without altering gene expression.",
+  "molecularDefect": "Diseases driven by excessive protein activity, ligand–receptor interactions, or dysregulated signaling pathways.",
+  "diseaseMechanism": "RNA aptamers fold into defined three-dimensional structures that bind target proteins with high affinity and specificity, preventing ligand binding, receptor activation, or protein function.",
+  "suitableVariantTypes": null,
+  "typicalDiseases": "Neovascular age-related macular degeneration (VEGF); Cancer (experimental); Coagulation disorders; Autoimmune diseases (experimental); Viral infections (preclinical).",
+  "rnaTargetRegion": "Not applicable (targets proteins rather than RNA).",
+  "transcriptRequirement": "None.",
+  "asoChemistry": null,
+  "typicalLength": "Approximately 20–100 nucleotides.",
+  "designRules": "Identify target protein; generate aptamers using SELEX; optimize affinity, specificity, nuclease resistance, and pharmacokinetics.",
+  "secondaryStructureRequirement": "Essential. Biological activity depends on correct three-dimensional folding (stem-loops, bulges, pseudoknots, etc.).",
+  "offTargetConsiderations": "Non-specific protein binding; structural instability; immune responses to delivery systems.",
+  "advantages": "High specificity; reversible activity; relatively low immunogenicity; can be chemically synthesized; antidotes can be developed.",
+  "limitations": "Susceptible to nuclease degradation without modification; delivery challenges; limited number of approved therapeutics.",
+  "fdaApprovedDrugs": "Pegaptanib",
+  "clinicalTrialExamples": "Pegaptanib (AMD); multiple oncology and coagulation-targeting aptamers in clinical development.",
+  "evidenceLevel": {
+    "rating": "High",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Systematic Evolution of Ligands by Exponential Enrichment: RNA ligands to bacteriophage T4 DNA polymerase by Craig Tuerk & Larry Gold",
+      "doi": "PMID: 2200121",
+      "usedFor": "DOI: 10.1126/science.2200121"
+    },
+    {
+      "refId": "R2",
+      "paper": "In vitro selection of RNA molecules that bind specific ligands by Andrew Ellington & Jack Szostak",
+      "doi": "PMID: 1697402",
+      "usedFor": "DOI: 10.1038/346818a0"
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on RNA aptamer therapeutics",
+      "doi": "Review",
+      "usedFor": "Therapeutic applications and optimization strategies."
+    },
+    {
+      "refId": "R4",
+      "paper": "Clinical development of Pegaptanib",
+      "doi": "PMID: Needs verification",
+      "usedFor": "Development and clinical use in age-related macular degeneration."
+    }
+  ]
+}

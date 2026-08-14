@@ -1,0 +1,10 @@
+{
+  "checkpoint": "backend/results/benchmark/generative_v3/generator.pt",
+  "train_rows": 82724,
+  "mechanisms": [
+    "rnase_h",
+    "sirna",
+    "splice_switching"
+  ],
+  "chemistry_classes": 233
+}

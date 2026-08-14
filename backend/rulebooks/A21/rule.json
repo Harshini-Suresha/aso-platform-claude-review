@@ -1,0 +1,51 @@
+{
+  "id": "A21",
+  "enabled": true,
+  "name": "RNA Interference (siRNA-mediated Gene Silencing)",
+  "category": "Post-transcriptional Gene Silencing",
+  "therapeuticGoalIds": [
+    "TG01"
+  ],
+  "therapeuticGoalDescription": "Reduce target gene expression by sequence-specific degradation of mRNA through the RNA-induced silencing complex (RISC).",
+  "molecularDefect": "Diseases driven by pathogenic gene overexpression, gain-of-function variants, or toxic transcript accumulation.",
+  "diseaseMechanism": "Double-stranded siRNA is loaded into the RISC complex. The guide strand directs Argonaute-2 (AGO2) to complementary mRNA, which is cleaved and degraded.",
+  "suitableVariantTypes": "Gain-of-function variants; dominant pathogenic variants; overexpressed genes; viral RNAs; toxic transcripts.",
+  "typicalDiseases": "Hereditary transthyretin amyloidosis (ATTR); Acute hepatic porphyria (ALAS1); Primary hyperoxaluria type 1 (HAO1); Hypercholesterolemia (PCSK9); Hepatitis B (investigational).",
+  "rnaTargetRegion": "Mature mRNA (typically coding sequence or untranslated regions with accessible sequence).",
+  "transcriptRequirement": "Cytoplasmic target mRNA with high sequence complementarity to the guide strand.",
+  "asoChemistry": null,
+  "typicalLength": "~21–23 bp duplex.",
+  "designRules": "Select unique target sequence; optimize guide/passenger strand asymmetry; minimize seed-region off-targets; validate AGO2-mediated cleavage.",
+  "scoring": "Candidates are ranked by predicted target duplex free energy (ΔG, kcal/mol) computed using ViennaRNA duplexfold — more negative values indicate stronger predicted ASO-target binding. Biophysical metrics reported: GC content, nearest-neighbor Tm (primer3), self-structure MFE (ViennaRNA fold), poly-G tracts, CpG count, homopolymer runs, purine content, GC skew, sequence complexity, molecular weight, extinction coefficient. Drug-like estimates: nuclease resistance, cellular uptake, BBB crossing, off-target risk, immune stimulation, synthesis difficulty.",
+  "secondaryStructureRequirement": "Accessible target region improves silencing efficiency.",
+  "offTargetConsiderations": "Seed-mediated off-target effects; saturation of endogenous RNAi pathways; immune stimulation.",
+  "advantages": "Highly potent; catalytic mechanism; several FDA-approved therapeutics; efficient liver delivery using GalNAc conjugation.",
+  "limitations": "Primarily effective in tissues with established delivery methods; off-target effects; requires intracellular delivery.",
+  "fdaApprovedDrugs": "Patisiran; Givosiran; Lumasiran; Inclisiran; Vutrisiran",
+  "clinicalTrialExamples": "Multiple Phase I–III RNAi therapeutics across liver, cardiovascular, infectious, and rare diseases.",
+  "evidenceLevel": {
+    "rating": "Very High",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Potent and specific genetic interference by double-stranded RNA in Caenorhabditis elegans",
+      "doi": "PMID: 9486653; DOI: 10.1038/35888",
+      "usedFor": "Discovery of RNA interference."
+    },
+    {
+      "refId": "R2",
+      "paper": "Duplexes of 21-nucleotide RNAs mediate RNA interference in mammalian cells",
+      "doi": "PMID: 11486090; DOI: 10.1038/35078107",
+      "usedFor": "Demonstration of siRNA-mediated RNAi in mammalian cells."
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on therapeutic RNA interference",
+      "doi": "Review",
+      "usedFor": "Clinical development and therapeutic applications of siRNA."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.pretrained/
+pretrained/
+data/*
+!data/benchmark/
+!data/raw/
+checkpoints/*.pth
+logs/
+*.log

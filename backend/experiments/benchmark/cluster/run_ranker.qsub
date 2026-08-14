@@ -1,0 +1,34 @@
+#!/bin/bash -l
+#$ -S /bin/bash
+#$ -cwd
+#$ -V
+#$ -N neural_ranker
+#$ -r y
+#$ -q short.q
+#$ -l h_vmem=4G
+#$ -pe shm 16
+#$ -j y
+#$ -o ranker_$JOB_ID.out
+#$ -e ranker_$JOB_ID.err
+
+# Neural chemistry-conditioned ranker on ASO Atlas (CPU, single node).
+# Usage: qsub run_ranker.qsub
+# Expects: conda env 'aso-env' + code + data under /cluster/share/$USER/aso
+
+source /cluster/share/${USER}/miniconda3/etc/profile.d/conda.sh
+conda activate aso-env
+
+cd /cluster/share/${USER}/aso
+export OMP_NUM_THREADS=16
+export MKL_NUM_THREADS=16
+
+python -m backend.experiments.benchmark.neural_ranker \
+  --data /cluster/share/${USER}/aso/backend/data/benchmark/aso_atlas_clean.parquet \
+  --out /cluster/share/${USER}/aso/results/benchmark/neural_ranker_full \
+  --n-pairs 1000000 \
+  --epochs 25 \
+  --batch 1024 \
+  --device cpu
+
+echo "==> JOB FINISHED at $(date)"
+exit 0

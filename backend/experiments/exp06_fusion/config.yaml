@@ -1,0 +1,26 @@
+experiment: exp06_fusion
+description: Full FusionNet (1300-dim)
+feature_families:
+- rnafm
+- accessibility
+- handcrafted
+input_dim: 1300
+hyperparameters:
+  learning_rate: 0.001
+  dropout: 0.2
+  weight_decay: 1.0e-05
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  n_folds: 5
+  seed: 42
+architecture:
+- 512
+- 256
+- 128
+- 64
+results:
+  pearson_mean: 0.5519744573865244
+  pearson_sd: 0.018254607218829048
+  r2_mean: 0.2735456943511963
+  r2_sd: 0.030739187001816763

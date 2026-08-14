@@ -1,0 +1,25 @@
+experiment: exp04_rnafm_accessibility
+description: RNA-FM + Accessibility (1291-dim)
+feature_families:
+- rnafm
+- accessibility
+input_dim: 1291
+hyperparameters:
+  learning_rate: 0.001
+  dropout: 0.2
+  weight_decay: 1.0e-05
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  n_folds: 5
+  seed: 42
+architecture:
+- 512
+- 256
+- 128
+- 64
+results:
+  pearson_mean: 0.5369637183419916
+  pearson_sd: 0.03875543083505856
+  r2_mean: 0.2763623118400574
+  r2_sd: 0.05091699314978891

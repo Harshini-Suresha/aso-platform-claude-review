@@ -1,0 +1,50 @@
+{
+  "id": "A14",
+  "enabled": true,
+  "name": "RNA Toxicity Neutralization (RNA Foci Disruption)",
+  "category": "Toxic RNA neutralization",
+  "therapeuticGoalIds": [
+    "TG05"
+  ],
+  "therapeuticGoalDescription": "Restore normal RNA-binding protein function by disrupting pathogenic RNA-protein complexes without necessarily degrading the RNA.",
+  "molecularDefect": "Expanded repeat RNAs sequester essential RNA-binding proteins (e.g. MBNL1/2) into nuclear foci, producing a toxic gain-of-function; steric masking of the repeat tract is intended to block protein sequestration.",
+  "diseaseMechanism": "Toxic RNA forms nuclear foci that trap proteins such as MBNL, leading to widespread splice abnormalities. RNase H-independent steric blockers (PMO, 2′-MOE) bind the repeat tract, displace the sequestered proteins, and restore splicing homeostasis without degrading the transcript.",
+  "suitableVariantTypes": "Expanded nucleotide repeat tracts (e.g. CUG in DMPK, CCUG in CNBP, CAG in polyglutamine disorders, GGGGCC in C9orf72) that create toxic RNA foci; diseases with pathogenic repeat-expansion transcripts.",
+  "typicalDiseases": "Myotonic Dystrophy Type 1 (DMPK, CUG); Myotonic Dystrophy Type 2 (CNBP, CCUG); C9orf72 ALS/FTD (GGGGCC); FXTAS (FMR1, CGG); Friedreich ataxia (FXN, GAA); spinocerebellar ataxias (CAG).",
+  "rnaTargetRegion": "The expanded repeat tract within the pre-mRNA/mRNA (e.g. CUG, CCUG, GGGGCC). Steric blockers hybridize directly to the repeat, masking the MBNL binding site and dissolving nuclear foci.",
+  "transcriptRequirement": "Target gene must express a transcript containing a pathogenic expanded repeat; no RNase H1 activity required (occupancy-only mechanism).",
+  "asoChemistry": "RNase H-independent steric blockers: PMO (morpholino), 2′-O-MOE full-phosphorothioate, and LNA/DNA mixmers; chemistries optimized for high-affinity repeat binding without nuclease cleavage.",
+  "typicalLength": "Typically 15–30 nt, sized to span several repeat units and achieve cooperative occupancy of the expanded tract.",
+  "designRules": "Select a repeat motif (e.g. CUG, CCUG, GGGGCC) and design a fully complementary steric blocker; minimize GC-dependent self-folding; validate reduction of RNA foci and restoration of downstream splicing (e.g. MBNL-dependent exons) in patient-derived cells.",
+  "secondaryStructureRequirement": "Repeat RNAs adopt stable hairpin/duplex structures; the oligo must outcompete these structures, so chemistry and length are chosen for high-affinity, structure-resistant binding.",
+  "offTargetConsiderations": "Partial complementarity to other repeat-containing transcripts; potential perturbation of normal RNA-protein interactions at non-expanded repeats; toxicity from high-affinity fully modified chemistries at high dose.",
+  "advantages": "Preserves the transcript (no degradation); directly addresses the toxic gain-of-function; broadly applicable across repeat diseases sharing the foci mechanism; can be allele-independent.",
+  "limitations": "Requires a pathogenic repeat expansion; long repeat tracts with stable secondary structure are challenging to mask; no FDA-approved therapy yet; clinical evidence remains limited to early-stage trials.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "IONIS-DMPKRx (investigational ASO for DM1); C9orf72-targeting steric blocker ASOs in early clinical/preclinical development.",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Strong preclinical evidence in DM1/C9orf72 models; early-stage clinical trials ongoing; no approved therapy."
+  },
+  "referencesSummary": "Wheeler et al. (2012) — CUG repeat steric blocking in DM1; Sareen et al. (2013) — C9orf72 ASOs; reviews on toxic RNA neutralization in repeat-expansion diseases.",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Wheeler TM et al. Reversal of RNA dominance by disposable gene therapy and anti-CUG oligos in myotonic dystrophy. Science (2012)",
+      "doi": "DOI: 10.1126/science.1224311",
+      "usedFor": "Demonstration that blocking CUG repeats with anti-CUG oligos releases MBNL and reverses DM1 splicing defects."
+    },
+    {
+      "refId": "R2",
+      "paper": "Sareen D et al. Targeting RNA foci in iPSC-derived motor neurons from ALS patients with a C9ORF72 repeat expansion. Sci Transl Med (2013)",
+      "doi": "DOI: 10.1126/scitranslmed.3007529",
+      "usedFor": "Use of antisense oligos to reduce GGGGCC RNA foci and toxicity in C9orf72 ALS."
+    },
+    {
+      "refId": "R3",
+      "paper": "Bhattacharyya A et al. Advances in RNA therapeutics for repeat-expansion disorders. (Review)",
+      "doi": "Review",
+      "usedFor": "Modern overview of steric blocking strategies for toxic RNA neutralization."
+    }
+  ]
+}

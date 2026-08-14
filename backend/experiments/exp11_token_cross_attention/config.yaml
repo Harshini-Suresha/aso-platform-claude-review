@@ -1,0 +1,44 @@
+experiment: exp11_token_cross_attention
+description: TokenCrossAttention (nucleotide-level cross-attention transformer)
+model_type: token_cross_attention
+input_shapes:
+  aso_tokens:
+  - 2361
+  - 19
+  - 640
+  mrna_tokens:
+  - 2361
+  - 57
+  - 640
+  accessibility:
+  - 2361
+  - 11
+  handcrafted:
+  - 2361
+  - 9
+embedding_note: Per-nucleotide RNA-FM token embeddings (no mean pool). Huesken targets
+  are pre-windowed 57-nt (19 up + 19 binding + 19 down); fixed lengths -> no padding,
+  no attention mask.
+hyperparameters:
+  learning_rate: 0.001
+  dropout: 0.2
+  weight_decay: 1.0e-05
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  n_folds: 5
+  seed: 42
+architecture:
+  rnafm_dim: 640
+  d_model: 128
+  n_heads: 4
+  aso_len: 19
+  target_len: 57
+  acc_dim: 11
+  hc_dim: 9
+  gate_hidden: 32
+  hidden_dims:
+  - 512
+  - 256
+  - 128
+  - 64

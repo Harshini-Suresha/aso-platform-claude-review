@@ -1,0 +1,45 @@
+experiment: exp11_token_attention
+model_type: TokenCrossAttention
+data_description:
+  source: OligoFormer/data/Hu.csv (2,361 ASO-mRNA pairs)
+  aso_tokens:
+  - 2361
+  - 19
+  - 640
+  target_tokens:
+  - 2361
+  - 57
+  - 640
+  target_construction: "Target is the FULL 57-nt mRNA window from the Huesken dataset\
+    \ \u2014 NOT truncated or padded by this pipeline. Verified: the ASO binding site\
+    \ (reverse complement) starts at position 19 in every sample, so the 57-nt window\
+    \ = 19 nt upstream + 19 nt binding site + 19 nt downstream, centered on the target\
+    \ site. Per-nucleotide RNA-FM layer-12 embeddings were extracted with <cls>/<eos>\
+    \ specials stripped (see backend/features/rnafm.py embed_batch_with_tokens). Fixed\
+    \ lengths -> no padding, no attention mask."
+  aso_construction: Full 19-nt ASO (siRNA column). Same token extraction, specials
+    stripped.
+hyperparameters:
+  optimizer: Adam
+  learning_rate: 0.001
+  weight_decay: 1.0e-05
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  n_folds: 5
+  seed: 42
+  scheduler: none (matches GatedFusionNet)
+architecture:
+  rnafm_dim: 640
+  d_model: 256
+  n_heads: 8
+  acc_dim: 11
+  hc_dim: 9
+  dropout: 0.2
+  head:
+  - 276
+  - 256
+  - 128
+  - 64
+  - 1
+  head_normalization: BatchNorm1d (matches prior-model protocol)

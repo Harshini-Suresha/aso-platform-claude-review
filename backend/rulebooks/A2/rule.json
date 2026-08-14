@@ -1,0 +1,58 @@
+{
+  "id": "A2",
+  "enabled": true,
+  "name": "Steric-Blocking Translation Inhibition",
+  "category": "Translation inhibition (RNase H-independent)",
+  "therapeuticGoalIds": [
+    "TG01",
+    "TG06"
+  ],
+  "therapeuticGoalDescription": "Reduce protein synthesis by sterically blocking ribosome initiation or progression without degrading the target RNA.",
+  "molecularDefect": "Diseases where reducing protein production is beneficial while preserving the target transcript.",
+  "diseaseMechanism": "Pathogenic protein production is inhibited by preventing ribosome access or movement on the mRNA rather than inducing RNA degradation.",
+  "suitableVariantTypes": "Gain-of-function variants; dominant pathogenic variants; selected viral RNAs and experimental therapeutic targets.",
+  "typicalDiseases": "Primarily preclinical applications in viral infections, cancer, and experimental dominant genetic disorders. No widely established disease indication exists for this mechanism alone.",
+  "rnaTargetRegion": "5′ UTR; translation initiation codon (AUG); ribosome-binding region; early coding sequence.",
+  "transcriptRequirement": "Disease-relevant transcript containing an accessible translation initiation region.",
+  "asoChemistry": "Fully modified RNase H-inactive ASOs including PMO, PNA, 2′-OMe, 2′-MOE and some LNA-based steric-blocking designs.",
+  "typicalLength": "Approximately 15–25 nucleotides, depending on chemistry and target.",
+  "designRules": "Literature synthesis: target accessible initiation regions; maintain high binding affinity; use RNase H-inactive chemistries; minimize off-target complementarity.",
+  "scoring": "Candidates are ranked by predicted target duplex free energy (ΔG, kcal/mol) computed using ViennaRNA duplexfold — more negative values indicate stronger predicted ASO-target binding. Biophysical metrics reported: GC content, nearest-neighbor Tm (primer3), self-structure MFE (ViennaRNA fold), poly-G tracts, CpG count, homopolymer runs, purine content, GC skew, sequence complexity, molecular weight, extinction coefficient. Drug-like estimates: nuclease resistance, cellular uptake, BBB crossing, off-target risk, immune stimulation, synthesis difficulty.",
+  "secondaryStructureRequirement": "Target accessible, unstructured regions surrounding the translation initiation site whenever possible.",
+  "offTargetConsiderations": "Unintended binding to homologous transcripts may inhibit translation of non-target genes; evaluate transcriptome-wide complementarity.",
+  "advantages": "Preserves RNA integrity; reversible mechanism; suitable when transcript degradation is undesirable.",
+  "limitations": "Generally less potent than catalytic RNase H-mediated ASOs because inhibition depends on sustained occupancy of the target site; highly dependent on RNA accessibility.",
+  "fdaApprovedDrugs": "None identified whose primary approved mechanism is direct translation inhibition.",
+  "clinicalTrialExamples": "No advanced clinical programs identified where the primary therapeutic mechanism is direct translation blockade alone. Most clinical steric-blocking ASOs act through splice modulation.",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Literature exists, but clinical evidence is limited."
+  },
+  "referencesSummary": "Shen & Corey (2018); Kole et al.; Chen et al. (2024); Kim et al. (2023).",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Shen X, Corey DR. Chemistry, mechanism and clinical status of antisense oligonucleotides and duplex RNAs. NAR (2018)",
+      "doi": "10.1093/nar/gkx1239",
+      "usedFor": "Steric-block mechanism; translation inhibition; chemistry. (OUP Academic)"
+    },
+    {
+      "refId": "R2",
+      "paper": "Kole R et al. RNA therapeutics: Beyond RNA interference and antisense oligonucleotides. Nat Rev Drug Discov.",
+      "doi": "10.1038/nrd3625",
+      "usedFor": "Steric-blocking oligonucleotides and translation inhibition. (PMC)"
+    },
+    {
+      "refId": "R3",
+      "paper": "Chen S et al. Splice-Modulating Antisense Oligonucleotides as Therapeutics. 2024",
+      "doi": "DOI to verify",
+      "usedFor": "Classification of RNase H vs steric-blocking mechanisms. (PMC)"
+    },
+    {
+      "refId": "R4",
+      "paper": "Kim Y et al. Drug Discovery Perspectives of Antisense Oligonucleotides. 2023",
+      "doi": "10.4062/biomolther.2023.001",
+      "usedFor": "Steric-blocking mechanism and chemistry. (biomolther.org)"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "model_type": "TokenCrossAttention",
+  "description": "Token-level cross-attention (Phase 12 architecture): proj(640->256) -> cross-attn(ASO q over target kv, 8 heads) -> self-attn(ASO) -> mean pool -> concat acc(11)+hc(9)=276 -> head 276-256-128-64-1.",
+  "protocol": "Identical to GatedFusionNet/CrossAttentionFusion: 5-fold CV seed 42, Adam, MSE, lr=1e-3, wd=1e-5, batch=32, 100 epochs, patience=10, no scheduler, per-fold seed = SEED+fold.",
+  "folds": [
+    {
+      "fold": 1,
+      "pearson": 0.4582066915199902,
+      "r2": 0.16644636697118365,
+      "mse": 0.019120419397950172,
+      "mae": 0.1097487136721611
+    },
+    {
+      "fold": 2,
+      "pearson": 0.3887238356036852,
+      "r2": 0.13364417407871898,
+      "mse": 0.01890423707664013,
+      "mae": 0.10949646681547165
+    },
+    {
+      "fold": 3,
+      "pearson": 0.5364789136126258,
+      "r2": 0.27680413952282934,
+      "mse": 0.01591057889163494,
+      "mae": 0.09984772652387619
+    },
+    {
+      "fold": 4,
+      "pearson": 0.5437888583594805,
+      "r2": 0.2808470155431677,
+      "mse": 0.016165535897016525,
+      "mae": 0.09986544400453568
+    },
+    {
+      "fold": 5,
+      "pearson": 0.4793497037496544,
+      "r2": 0.2242238073488383,
+      "mse": 0.01785907708108425,
+      "mae": 0.10599926114082336
+    }
+  ],
+  "pearson_mean": 0.48131,
+  "pearson_sd": 0.056669,
+  "r2_mean": 0.216393,
+  "r2_sd": 0.058664,
+  "mse_mean": 0.017592,
+  "mse_sd": 0.001341,
+  "mae_mean": 0.104992,
+  "mae_sd": 0.004397
+}

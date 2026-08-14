@@ -1,0 +1,50 @@
+{
+  "id": "A24",
+  "enabled": true,
+  "name": "Messenger RNA (mRNA) Replacement Therapy",
+  "category": "Protein Replacement / Gene Augmentation",
+  "therapeuticGoalIds": [
+    "TG08"
+  ],
+  "therapeuticGoalDescription": "Restore functional protein expression by delivering synthetic mRNA encoding the therapeutic protein.",
+  "molecularDefect": "Loss-of-function mutations, haploinsufficiency, absent or severely reduced protein production where transient protein replacement is therapeutically beneficial.",
+  "diseaseMechanism": "Exogenous mRNA is delivered into the cytoplasm, translated by host ribosomes into the therapeutic protein, thereby restoring or supplementing endogenous protein function without altering genomic DNA.",
+  "suitableVariantTypes": "Nonsense mutations; frameshift mutations; deletions; loss-of-function variants; haploinsufficiency; null alleles.",
+  "typicalDiseases": "Propionic acidemia; Methylmalonic acidemia; Cystic fibrosis (experimental); Ornithine transcarbamylase deficiency; Infectious diseases (vaccines).",
+  "rnaTargetRegion": "None. The therapeutic mRNA itself is delivered rather than targeting endogenous RNA.",
+  "transcriptRequirement": "None. Expression is independent of endogenous transcript production.",
+  "asoChemistry": null,
+  "typicalLength": "Approximately 1–5 kb, depending on the encoded protein.",
+  "designRules": "Optimize codon usage; select appropriate untranslated regions (UTRs); include 5′ cap, poly(A) tail, and modified nucleosides to enhance stability and reduce innate immune activation; validate protein expression.",
+  "secondaryStructureRequirement": "Optimized to promote efficient translation while maintaining mRNA stability.",
+  "offTargetConsiderations": "Innate immune activation; transient expression; delivery-related toxicity; excessive protein expression.",
+  "advantages": "No genomic integration; rapid protein expression; adaptable platform; suitable for repeated dosing.",
+  "limitations": "Transient expression; requires efficient delivery; storage and stability challenges; repeated administration often necessary.",
+  "fdaApprovedDrugs": "Comirnaty; Spikevax",
+  "clinicalTrialExamples": "Multiple clinical programs in infectious diseases, rare diseases, and oncology.",
+  "evidenceLevel": {
+    "rating": "Very High",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Katalin Karikó et al. Suppression of RNA recognition by Toll-like receptors: the impact of nucleoside modification.",
+      "doi": "PMID: 16111635",
+      "usedFor": "DOI: 10.1016/j.immuni.2005.06.008"
+    },
+    {
+      "refId": "R2",
+      "paper": "Drew Weissman & Katalin Karikó reviews on mRNA therapeutics",
+      "doi": "Review",
+      "usedFor": "Development of therapeutic mRNA platforms."
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on clinical mRNA therapeutics",
+      "doi": "Review",
+      "usedFor": "Clinical applications and delivery strategies."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "A6",
+  "enabled": true,
+  "name": "miRNA Binding Site Blocking (Target Protector / BlockmiR / miR-Mask)",
+  "category": "Translation enhancement / Post-transcriptional regulation",
+  "therapeuticGoalIds": [
+    "TG02",
+    "TG06"
+  ],
+  "therapeuticGoalDescription": "Increase expression of a specific target gene by preventing binding of a regulatory miRNA to its binding site on the target mRNA.",
+  "molecularDefect": "Reduced protein expression caused by pathogenic or excessive miRNA-mediated repression of a disease-relevant transcript.",
+  "diseaseMechanism": "A disease-associated miRNA binds the 3′ UTR of the target mRNA, suppressing translation and/or promoting mRNA destabilization. Blocking only that interaction restores expression of the specific gene without inhibiting the miRNA globally.",
+  "suitableVariantTypes": "Haploinsufficiency or reduced protein expression where a pathogenic miRNA:mRNA interaction has been experimentally validated.",
+  "typicalDiseases": "Frontotemporal dementia (GRN/progranulin deficiency, investigational); additional preclinical cardiovascular, muscular, and neurological disease models.",
+  "rnaTargetRegion": "miRNA recognition element (MRE), typically within the 3′ untranslated region (3′ UTR) of the target mRNA.",
+  "transcriptRequirement": "A validated disease-relevant miRNA-binding site within the target transcript.",
+  "asoChemistry": "RNase H-independent steric-blocking ASOs including morpholinos, LNA, 2′-O-Me and other fully modified chemistries designed to prevent miRNA binding rather than induce RNA cleavage.",
+  "typicalLength": "Approximately 15–25 nucleotides depending on the size of the miRNA recognition element and ASO chemistry.",
+  "designRules": "Literature synthesis: identify experimentally validated miRNA-binding sites; design ASOs complementary to the MRE; avoid RNase H-active chemistries; experimentally confirm restoration of target gene expression.",
+  "secondaryStructureRequirement": "Target accessible miRNA-binding regions within the 3′ UTR.",
+  "offTargetConsiderations": "Potential binding to homologous miRNA-binding motifs in other transcripts; evaluate transcriptome-wide complementarity and unintended disruption of other miRNA:mRNA interactions.",
+  "advantages": "Gene-specific modulation; preserves global miRNA function; fewer systemic effects than anti-miRs because only one miRNA:mRNA interaction is disrupted.",
+  "limitations": "Requires experimentally validated miRNA-binding sites; limited clinical validation; each target requires a custom-designed ASO.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified. Current therapeutic applications remain preclinical.",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Strong mechanistic and preclinical evidence; no approved therapeutics."
+  },
+  "referencesSummary": "Davis et al. (2006); Lima et al. (2018); Staton et al. (2011); Aggarwal et al. (2023).",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Davis et al. Improved targeting of miRNA with antisense oligonucleotides. Nucleic Acids Research (2006)",
+      "doi": "DOI: 10.1093/nar/gkl171",
+      "usedFor": "Early miRNA-targeting ASO chemistry and principles. (OUP Academic)"
+    },
+    {
+      "refId": "R2",
+      "paper": "Lima et al. Anti-miRNA oligonucleotides: A comprehensive guide for design. RNA Biology (2018)",
+      "doi": "DOI: 10.1080/15476286.2018.1445959",
+      "usedFor": "Reviews target protectors (miR-Mask/BlockmiR). (Taylor & Francis Online)"
+    },
+    {
+      "refId": "R3",
+      "paper": "Staton et al. Use of target protector morpholinos to analyze the physiological roles of specific miRNA–mRNA pairs. Methods Mol Biol (2011)",
+      "doi": "PMID available",
+      "usedFor": "Experimental target protector methodology. (PMC)"
+    },
+    {
+      "refId": "R4",
+      "paper": "Aggarwal et al. Antisense oligonucleotides targeting the miR-29b binding site increase progranulin expression. J Biol Chem (2023)",
+      "doi": "JBC 2023",
+      "usedFor": "Therapeutic BlockmiR application. (JBC)"
+    }
+  ]
+}

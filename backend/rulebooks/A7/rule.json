@@ -1,0 +1,57 @@
+{
+  "id": "A7",
+  "enabled": true,
+  "name": "Exon Skipping",
+  "category": "Splice modulation",
+  "therapeuticGoalIds": [
+    "TG04",
+    "TG07"
+  ],
+  "therapeuticGoalDescription": "Restore production of a functional protein by preventing inclusion of a disease-associated exon during pre-mRNA splicing.",
+  "molecularDefect": "Mutations that disrupt the reading frame or introduce pathogenic exons, where skipping one or more exons can restore a functional transcript.",
+  "diseaseMechanism": "Binding of a steric-blocking ASO masks splice-regulatory sequences (e.g., splice donor/acceptor sites or exonic splicing enhancers), preventing spliceosome recognition of the target exon and promoting its exclusion from the mature mRNA.",
+  "suitableVariantTypes": "Frameshift mutations; nonsense mutations; splice-site variants; mutations in exons where exon removal restores the reading frame while maintaining protein function.",
+  "typicalDiseases": "Duchenne muscular dystrophy (DMD); selected inherited retinal dystrophies (investigational); other rare genetic disorders with frame-restorable mutations.",
+  "rnaTargetRegion": "Exonic splicing enhancers (ESEs); splice donor sites; splice acceptor sites; intronic splice regulatory elements flanking the target exon.",
+  "transcriptRequirement": "A transcript in which skipping the selected exon restores or preserves production of a functional protein.",
+  "asoChemistry": "RNase H-independent steric-blocking ASOs. Common chemistries include PMO (phosphorodiamidate morpholino oligomer) and 2′-O-methyl phosphorothioate (2′-OMe PS).",
+  "typicalLength": "Approximately 20–30 nucleotides, depending on target exon and chemistry.",
+  "designRules": "Literature synthesis: target validated splice-regulatory elements; preserve reading frame; avoid RNase H-activating chemistries; experimentally validate exon-skipping efficiency by RT-PCR and protein restoration assays.",
+  "secondaryStructureRequirement": "Prefer accessible splice-regulatory regions within pre-mRNA; RNA accessibility may influence exon-skipping efficiency.",
+  "offTargetConsiderations": "Potential unintended modulation of splicing in partially complementary transcripts; transcriptome-wide splice analysis is recommended.",
+  "advantages": "Clinically validated mechanism; can restore endogenous protein production without genome editing; reversible and sequence-specific.",
+  "limitations": "Applicable only when exon removal preserves protein function; patient-specific applicability depends on mutation location; repeated dosing required.",
+  "fdaApprovedDrugs": "Eteplirsen (Exondys 51); Golodirsen (Vyondys 53); Casimersen (Amondys 45); Viltolarsen (Viltepso).",
+  "clinicalTrialExamples": "Eteplirsen; Golodirsen; Casimersen; Viltolarsen; numerous investigational exon-skipping ASOs for DMD and other inherited disorders.",
+  "evidenceLevel": {
+    "rating": "High",
+    "note": "Multiple FDA-approved drugs and extensive clinical validation."
+  },
+  "referencesSummary": "Aartsma-Rus & Corey (2020); Chen et al. (2024); Lim et al. (2020); FDA prescribing information for Exondys 51, Vyondys 53, Amondys 45, and Viltepso.",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Aartsma-Rus A, Corey DR. The 10th oligonucleotide therapy approved: Golodirsen for Duchenne muscular dystrophy. Nucleic Acid Therapeutics (2020)",
+      "doi": "DOI: 10.1089/nat.2020.0843",
+      "usedFor": "Exon-skipping mechanism, DMD therapeutics."
+    },
+    {
+      "refId": "R2",
+      "paper": "Chen S et al. Splice-Modulating Antisense Oligonucleotides as Therapeutics. Molecular Therapy – Nucleic Acids (2024)",
+      "doi": "Review",
+      "usedFor": "Comprehensive splice-modulating ASO review. (pmc.ncbi.nlm.nih.gov)"
+    },
+    {
+      "refId": "R3",
+      "paper": "Lim KRQ et al. Antisense oligonucleotide modulation of splicing: Current status and future prospects. Molecular Therapy (2020)",
+      "doi": "Review",
+      "usedFor": "Mechanism, chemistry, diseases."
+    },
+    {
+      "refId": "R4",
+      "paper": "FDA labels: Exondys 51, Vyondys 53, Amondys 45, Viltepso",
+      "doi": "FDA",
+      "usedFor": "Approved drugs and indications."
+    }
+  ]
+}

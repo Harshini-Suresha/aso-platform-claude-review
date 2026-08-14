@@ -1,0 +1,57 @@
+{
+  "id": "A15",
+  "enabled": true,
+  "name": "Transcriptional Gene Silencing (Promoter-Targeting ASOs)",
+  "category": "Transcriptional regulation / Epigenetic modulation",
+  "therapeuticGoalIds": [
+    "TG01"
+  ],
+  "therapeuticGoalDescription": "Reduce gene expression by inhibiting transcription through targeting promoter-associated RNAs or promoter regions.",
+  "molecularDefect": "Diseases driven by pathogenic gene overexpression where transcriptional repression is desirable.",
+  "diseaseMechanism": "ASOs bind promoter-associated RNAs, recruiting chromatin-modifying complexes and altering transcription initiation, resulting in decreased transcription of the target gene.",
+  "suitableVariantTypes": "Gene overexpression; oncogene activation; transcriptional dysregulation.",
+  "typicalDiseases": "Cancer (MYC, progesterone receptor studies); experimental models of transcriptional dysregulation.",
+  "rnaTargetRegion": "Promoter-associated RNA (paRNA); promoter-overlapping transcripts; transcription start site-associated RNAs.",
+  "transcriptRequirement": "Presence of a functional promoter-associated RNA involved in regulating transcription.",
+  "asoChemistry": "RNase H-compatible phosphorothioate gapmers and other modified ASOs, depending on the experimental platform.",
+  "typicalLength": "~18–20 nt in most published studies.",
+  "designRules": "Literature synthesis: identify functional promoter-associated RNAs; design ASOs complementary to regulatory promoter transcripts; experimentally verify transcriptional repression by qPCR and chromatin assays.",
+  "scoring": "Candidates are ranked by predicted target duplex free energy (ΔG, kcal/mol) computed using ViennaRNA duplexfold — more negative values indicate stronger predicted ASO-target binding. Biophysical metrics reported: GC content, nearest-neighbor Tm (primer3), self-structure MFE (ViennaRNA fold), poly-G tracts, CpG count, homopolymer runs, purine content, GC skew, sequence complexity, molecular weight, extinction coefficient. Drug-like estimates: nuclease resistance, cellular uptake, BBB crossing, off-target risk, immune stimulation, synthesis difficulty.",
+  "secondaryStructureRequirement": "Accessible promoter-associated RNA regions are preferred.",
+  "offTargetConsiderations": "Potential epigenetic effects on unintended loci; evaluate transcriptome-wide and chromatin-wide specificity.",
+  "advantages": "Regulates gene expression at the transcriptional level; may provide durable suppression compared with post-transcriptional approaches.",
+  "limitations": "Mechanism is incompletely understood; highly context-dependent; limited clinical validation.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified. Primarily preclinical.",
+  "evidenceLevel": {
+    "rating": "Low–Moderate",
+    "note": null
+  },
+  "referencesSummary": "Janowski et al.; Matsui & Corey reviews; Corey reviews on antigene oligonucleotides.",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Janowski BA et al. Inhibiting gene expression at transcription start sites in chromosomal DNA with antigene RNAs. Nature Chemical Biology (2005)",
+      "doi": "DOI: 10.1038/nchembio721",
+      "usedFor": "Early demonstration of promoter-targeted oligonucleotide-mediated transcriptional silencing."
+    },
+    {
+      "refId": "R2",
+      "paper": "Janowski BA et al. Antisense inhibition of transcription by promoter-targeted oligonucleotides.",
+      "doi": "Follow-up mechanistic work",
+      "usedFor": "Mechanism of transcriptional silencing."
+    },
+    {
+      "refId": "R3",
+      "paper": "Matsui M., Corey DR. Reviews on antigene oligonucleotides",
+      "doi": "Review",
+      "usedFor": "Promoter-targeting ASOs and transcriptional regulation."
+    },
+    {
+      "refId": "R4",
+      "paper": "Corey DR. Reviews on antigene and promoter-targeting oligonucleotides",
+      "doi": "Review",
+      "usedFor": "Therapeutic potential and mechanism."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": "A17",
+  "enabled": true,
+  "name": "LEAPER (Leveraging Endogenous ADAR for Programmable Editing of RNA)",
+  "category": "Endogenous RNA Editing",
+  "therapeuticGoalIds": [
+    "TG03"
+  ],
+  "therapeuticGoalDescription": "Correct pathogenic RNA mutations through endogenous ADAR-mediated A→I (G) editing without introducing exogenous editing proteins.",
+  "molecularDefect": "Single-nucleotide pathogenic variants that can be corrected by adenosine-to-inosine (A→I) RNA editing.",
+  "diseaseMechanism": "An engineered ADAR-recruiting RNA (arRNA) hybridizes to the target transcript, forming a dsRNA structure that recruits endogenous ADAR enzymes, resulting in site-specific A→I editing.",
+  "suitableVariantTypes": "G→A pathogenic variants; nonsense mutations; selected missense mutations; splice-site variants correctable by A→I editing.",
+  "typicalDiseases": "Hurler syndrome (IDUA); Ornithine transcarbamylase (OTC) deficiency; Rett syndrome (MECP2); proof-of-concept studies in additional monogenic disorders.",
+  "rnaTargetRegion": "Exonic or splice-site regions containing an editable adenosine.",
+  "transcriptRequirement": "Target transcript must contain an accessible adenosine suitable for endogenous ADAR editing.",
+  "asoChemistry": null,
+  "typicalLength": "Approximately 70–200 nt, depending on target and arRNA design.",
+  "designRules": "Select an editable adenosine; optimize mismatch opposite the target A; maximize endogenous ADAR recruitment while minimizing bystander editing; validate by RNA sequencing.",
+  "secondaryStructureRequirement": "Stable duplex formation between arRNA and target RNA is required for efficient ADAR recruitment.",
+  "offTargetConsiderations": "Bystander A→I editing; transcriptome-wide off-target editing; RNA duplex-dependent specificity.",
+  "advantages": "No exogenous protein delivery; reversible RNA editing; reduced risk of permanent genomic alterations.",
+  "limitations": "Restricted to editable adenosines; editing efficiency varies by transcript and cell type; no approved therapies.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None (currently preclinical).",
+  "evidenceLevel": {
+    "rating": "Moderate (strong preclinical evidence).",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Qu L. et al. Leveraging Endogenous ADAR for Programmable Editing of RNA. Nature. 2019.",
+      "doi": "PMID: 31959987; DOI: 10.1038/s41586-019-1711-4",
+      "usedFor": "Original LEAPER platform."
+    },
+    {
+      "refId": "R2",
+      "paper": "Qu L. et al. Follow-up LEAPER studies",
+      "doi": "Needs verification",
+      "usedFor": "Improved editing efficiency and expanded applications."
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on programmable RNA editing",
+      "doi": "Needs verification",
+      "usedFor": "Overview of endogenous ADAR-based editing technologies."
+    },
+    {
+      "refId": "R4",
+      "paper": "Reviews comparing LEAPER with engineered ADAR systems",
+      "doi": "Needs verification",
+      "usedFor": "Comparison of RNA editing platforms."
+    }
+  ]
+}

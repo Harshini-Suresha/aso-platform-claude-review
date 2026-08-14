@@ -1,0 +1,56 @@
+{
+  "id": "A11",
+  "enabled": true,
+  "name": "Alternative Polyadenylation (APA) Modulation",
+  "category": "RNA processing modulation",
+  "therapeuticGoalIds": [
+    "TG04"
+  ],
+  "therapeuticGoalDescription": "Modify polyadenylation site selection to restore normal transcript processing or alter mRNA stability, localization, or protein expression.",
+  "molecularDefect": "Diseases involving aberrant alternative polyadenylation, premature poly(A) site usage, or dysregulated 3′ end processing.",
+  "diseaseMechanism": "Alternative polyadenylation generates abnormal transcript isoforms with altered coding potential, stability, localization, or translational efficiency. ASOs can block aberrant polyadenylation signals or regulatory elements to redirect processing toward the desired poly(A) site.",
+  "suitableVariantTypes": "Variants affecting polyadenylation signals (PAS); mutations creating cryptic poly(A) sites; regulatory variants altering alternative polyadenylation.",
+  "typicalDiseases": "β-thalassemia (selected cases); cancer-associated APA dysregulation; several rare genetic disorders involving abnormal polyadenylation (primarily experimental).",
+  "rnaTargetRegion": "Polyadenylation signal (AAUAAA and variants); cleavage site; downstream sequence element (DSE); upstream sequence element (USE); regulatory motifs controlling 3′ end processing.",
+  "transcriptRequirement": "Presence of a validated disease-associated alternative polyadenylation event or pathogenic poly(A) site.",
+  "asoChemistry": "Primarily RNase H-independent steric-blocking ASOs; experimental studies have used fully modified phosphorothioate, 2′-MOE, and morpholino chemistries depending on the application.",
+  "typicalLength": "Approximately 18–25 nucleotides in published experimental studies; no universally accepted standard.",
+  "designRules": "Literature synthesis: target validated polyadenylation signals or regulatory elements; avoid RNase H-mediated degradation when the objective is RNA processing modulation; experimentally verify APA changes using 3′ end sequencing or RT-PCR.",
+  "secondaryStructureRequirement": "Accessible regions surrounding the polyadenylation signal and cleavage site are preferred for efficient ASO binding.",
+  "offTargetConsiderations": "Potential alteration of polyadenylation in non-target transcripts with homologous sequence motifs; transcriptome-wide APA analysis is recommended.",
+  "advantages": "Enables regulation of endogenous RNA processing without genome editing; can alter transcript isoform expression and protein output while preserving the genomic sequence.",
+  "limitations": "Limited therapeutic validation; APA regulation is highly context-dependent; requires detailed characterization of transcript-specific polyadenylation patterns.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified. Current applications remain preclinical or proof-of-concept.",
+  "evidenceLevel": {
+    "rating": "Low–Moderate",
+    "note": "Strong mechanistic biology but limited direct therapeutic and clinical evidence."
+  },
+  "referencesSummary": "Di Giammartino et al. (2011); Tian & Manley (2017); recent reviews on ASO-mediated RNA processing.",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Di Giammartino DC, Nishida K, Manley JL. Mechanisms and consequences of alternative polyadenylation. Molecular Cell (2011)",
+      "doi": "DOI: 10.1016/j.molcel.2011.08.017",
+      "usedFor": "Biology of alternative polyadenylation (APA)."
+    },
+    {
+      "refId": "R2",
+      "paper": "Tian B, Manley JL. Alternative polyadenylation of mRNA precursors. Nature Reviews Molecular Cell Biology (2017)",
+      "doi": "DOI: 10.1038/nrm.2017.79",
+      "usedFor": "Comprehensive APA review."
+    },
+    {
+      "refId": "R3",
+      "paper": "Lim KH et al. Antisense oligonucleotide modulation of RNA processing",
+      "doi": "Review",
+      "usedFor": "ASO-mediated modulation of polyadenylation."
+    },
+    {
+      "refId": "R4",
+      "paper": "Reviews on therapeutic ASOs targeting RNA processing (2023–2024)",
+      "doi": "Review",
+      "usedFor": "Therapeutic applications of APA modulation."
+    }
+  ]
+}

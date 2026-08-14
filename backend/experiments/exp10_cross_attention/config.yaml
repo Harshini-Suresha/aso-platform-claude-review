@@ -1,0 +1,26 @@
+experiment: exp10_cross_attention
+description: CrossAttentionFusion (feature-level cross-attention + bilinear interaction)
+model_type: cross_attention
+input_dim: 1300
+embedding_note: RNA-FM embeddings are mean-pooled (640-dim) per sequence; feature-level
+  cross-attention + bilinear interaction used instead of nucleotide-level attention.
+hyperparameters:
+  learning_rate: 0.001
+  dropout: 0.2
+  weight_decay: 1.0e-05
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  n_folds: 5
+  seed: 42
+architecture:
+  rnafm_dim: 640
+  proj_dim: 256
+  acc_dim: 11
+  hc_dim: 9
+  gate_hidden: 32
+  hidden_dims:
+  - 512
+  - 256
+  - 128
+  - 64

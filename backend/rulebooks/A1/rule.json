@@ -1,0 +1,75 @@
+{
+  "id": "A1",
+  "enabled": true,
+  "name": "RNase H-mediated Gapmer Knockdown",
+  "category": "RNA degradation (Knockdown)",
+  "therapeuticGoalIds": [
+    "TG01"
+  ],
+  "therapeuticGoalDescription": "Selective degradation of target RNA through endogenous RNase H1 cleavage, thereby reducing expression of the encoded protein.",
+  "molecularDefect": "Disorders in which reducing the abundance of a pathogenic RNA transcript is therapeutically beneficial, including toxic gain-of-function and pathogenic overexpression.",
+  "diseaseMechanism": "Disease is driven by expression of a pathogenic transcript or protein; reducing transcript abundance is expected to reduce disease pathology.",
+  "suitableVariantTypes": "Gain-of-function variants; dominant pathogenic variants; pathogenic overexpression. Repeat-expansion transcripts may be suitable in specific diseases but should be considered disease-specific rather than a general rule.",
+  "typicalDiseases": "Hereditary transthyretin amyloidosis (TTR); Homozygous familial hypercholesterolemia (ApoB); SOD1-associated ALS; Familial chylomicronemia syndrome (APOC3); Huntington disease (investigational).",
+  "rnaTargetRegion": "Mature mRNA, including coding sequence, exons and untranslated regions depending on target accessibility and biology. RNase H1 can act on nuclear and cytoplasmic RNA.",
+  "transcriptRequirement": "Disease-relevant transcript (canonical or pathogenic isoform). Allele-specific transcript where selective silencing is intended.",
+  "asoChemistry": "DNA gap flanked by chemically modified nucleotides (commonly 2′-MOE, LNA or cEt) with a phosphorothioate (PS) backbone.",
+  "typicalLength": "Approximately 13–20 nt for many therapeutic gapmers; exact length depends on chemistry and target.",
+  "designRules": "Literature synthesis: target accessible RNA regions; optimize affinity; minimize off-target complementarity; choose chemistry compatible with RNase H1 activation. Sequence heuristics (GC%, homopolymers, etc.) should come from design studies rather than mechanism reviews.",
+  "scoring": "Candidates are ranked by predicted target duplex free energy (ΔG, kcal/mol) computed using ViennaRNA duplexfold — more negative values indicate stronger predicted ASO-target binding. Biophysical metrics reported: GC content, nearest-neighbor Tm (primer3), self-structure MFE (ViennaRNA fold), poly-G tracts, CpG count, homopolymer runs, purine content, GC skew, sequence complexity, molecular weight, extinction coefficient. Drug-like estimates: nuclease resistance, cellular uptake, BBB crossing, off-target risk, immune stimulation, synthesis difficulty.",
+  "secondaryStructureRequirement": "Accessible target regions generally improve activity; RNA accessibility is an important consideration during target-site selection.",
+  "offTargetConsiderations": "Partial complementarity, unintended hybridization, chemistry-dependent toxicity, and RNase H1-mediated cleavage of unintended transcripts should be evaluated.",
+  "advantages": "Catalytic RNA degradation; clinically validated mechanism; applicable to coding and non-coding RNAs; effective in nucleus and cytoplasm.",
+  "limitations": "Sequence-dependent off-target effects; potential hepatotoxicity for some high-affinity gapmers; requires RNase H1; not appropriate when transcript preservation is desired.",
+  "fdaApprovedDrugs": "Mipomersen (Kynamro); Inotersen (Tegsedi); Eplontersen (Wainua); Olezarsen (Tryngolza); Tofersen (Qalsody).",
+  "clinicalTrialExamples": "Tominersen (HTT); Pelacarsen (LPA); BIIB078 (C9orf72 ALS); additional investigational gapmer ASOs.",
+  "evidenceLevel": {
+    "rating": "High",
+    "note": "Multiple reviews + FDA-approved therapeutics."
+  },
+  "referencesSummary": "Shen X, Corey DR. Nucleic Acids Research (2018); Crooke ST. Nucleic Acid Therapeutics (2017); Crooke ST. Journal of Biological Chemistry (2021); Burel SA et al. Nucleic Acids Research (2016). (OUP Academic)",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Crooke ST. Antisense technology: A review. J Biol Chem. 2021.",
+      "doi": "10.1016/j.jbc.2021.100416",
+      "usedFor": "Overall mechanism, RNase H ASOs, chemistry, approved drugs. (JBC)"
+    },
+    {
+      "refId": "R2",
+      "paper": "Crooke ST. Molecular Mechanisms of Antisense Oligonucleotides. Nucleic Acid Therapeutics. 2017.",
+      "doi": "10.1089/nat.2016.0656",
+      "usedFor": "RNase H mechanism, occupancy-only mechanisms, molecular biology. (Sage Journals)"
+    },
+    {
+      "refId": "R3",
+      "paper": "Shen X, Corey DR. Chemistry, mechanism and clinical status of antisense oligonucleotides and duplex RNAs. Nucleic Acids Research. 2018.",
+      "doi": "10.1093/nar/gkx1239",
+      "usedFor": "Therapeutic mechanisms, chemistry, target regions."
+    },
+    {
+      "refId": "R4",
+      "paper": "Kim Y et al. Drug Discovery Perspectives of Antisense Oligonucleotides. 2023.",
+      "doi": "10.4062/biomolther.2023.001",
+      "usedFor": "Modern ASO mechanism classification and chemistry. (biomolther.org)"
+    },
+    {
+      "refId": "R5",
+      "paper": "Hagedorn PH et al. Managing the sequence-specificity of antisense oligonucleotides. Nucleic Acids Research. 2017.",
+      "doi": "10.1093/nar/gkw1381",
+      "usedFor": "Off-target effects, specificity, RNase H gapmer design. (OUP Academic)"
+    },
+    {
+      "refId": "R6",
+      "paper": "Liang XH et al. RNase H1-Dependent Antisense Oligonucleotides Are Robustly Active in Directing RNA Cleavage in Both the Cytoplasm and the Nucleus. Molecular Therapy. 2017.",
+      "doi": "10.1016/j.ymthe.2017.06.002",
+      "usedFor": "RNase H biology, intracellular activity. (PMC)"
+    },
+    {
+      "refId": "R7",
+      "paper": "FDA labels (Kynamro, Tegsedi, Wainua, Tryngolza, Qalsody)",
+      "doi": null,
+      "usedFor": "Approved drugs, indications."
+    }
+  ]
+}

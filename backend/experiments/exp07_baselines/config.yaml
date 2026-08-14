@@ -1,0 +1,24 @@
+experiment: baseline_comparison
+description: Classical ML baselines vs FusionNet
+input_dim: 1300
+n_folds: 5
+seed: 42
+models:
+  RandomForest:
+    n_estimators: 200
+    max_depth: 15
+    max_features: sqrt
+  XGBoost:
+    n_estimators: 200
+    max_depth: 6
+    learning_rate: 0.1
+  SVR_rbf:
+    C: 10.0
+    gamma: scale
+  FusionNet:
+    hidden_dims:
+    - 512
+    - 256
+    - 128
+    - 64
+    dropout: 0.2

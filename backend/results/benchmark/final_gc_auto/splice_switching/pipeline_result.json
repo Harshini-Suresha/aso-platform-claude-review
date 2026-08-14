@@ -1,0 +1,43 @@
+{
+  "n_generated": 1000,
+  "alphabet_purity": 1.0,
+  "length_in_range": 1.0,
+  "gc_in_range": 1.0,
+  "homopolymer_ok": 1.0,
+  "novelty_frac": 1.0,
+  "mechanism": "splice_switching",
+  "chemistry": "chem_oov",
+  "ranker_mode": "conditioned",
+  "gen_score_mean": 0.6186840534210205,
+  "rand_score_mean": 0.5884465575218201,
+  "gen_score_median": 0.634099006652832,
+  "rand_score_median": 0.5933575630187988,
+  "score_lift_mean": 0.03023749589920044,
+  "gen_frac_in_top20": 0.215,
+  "n_ranked": 1000,
+  "gc_target": 0.4848875857003639,
+  "gen_gc_mean": 0.4861735225601712,
+  "rand_gc_mean": 0.4966601123377826,
+  "conformal": {
+    "coverage": 0.0,
+    "coverage_ci": [
+      0.0,
+      0.2425007574992425
+    ],
+    "selected_size_mean": 8.333333333333334,
+    "selected_size_mean_ci": [
+      5.416666666666667,
+      11.833333333333334
+    ],
+    "selected_size_median": 8.5,
+    "selected_size_median_ci": [
+      5.0,
+      10.0
+    ],
+    "k": 2,
+    "alpha": 0.1,
+    "n_groups": 12,
+    "q_hat": 0.9134703278541565,
+    "weighted": false
+  }
+}

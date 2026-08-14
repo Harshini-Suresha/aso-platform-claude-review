@@ -1,0 +1,24 @@
+experiment: exp02_rnafm
+description: RNA-FM embeddings only (1280-dim)
+feature_families:
+- rnafm
+input_dim: 1280
+hyperparameters:
+  learning_rate: 0.001
+  dropout: 0.2
+  weight_decay: 1.0e-05
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  n_folds: 5
+  seed: 42
+architecture:
+- 512
+- 256
+- 128
+- 64
+results:
+  pearson_mean: 0.5641117807251168
+  pearson_sd: 0.009663070129723858
+  r2_mean: 0.2891587734222412
+  r2_sd: 0.015835167182691214

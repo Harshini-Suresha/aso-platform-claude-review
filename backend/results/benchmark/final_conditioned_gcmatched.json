@@ -1,0 +1,109 @@
+{
+  "ranker_mode": "conditioned",
+  "generation": "gc_steered_at_source (mechanism training mean GC)",
+  "results": [
+    {
+      "mechanism": "rnase_h",
+      "n": 1000,
+      "lift": 0.05645167827606201,
+      "top20": 0.245,
+      "gc_target": 0.4680259990764734,
+      "gen_gc_mean": 0.46983985576686815,
+      "rand_gc_mean": 0.4966618467832477,
+      "conformal": {
+        "coverage": 0.04,
+        "coverage_ci": [
+          0.015663050551848016,
+          0.09837217232607373
+        ],
+        "selected_size_mean": 4.85,
+        "selected_size_mean_ci": [
+          3.58,
+          6.3
+        ],
+        "selected_size_median": 1.0,
+        "selected_size_median_ci": [
+          1.0,
+          2.0
+        ],
+        "k": 2,
+        "alpha": 0.1,
+        "n_groups": 100,
+        "q_hat": 0.8664360046386719,
+        "weighted": false
+      }
+    },
+    {
+      "mechanism": "sirna",
+      "n": 1000,
+      "lift": 0.03135573863983154,
+      "top20": 0.212,
+      "gc_target": 0.5159148187164135,
+      "gen_gc_mean": 0.5179187865497076,
+      "rand_gc_mean": 0.4971655388471178,
+      "conformal": {
+        "coverage": 0.16666666666666666,
+        "coverage_ci": [
+          0.03005258587173032,
+          0.563509436563646
+        ],
+        "selected_size_mean": 60.333333333333336,
+        "selected_size_mean_ci": [
+          31.666666666666668,
+          92.86666666666618
+        ],
+        "selected_size_median": 50.5,
+        "selected_size_median_ci": [
+          21.0,
+          109.0
+        ],
+        "k": 2,
+        "alpha": 0.1,
+        "n_groups": 6,
+        "q_hat": 0.7941271066665649,
+        "weighted": false
+      }
+    },
+    {
+      "mechanism": "splice_switching",
+      "n": 1000,
+      "lift": 0.03023749589920044,
+      "top20": 0.215,
+      "gc_target": 0.4848875857003639,
+      "gen_gc_mean": 0.4861735225601712,
+      "rand_gc_mean": 0.4966601123377826,
+      "conformal": {
+        "coverage": 0.0,
+        "coverage_ci": [
+          0.0,
+          0.2425007574992425
+        ],
+        "selected_size_mean": 8.333333333333334,
+        "selected_size_mean_ci": [
+          5.416666666666667,
+          11.833333333333334
+        ],
+        "selected_size_median": 8.5,
+        "selected_size_median_ci": [
+          5.0,
+          10.0
+        ],
+        "k": 2,
+        "alpha": 0.1,
+        "n_groups": 12,
+        "q_hat": 0.9134703278541565,
+        "weighted": false
+      }
+    },
+    {
+      "mechanism": "mechanism_oov",
+      "n": 1000,
+      "lift": 0.009088754653930664,
+      "top20": 0.203,
+      "gc_target": 0.4694015263974466,
+      "gen_gc_mean": 0.4708859618881291,
+      "rand_gc_mean": 0.49704703396878325,
+      "conformal": null
+    }
+  ]
+}

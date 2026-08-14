@@ -1,0 +1,19 @@
+{
+  "dataset": "Huesken",
+  "samples": 2361,
+  "model": "FusionNet",
+  "folds": 5,
+  "pearson": 0.5494,
+  "pearson_sd": 0.0148,
+  "r2": 0.2879,
+  "r2_sd": 0.0233,
+  "mse": 0.016,
+  "mae": 0.099,
+  "epochs": 44,
+  "best_fold": 3,
+  "best_fold_pearson": 0.5782,
+  "oof_pearson": 0.5433,
+  "oof_r2": 0.2894,
+  "oof_mse": 0.016,
+  "oof_mae": 0.099
+}

@@ -1,0 +1,35 @@
+version: 1
+data:
+  csv_path: OligoFormer/data/Hu.csv
+  train_split: 0.8
+  seed: 42
+model:
+  type: FusionNet
+  input_dim: 1300
+  hidden_dims:
+  - 512
+  - 256
+  - 128
+  - 64
+  dropout: 0.2
+  output_dim: 1
+rnafm:
+  model_name: rna_fm_t12
+  model_path: backend/pretrained/RNA-FM_pretrained.pth
+  embedding_dim: 640
+  pooling: mean
+  layer: 12
+train:
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  learning_rate: 0.001
+  optimizer: adam
+  loss_function: mse
+  seed: 42
+  val_log_interval: 10
+  weight_decay: 1.0e-05
+paths:
+  checkpoint_dir: backend/checkpoints
+  log_dir: backend/logs
+  checkpoint_name: fusion_model

@@ -1,0 +1,28 @@
+Loading precomputed embeddings from backend/data/hu_embeddings.pt
+Pre-loading all data into tensors...
+Dataset: 2361 samples, input_dim=1300
+Best config from CSV: Pearson=0.5601
+  lr=0.001, dropout=0.2, hidden=[512, 256, 128, 64], wd=1e-05, batch=16
+Search space: 1 total configs
+Running: 1 configs x 5-fold CV
+Epochs/fold: 100, Patience: 15
+Threads: 10
+Output: backend/results/hyperparameter_results.csv
+
+[0/1] lr=0.001, dropout=0.2, hidden=[512, 256, 128, 64], wd=1e-05, batch=16
+  Pearson: 0.5599 +/- 0.0259  R2: 0.2911  (99.2s, ETA: 1.7m)
+  *** NEW BEST ***
+
+============================================================
+SEARCH COMPLETE — 1 configs in 1.7m
+============================================================
+
+Best Pearson: 0.5599
+Best config:
+  learning_rate: 0.001
+  dropout: 0.2
+  hidden_dims: [512, 256, 128, 64]
+  weight_decay: 1e-05
+  batch_size: 16
+
+Results saved to: backend/results/hyperparameter_results.csv

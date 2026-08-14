@@ -1,0 +1,16 @@
+{
+  "mode": "invariant",
+  "n_test_experiments": 488,
+  "n_test_rows": 48999,
+  "spearman_w": 0.0029721704419271707,
+  "topk_w": 0.2967468059920813,
+  "pearson_z_w": 0.25353454729468194,
+  "median_exp_size": 77,
+  "train_seconds": 503.7,
+  "checkpoint": "backend/results/benchmark/ranker_v2/ranker.pt",
+  "split": "gene",
+  "holdout_chemistry": null,
+  "train_modality": null,
+  "eval_modality": null,
+  "epochs": 15
+}

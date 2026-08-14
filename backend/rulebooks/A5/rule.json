@@ -1,0 +1,51 @@
+{
+  "id": "A5",
+  "enabled": true,
+  "name": "Upstream Open Reading Frame (uORF) Blocking",
+  "category": "Translation enhancement",
+  "therapeuticGoalIds": [
+    "TG02",
+    "TG06"
+  ],
+  "therapeuticGoalDescription": "Increase translation of the primary open reading frame (pORF) by preventing translation initiation at inhibitory upstream open reading frames (uORFs).",
+  "molecularDefect": "Reduced protein expression due to translational repression mediated by functional uORFs within the 5′ UTR.",
+  "diseaseMechanism": "Translation initiation at a uORF decreases translation of the downstream coding sequence. Steric-blocking ASOs mask the uORF start site or regulatory sequence to favor translation of the primary ORF.",
+  "suitableVariantTypes": "Disorders where reduced protein expression is directly attributable to a validated inhibitory uORF.",
+  "typicalDiseases": "No established disease indication. Published work has focused primarily on proof-of-concept and experimental targets.",
+  "rnaTargetRegion": "5′ untranslated region (5′ UTR), specifically inhibitory uORFs and their AUG initiation codons.",
+  "transcriptRequirement": "Target transcript must contain a functionally validated inhibitory uORF regulating translation of the primary ORF.",
+  "asoChemistry": "RNase H-inactive steric-blocking ASOs (e.g., fully modified phosphorothioate/2′-MOE designs in the original studies).",
+  "typicalLength": "Approximately 16–20 nt in the original studies; no universal standard established.",
+  "designRules": "Literature synthesis: identify functional uORFs experimentally; target the uAUG or adjacent regulatory sequence; avoid RNase H-mediated cleavage; validate translational effects experimentally.",
+  "secondaryStructureRequirement": "Accessible 5′ UTR regions surrounding the uORF initiation site are preferred.",
+  "offTargetConsiderations": "Potential effects on translation of non-target transcripts containing homologous 5′ UTR sequences; transcriptome-wide specificity analysis recommended.",
+  "advantages": "Potential to increase endogenous protein production without altering genomic DNA or degrading the target transcript.",
+  "limitations": "Independent studies have questioned the reproducibility of this strategy for some targets (e.g., RNASEH1). Clinical utility remains unproven.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified.",
+  "evidenceLevel": {
+    "rating": "Low–Moderate",
+    "note": "Strong mechanistic rationale but conflicting experimental evidence and no clinical validation."
+  },
+  "referencesSummary": "Liang et al. (2016); Liang et al. (2017); Ahlskog et al. (2025).",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Liang XH et al. Translation efficiency of mRNAs is increased by antisense oligonucleotides targeting upstream open reading frames. Nature Biotechnology (2016)",
+      "doi": "PMID: 27398791; DOI: 10.1038/nbt.3589",
+      "usedFor": "Original uORF ASO mechanism. (PubMed)"
+    },
+    {
+      "refId": "R2",
+      "paper": "Liang XH et al. Specific Increase of Protein Levels by Enhancing Translation Using ASOs Targeting Upstream Open Reading Frames. Nucleic Acids Research (2017)",
+      "doi": "Review",
+      "usedFor": "Mechanism review. (OUP Academic)"
+    },
+    {
+      "refId": "R3",
+      "paper": "Ahlskog N et al. uORF-targeting steric block antisense oligonucleotides do not reproducibly increase RNASEH1 expression. Molecular Therapy – Nucleic Acids (2025)",
+      "doi": "DOI: 10.1016/j.omtn.2024.102406",
+      "usedFor": "Independent reproduction study challenging the original RNASEH1 findings. (ScienceDirect)"
+    }
+  ]
+}

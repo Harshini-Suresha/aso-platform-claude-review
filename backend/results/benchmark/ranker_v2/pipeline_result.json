@@ -1,0 +1,28 @@
+{
+  "n_generated": 300,
+  "alphabet_purity": 1.0,
+  "length_in_range": 1.0,
+  "gc_in_range": 0.98,
+  "homopolymer_ok": 1.0,
+  "novelty_frac": 1.0,
+  "mechanism": "splice_switching",
+  "chemistry": "chem_oov",
+  "ranker_mode": "invariant",
+  "gen_score_mean": -8.35166072845459,
+  "rand_score_mean": -8.332060813903809,
+  "gen_score_median": -8.358333587646484,
+  "rand_score_median": -8.312576293945312,
+  "score_lift_mean": -0.01959991455078125,
+  "gen_frac_in_top20": 0.19,
+  "n_ranked": 300,
+  "conformal": {
+    "coverage": 0.0,
+    "selected_size_mean": 41.916666666666664,
+    "selected_size_median": 31.0,
+    "k": 5,
+    "alpha": 0.1,
+    "n_groups": 12,
+    "q_hat": -8.28152084350586,
+    "weighted": false
+  }
+}

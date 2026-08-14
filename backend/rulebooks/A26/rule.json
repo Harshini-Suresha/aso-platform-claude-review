@@ -1,0 +1,50 @@
+{
+  "id": "A26",
+  "enabled": true,
+  "name": "Circular RNA (circRNA)-Mediated Protein Replacement",
+  "category": "Protein Replacement / Sustained Protein Expression",
+  "therapeuticGoalIds": [
+    "TG08"
+  ],
+  "therapeuticGoalDescription": "Produce sustained therapeutic protein expression using circular RNA molecules with enhanced intracellular stability.",
+  "molecularDefect": "Diseases caused by absent or deficient protein expression where prolonged protein production is beneficial.",
+  "diseaseMechanism": "Synthetic circular RNAs enter the cytoplasm and are translated into therapeutic proteins through cap-independent translation (typically mediated by internal ribosome entry sites or other translation elements). The circular topology confers resistance to exonuclease degradation, resulting in prolonged protein production.",
+  "suitableVariantTypes": "Loss-of-function variants; nonsense mutations; frameshift mutations; gene deletions; haploinsufficiency.",
+  "typicalDiseases": "Vaccines (experimental); Ornithine transcarbamylase deficiency; Cystic fibrosis; Hemophilia; Rare metabolic disorders (preclinical).",
+  "rnaTargetRegion": "None. The therapeutic circRNA itself is delivered.",
+  "transcriptRequirement": "None.",
+  "asoChemistry": null,
+  "typicalLength": "Approximately 1–5 kb, depending on the encoded protein.",
+  "designRules": "Optimize coding sequence, IRES/translation element, circularization strategy, untranslated regions (if applicable), and codon usage; validate sustained protein expression.",
+  "secondaryStructureRequirement": "Circular topology is required; local RNA structure should permit efficient ribosome recruitment and translation.",
+  "offTargetConsiderations": "Innate immune activation; prolonged expression; delivery-related toxicity; unintended protein expression.",
+  "advantages": "Increased RNA stability; prolonged protein production; no genomic integration; potentially reduced dosing frequency compared with linear mRNA.",
+  "limitations": "Delivery remains challenging; manufacturing complexity; no FDA-approved circRNA therapeutics (as of now).",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "Multiple early-stage/preclinical circRNA therapeutic programs; no approved products.",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Wesselhoeft RA et al. Engineered circular RNA for enhanced protein production.",
+      "doi": "PMID: 30626939",
+      "usedFor": "DOI: 10.1038/nbt.4300"
+    },
+    {
+      "refId": "R2",
+      "paper": "Reviews on circular RNA therapeutics",
+      "doi": "Review",
+      "usedFor": "Therapeutic applications and design principles."
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on synthetic circRNA technology",
+      "doi": "Review",
+      "usedFor": "Stability, translation, and delivery."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+FusionNet — Binary Classification Confusion (out-of-fold predictions)
+Binary threshold on predicted efficacy: 0.5
+Test samples: 2361
+Accuracy: 0.7052
+
+Confusion matrix (rows=true, cols=pred):
+              Pred Low(0)  Pred High(1)
+True Low(0)          766         421
+True High(1)         275         899
+
+Classification report:
+                   precision    recall  f1-score   support
+
+ Low efficacy (0)       0.74      0.65      0.69      1187
+High efficacy (1)       0.68      0.77      0.72      1174
+
+         accuracy                           0.71      2361
+        macro avg       0.71      0.71      0.70      2361
+     weighted avg       0.71      0.71      0.70      2361

@@ -1,0 +1,56 @@
+{
+  "id": "A3",
+  "enabled": true,
+  "name": "Poison Exon Blocking (Targeted Augmentation of Nuclear Gene Output; TANGO)",
+  "category": "Splice modulation / Gene upregulation",
+  "therapeuticGoalIds": [
+    "TG02"
+  ],
+  "therapeuticGoalDescription": "Increase endogenous protein expression by preventing inclusion of poison (non-productive) exons that trigger nonsense-mediated decay (NMD).",
+  "molecularDefect": "Haploinsufficiency caused by excessive inclusion of poison exons or other non-productive splicing events that reduce productive mRNA.",
+  "diseaseMechanism": "Inclusion of a poison exon introduces a premature termination codon, leading to nonsense-mediated mRNA decay and reduced protein production. Blocking poison exon inclusion restores productive mRNA and increases protein expression.",
+  "suitableVariantTypes": "Haploinsufficiency; pathogenic deep intronic variants promoting poison exon inclusion; splice-regulatory variants affecting poison exon usage.",
+  "typicalDiseases": "Dravet syndrome (SCN1A); Autosomal dominant optic atrophy (OPA1, investigational); SYNGAP1-related disorders (preclinical).",
+  "rnaTargetRegion": "Poison exon sequence; flanking splice donor/acceptor sites; intronic splicing regulatory elements within pre-mRNA.",
+  "transcriptRequirement": "Presence of a characterized poison exon or non-productive alternative splicing event in the target gene.",
+  "asoChemistry": "RNase H-inactive steric-blocking ASOs; published studies commonly use fully modified 2′-MOE phosphorothioate oligonucleotides.",
+  "typicalLength": "Approximately 18–20 nucleotides in published TANGO studies; no universal length has been established.",
+  "designRules": "Literature synthesis: target splice-regulatory elements controlling poison exon inclusion; use steric-blocking chemistry; avoid RNase H activation; experimentally validate splice correction.",
+  "secondaryStructureRequirement": "Target accessible splice-regulatory regions within pre-mRNA to maximize ASO binding and splice modulation.",
+  "offTargetConsiderations": "Unintended modulation of alternative splicing in non-target transcripts; evaluate transcriptome-wide splice effects and sequence specificity.",
+  "advantages": "Increases expression from the endogenous healthy allele; preserves physiological gene regulation; directly addresses haploinsufficiency.",
+  "limitations": "Applicable only when a therapeutically targetable poison exon or non-productive splicing event exists; requires detailed transcript annotation and splice biology.",
+  "fdaApprovedDrugs": "None (as of now).",
+  "clinicalTrialExamples": "STK-001 (zorevunersen) for Dravet syndrome; STK-002 for autosomal dominant optic atrophy (investigational). (stoketherapeutics.com)",
+  "evidenceLevel": {
+    "rating": "Moderate–High",
+    "note": "Strong mechanistic evidence; clinical development ongoing but no FDA approval yet."
+  },
+  "referencesSummary": "Lim et al., 2020; Stoke Therapeutics TANGO platform; Tang et al., 2025; Chen et al., 2024. (PMC)",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Lim KH et al. Antisense oligonucleotide modulation of non-productive alternative splicing upregulates gene expression. Nature Communications (2020)",
+      "doi": "Nature Communications, 2020",
+      "usedFor": "Original description of TANGO mechanism. (PMC)"
+    },
+    {
+      "refId": "R2",
+      "paper": "Chen S et al. Splice-Modulating Antisense Oligonucleotides as Therapeutics. (2024)",
+      "doi": "To verify",
+      "usedFor": "Mechanism review and clinical perspective. (JCI Insight)"
+    },
+    {
+      "refId": "R3",
+      "paper": "Stoke Therapeutics – TANGO Scientific Platform",
+      "doi": null,
+      "usedFor": "Platform description and biological rationale. (stoketherapeutics.com)"
+    },
+    {
+      "refId": "R4",
+      "paper": "Tang S et al. JCI Insight (2025)",
+      "doi": "To verify",
+      "usedFor": "Poison exon biology and ASO rescue in SCN1A. (JCI Insight)"
+    }
+  ]
+}

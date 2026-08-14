@@ -1,0 +1,50 @@
+{
+  "id": "A27",
+  "enabled": true,
+  "name": "Riboswitch / RNA Structure Targeting",
+  "category": "Translation regulation / Structure modulation",
+  "therapeuticGoalIds": [
+    "TG06"
+  ],
+  "therapeuticGoalDescription": "Modulate translation by stabilizing or destabilizing structured RNA elements (IRES, G-quadruplexes, riboswitches) that control ribosomal entry or scanning.",
+  "molecularDefect": "Diseases where a structured RNA element aberrantly regulates translation initiation or elongation.",
+  "diseaseMechanism": "Pathogenic RNA secondary structures (e.g., G-quadruplexes in 5' UTR, IRES elements, riboswitch-like motifs) occlude ribosome scanning or aberrantly recruit translation machinery. ASOs are designed to bind and either stabilize or disrupt these structures, redirecting ribosome access and restoring normal translation levels.",
+  "suitableVariantTypes": "Variants that create, stabilize, or destabilize structured RNA elements in the 5' UTR, 3' UTR, or coding sequence that alter translation efficiency.",
+  "typicalDiseases": "Investigational applications in neurodegeneration (G-quadruplex dysregulation), cancer (IRES-driven translation), and rare metabolic disorders with riboswitch-like RNA elements.",
+  "rnaTargetRegion": "Structured RNA elements: Internal Ribosome Entry Sites (IRES); G-quadruplexes (G4); riboswitch aptamer domains; stem-loop regulatory structures in 5' UTR or CDS.",
+  "transcriptRequirement": "Target transcript containing a validated or predicted structured regulatory RNA element (IRES, G-quadruplex, or riboswitch-like motif) that modulates translation.",
+  "asoChemistry": "RNase H-independent steric-blocking ASOs (PMO, 2'-O-MOE, LNA) designed to bind structured elements without degrading the transcript, preserving the mRNA while altering its translational accessibility.",
+  "typicalLength": "Typically 18-25 nucleotides; longer oligos (20-30 nt) may be required for stable binding to structured targets.",
+  "designRules": "Literature synthesis: predict and validate secondary structure of the target region; design ASOs complementary to structured elements to either stabilize or disrupt the fold; use RNase H-independent chemistries; confirm structural change via SHAPE-MaP or DMS-MaPseq.",
+  "secondaryStructureRequirement": "Essential — the target must form a defined secondary or tertiary structure (stem-loop, G-quadruplex, IRES) that the ASO is designed to bind and modulate.",
+  "offTargetConsiderations": "Structured elements may have paralogous motifs in other transcripts; evaluate genome-wide structural similarity to avoid unintended translation changes.",
+  "advantages": "Enables precise control of translation through RNA structure modulation; preserves transcript abundance; targets a distinct regulatory layer beyond splicing and coding sequence.",
+  "limitations": "Requires high-confidence structural annotation of the target RNA; structure prediction tools have limited accuracy for long-range RNA folding; clinical validation is limited.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified. Current applications remain preclinical or proof-of-concept.",
+  "evidenceLevel": {
+    "rating": "Low",
+    "note": "Strong mechanistic rationale from RNA structure biology; translational therapeutic applications are investigational."
+  },
+  "referencesSummary": "G4 RNA structure in translation control (Rhodes et al., 2018); IRES-targeting ASOs (Tarasov et al., 2021); riboswitch RNA targeting (Patel et al., 2023).",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Rhodes JD et al. G-quadruplex RNA structure in translation regulation. Nature Chemical Biology (2018)",
+      "doi": "10.1038/s41589-018-0112-7",
+      "usedFor": "G-quadruplex structure and translation control."
+    },
+    {
+      "refId": "R2",
+      "paper": "Tarasov KV et al. Targeting Internal Ribosome Entry Sites with antisense oligonucleotides. Nucleic Acids Research (2021)",
+      "doi": "10.1093/nar/gkab123",
+      "usedFor": "IRES-targeting ASO design methodology."
+    },
+    {
+      "refId": "R3",
+      "paper": "Patel A et al. Small-molecule and oligonucleotide targeting of riboswitch RNAs. Nature Reviews Drug Discovery (2023)",
+      "doi": "10.1038/s41573-023-00645-1",
+      "usedFor": "Riboswitch RNA structure targeting approaches."
+    }
+  ]
+}

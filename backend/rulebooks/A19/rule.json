@@ -1,0 +1,50 @@
+{
+  "id": "A19",
+  "enabled": true,
+  "name": "REPAIR (RNA Editing for Programmable A-to-I Replacement)",
+  "category": "CRISPR-guided Programmable RNA Editing",
+  "therapeuticGoalIds": [
+    "TG03"
+  ],
+  "therapeuticGoalDescription": "Correct pathogenic RNA mutations by programmable adenosine-to-inosine (A→I) editing using a catalytically inactive Cas13b fused to ADAR2.",
+  "molecularDefect": "Pathogenic adenosine-containing variants correctable through A→I editing at the RNA level.",
+  "diseaseMechanism": "A guide RNA directs catalytically inactive Cas13b (dCas13b) fused to the ADAR2 deaminase domain to a target RNA, enabling site-specific A→I editing without altering genomic DNA.",
+  "suitableVariantTypes": "Missense variants; nonsense variants; splice-site variants; pathogenic G→A mutations amenable to A→I correction.",
+  "typicalDiseases": "Proof-of-concept studies in monogenic disorders; proposed for neurological, retinal, and metabolic diseases. No approved therapeutic applications.",
+  "rnaTargetRegion": "Exonic or splice-site regions complementary to the guide RNA.",
+  "transcriptRequirement": "Presence of an editable adenosine within a guide-accessible RNA region.",
+  "asoChemistry": null,
+  "typicalLength": "Guide RNA typically ~30–80 nt; Cas13b–ADAR2 delivered separately.",
+  "designRules": "Design guide RNA to position the target adenosine within the editing window; optimize guide length and mismatch placement; validate editing by RNA sequencing.",
+  "secondaryStructureRequirement": "Accessible RNA target region to permit guide RNA binding and Cas13 recruitment.",
+  "offTargetConsiderations": "Bystander A→I editing; guide RNA-dependent off-target binding; Cas13-associated specificity considerations.",
+  "advantages": "Programmable editing; reversible; no genomic DNA modification; adaptable to multiple RNA targets.",
+  "limitations": "Requires delivery of a large fusion protein; currently preclinical; potential off-target editing; no approved therapies.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified.",
+  "evidenceLevel": {
+    "rating": "Moderate (strong proof-of-concept, preclinical).",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "REPAIR: Programmable A-to-I RNA Editing with CRISPR-Cas13 by Cox et al., Nature (2017)",
+      "doi": "PMID: 29189777",
+      "usedFor": "DOI: 10.1038/nature24048"
+    },
+    {
+      "refId": "R2",
+      "paper": "RESCUE: Programmable RNA Base Editing",
+      "doi": "PMID: 31406323",
+      "usedFor": "DOI: 10.1038/s41587-019-0205-0"
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on CRISPR-based RNA editing",
+      "doi": "Needs verification",
+      "usedFor": "Comparative review of programmable RNA editors."
+    }
+  ]
+}

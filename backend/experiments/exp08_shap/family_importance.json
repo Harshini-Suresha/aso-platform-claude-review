@@ -1,0 +1,14 @@
+{
+  "raw": {
+    "rnafm_siRNA": 2.8040738105773926,
+    "rnafm_mRNA": 2.903792381286621,
+    "accessibility": 0.019191738218069077,
+    "handcrafted": 0.027758542448282242
+  },
+  "normalized": {
+    "rnafm_siRNA": 0.487256861094035,
+    "rnafm_mRNA": 0.5045847065927087,
+    "accessibility": 0.0033349001327283964,
+    "handcrafted": 0.004823532180527895
+  }
+}

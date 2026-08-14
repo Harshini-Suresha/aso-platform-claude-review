@@ -1,0 +1,57 @@
+{
+  "id": "A8",
+  "enabled": true,
+  "name": "Exon Inclusion (Splice Correction)",
+  "category": "Splice modulation",
+  "therapeuticGoalIds": [
+    "TG04",
+    "TG07"
+  ],
+  "therapeuticGoalDescription": "Restore production of a functional protein by promoting inclusion of a therapeutically important exon during pre-mRNA splicing.",
+  "molecularDefect": "Diseases caused by exon skipping or defective exon recognition, where inclusion of the skipped exon restores production of a functional transcript.",
+  "diseaseMechanism": "Steric-blocking ASOs bind splice-silencing elements or inhibitory splice-regulatory sequences, preventing binding of negative splicing factors and promoting exon recognition by the spliceosome.",
+  "suitableVariantTypes": "Splice-site variants; intronic variants disrupting normal splicing; exon-skipping mutations; selected deep intronic variants where exon inclusion restores function.",
+  "typicalDiseases": "Spinal muscular atrophy (SMN2 exon 7 inclusion); Pompe disease (investigational); selected inherited metabolic and neurological disorders under investigation.",
+  "rnaTargetRegion": "Intronic splicing silencers (ISS); exonic splicing silencers (ESS); splice donor/acceptor regulatory regions adjacent to the target exon.",
+  "transcriptRequirement": "A transcript in which restoring inclusion of the target exon increases production of a functional protein.",
+  "asoChemistry": "RNase H-independent steric-blocking ASOs. Clinically validated chemistries include 2′-O-methoxyethyl phosphorothioate (2′-MOE PS) (e.g., nusinersen); PMO and other steric-blocking chemistries are also used experimentally.",
+  "typicalLength": "Approximately 18–25 nucleotides, depending on target and chemistry.",
+  "designRules": "Literature synthesis: target validated splice-silencing elements; avoid RNase H-active chemistries; experimentally verify exon inclusion by RT-PCR and protein restoration assays.",
+  "secondaryStructureRequirement": "Accessible splice-regulatory regions within the pre-mRNA are preferred to maximize ASO binding and splice correction.",
+  "offTargetConsiderations": "Potential unintended modulation of alternative splicing in partially complementary transcripts; transcriptome-wide splice analysis is recommended.",
+  "advantages": "Clinically validated mechanism; restores endogenous protein expression; reversible and sequence-specific; does not require genome editing.",
+  "limitations": "Applicable only when exon inclusion restores protein function; repeated dosing required; efficacy depends on target accessibility and splice biology.",
+  "fdaApprovedDrugs": "Spinraza (nusinersen).",
+  "clinicalTrialExamples": "Spinraza (nusinersen); investigational exon-inclusion ASOs for Pompe disease and other rare genetic disorders.",
+  "evidenceLevel": {
+    "rating": "High",
+    "note": "FDA-approved therapy with extensive clinical validation."
+  },
+  "referencesSummary": "Hua et al. (2010); Chen et al. (2024); Zhang et al. (2024); FDA prescribing information for Spinraza.",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Hua Y. et al. Antisense correction of SMN2 splicing in the CNS rescues necrosis in SMA mice. Nature (2010)",
+      "doi": "DOI: 10.1038/nature08076",
+      "usedFor": "Foundational demonstration of exon inclusion in SMA."
+    },
+    {
+      "refId": "R2",
+      "paper": "Chen S. et al. Splice-Modulating Antisense Oligonucleotides as Therapeutics. (2024)",
+      "doi": "Review",
+      "usedFor": "Comprehensive review of splice-switching ASOs. (PMC)"
+    },
+    {
+      "refId": "R3",
+      "paper": "Zhang X. et al. Splice-switching antisense oligonucleotides for pediatric neurological disorders. (2024)",
+      "doi": "Review",
+      "usedFor": "Clinical applications of exon inclusion. (PMC)"
+    },
+    {
+      "refId": "R4",
+      "paper": "FDA Prescribing Information – Spinraza (nusinersen)",
+      "doi": "FDA",
+      "usedFor": "Approved drug and mechanism."
+    }
+  ]
+}

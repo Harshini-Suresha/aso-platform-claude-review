@@ -1,0 +1,16 @@
+{
+  "rows": 165449,
+  "modality": {
+    "rnase_h": 159215,
+    "sirna": 3947,
+    "splice_switching": 2287
+  },
+  "experiments": 1974,
+  "chemistry_classes": 233,
+  "target_genes": 4289,
+  "seq_len_range": [
+    12,
+    28
+  ],
+  "label_corr_rank_raw": 0.958438671033144
+}

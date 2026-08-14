@@ -1,0 +1,50 @@
+{
+  "id": "A16",
+  "enabled": true,
+  "name": "C-to-U RNA Editing (APOBEC / RESCUE)",
+  "category": "RNA editing",
+  "therapeuticGoalIds": [
+    "TG03"
+  ],
+  "therapeuticGoalDescription": "Correct pathogenic RNA sequences by recruiting or engineering cytidine deaminases (APOBEC) to catalyze cytidine-to-uridine (C→U) editing without altering genomic DNA.",
+  "molecularDefect": "Pathogenic variants correctable by C→U RNA editing, where converting a mutant cytidine to uridine restores the wild-type sequence or introduces a defined change (e.g., a premature stop for targeted silencing).",
+  "diseaseMechanism": "A guide RNA targets a specific cytidine within the transcript and recruits a cytidine deaminase (endogenous APOBEC or an engineered fusion such as dCas13–APOBEC / RESCUE). The deaminase converts C→U, changing the encoded codon and restoring protein function or introducing a premature stop codon.",
+  "suitableVariantTypes": "T>C pathogenic variants (mutant cytidine editable to U); selected nonsense and missense mutations amenable to C→U editing; disease alleles where the wild-type base is U.",
+  "typicalDiseases": "Proof-of-concept studies in monogenic disorders; RESCUE-based RNA base-editing applications; targeted silencing of gain-of-function alleles by engineered premature stop codons.",
+  "rnaTargetRegion": "Target cytidine within pre-mRNA or mature mRNA, in a context that favors deaminase activity and guide-RNA binding.",
+  "transcriptRequirement": "Target transcript must contain an editable cytidine within a guide-accessible region.",
+  "asoChemistry": null,
+  "typicalLength": "Guide RNA typically 30–120 nt (70 nt default), depending on platform and recruiting strategy.",
+  "designRules": "Position the target cytidine within the deaminase activity window; optimize guide length and secondary structure; minimize bystander editing; validate editing efficiency and specificity by RNA sequencing.",
+  "secondaryStructureRequirement": "Accessible RNA region permitting guide binding and deaminase recruitment; excessive secondary structure can reduce activity.",
+  "offTargetConsiderations": "Bystander C→U editing; guide-RNA cross-reactivity; transcriptome-wide deamination analysis recommended.",
+  "advantages": "Reversible; no permanent DNA modification; broadens the editable target space beyond adenosines.",
+  "limitations": "Restricted to editable cytosines; efficiency and specificity vary by transcript and cell type; no approved therapeutic.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified (preclinical / early translational).",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Preclinical proof-of-concept (RESCUE); clinical translation is ongoing."
+  },
+  "referencesSummary": "Abudayyeh et al. (2019); Cox et al. (2017); reviews on programmable RNA base editing.",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Abudayyeh OO et al. A cytosine deaminase for programmable single-base RNA editing (RESCUE). Science (2019)",
+      "doi": "DOI: 10.1126/science.aax7063",
+      "usedFor": "Original RESCUE platform for programmable C→U RNA editing."
+    },
+    {
+      "refId": "R2",
+      "paper": "Cox DBT et al. RNA editing with CRISPR-Cas13 (REPAIR). Nature (2017)",
+      "doi": "DOI: 10.1038/nature24048",
+      "usedFor": "Foundational Cas13 RNA-editing platform adapted for cytidine deaminase effectors."
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on programmable RNA base editing",
+      "doi": "Review",
+      "usedFor": "Comparison of A-to-I and C-to-U RNA editing technologies and therapeutic applications."
+    }
+  ]
+}

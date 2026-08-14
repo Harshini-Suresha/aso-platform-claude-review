@@ -1,0 +1,16 @@
+{
+  "mode": "conditioned",
+  "n_test_experiments": 488,
+  "n_test_rows": 48997,
+  "spearman_w": 0.35300641341433014,
+  "topk_w": 0.3479875908237407,
+  "pearson_z_w": 0.3616839885327491,
+  "median_exp_size": 77,
+  "train_seconds": 300.8,
+  "checkpoint": "backend/results/benchmark/ranker_ablation_conditioned/ranker.pt",
+  "split": "gene",
+  "holdout_chemistry": null,
+  "train_modality": null,
+  "eval_modality": null,
+  "epochs": 15
+}

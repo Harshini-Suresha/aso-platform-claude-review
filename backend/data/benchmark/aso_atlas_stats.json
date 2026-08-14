@@ -1,0 +1,17 @@
+{
+  "raw_rows": 190927,
+  "cleaned_rows": 174867,
+  "mechanism": {
+    "rnase_h": 172580,
+    "splice_switching": 2287
+  },
+  "genes": 343,
+  "patent_tables": 2026,
+  "chemistry_fingerprints": 422,
+  "label_range_raw": [
+    -786.0,
+    224.0
+  ],
+  "label_mean": 43.261901673843546,
+  "rank_label_mean": 50.579297408887896
+}

@@ -1,0 +1,56 @@
+{
+  "id": "A4",
+  "enabled": true,
+  "name": "Natural Antisense Transcript (NAT) Knockdown (AntagoNAT)",
+  "category": "Gene upregulation / Non-coding RNA modulation",
+  "therapeuticGoalIds": [
+    "TG02"
+  ],
+  "therapeuticGoalDescription": "Increase expression of an endogenous protein-coding gene by inhibiting its regulatory natural antisense transcript (NAT).",
+  "molecularDefect": "Diseases caused by reduced gene expression or haploinsufficiency where a NAT negatively regulates the corresponding sense transcript.",
+  "diseaseMechanism": "A natural antisense transcript represses expression of the sense gene through transcriptional, post-transcriptional, or epigenetic regulatory mechanisms. Blocking the NAT relieves repression and increases expression of the target gene.",
+  "suitableVariantTypes": "Haploinsufficiency; reduced gene expression; loss-of-function disorders where a disease-relevant NAT has been experimentally demonstrated.",
+  "typicalDiseases": "Angelman syndrome (UBE3A); Dravet syndrome (SCN1A, investigational); Friedreich's ataxia (investigational); additional neurological disorders under preclinical investigation.",
+  "rnaTargetRegion": "Natural antisense transcript (lncRNA), typically overlapping promoter, exon, intron, or untranslated regions of the sense gene depending on NAT architecture.",
+  "transcriptRequirement": "A validated disease-associated NAT regulating the target gene must be identified.",
+  "asoChemistry": "RNase H-active gapmers (commonly phosphorothioate gapmers with 2′-MOE/LNA modifications) designed to degrade the NAT transcript.",
+  "typicalLength": "Typically 16–20 nucleotides for RNase H-active gapmers; varies by chemistry and target.",
+  "designRules": "Literature synthesis: identify the functional NAT; target accessible regions of the NAT; preserve specificity for the antisense transcript; experimentally validate gene upregulation.",
+  "secondaryStructureRequirement": "Prefer accessible regions within the NAT transcript to facilitate efficient ASO binding.",
+  "offTargetConsiderations": "Potential hybridization with unintended lncRNAs or overlapping transcripts; evaluate transcriptome-wide complementarity and unintended effects on neighboring genes.",
+  "advantages": "Upregulates the endogenous gene without introducing exogenous DNA; preserves native regulation; particularly attractive for haploinsufficiency disorders.",
+  "limitations": "Applicable only when a functionally relevant NAT has been identified; NAT biology remains incompletely characterized for many genes; mechanism may differ between loci.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "Angelman syndrome ASO programs targeting UBE3A-ATS; additional investigational NAT-targeting programs in neurological disorders.",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Strong biological rationale and preclinical evidence; limited clinical validation."
+  },
+  "referencesSummary": "Modarresi et al. (2012); Wahlestedt (2013); Khorkova et al. (2022); Ali et al. (2024).",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Modarresi F. et al. Inhibition of natural antisense transcripts in vivo results in gene-specific transcriptional upregulation. Nature Biotechnology (2012)",
+      "doi": "10.1038/nbt.2158",
+      "usedFor": "First demonstration of AntagoNAT-mediated gene upregulation."
+    },
+    {
+      "refId": "R2",
+      "paper": "Wahlestedt C. Targeting long non-coding RNA to therapeutically upregulate gene expression. Nature Reviews Drug Discovery (2013)",
+      "doi": "10.1038/nrd4018",
+      "usedFor": "Concept and therapeutic rationale for NAT targeting."
+    },
+    {
+      "refId": "R3",
+      "paper": "Khorkova O. et al. Natural antisense transcripts as drug targets. Frontiers in Molecular Biosciences (2022)",
+      "doi": "Review",
+      "usedFor": "Comprehensive review of NAT-targeting therapeutics. (Frontiers)"
+    },
+    {
+      "refId": "R4",
+      "paper": "Ali A. et al. Therapeutic potential of natural antisense transcripts and antisense oligonucleotides. (2024)",
+      "doi": "DOI in journal",
+      "usedFor": "Updated review of NAT biology and therapeutic applications. (Taylor & Francis Online)"
+    }
+  ]
+}

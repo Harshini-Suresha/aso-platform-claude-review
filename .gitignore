@@ -1,0 +1,16 @@
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+.env
+.env.local
+.next/
+out/
+*.log
+/tmp/
+frontend/tsconfig.tsbuildinfo
+*.db
+.kilo/
+.pytest_cache/

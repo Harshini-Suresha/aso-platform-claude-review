@@ -1,0 +1,38 @@
+{
+  "TG01": {
+    "name": "Gene Silencing",
+    "description": "Reduce expression of a pathogenic gene or transcript through transcriptional or post-transcriptional mechanisms."
+  },
+  "TG02": {
+    "name": "Gene Activation / Upregulation",
+    "description": "Increase endogenous gene expression or restore production of a beneficial protein."
+  },
+  "TG03": {
+    "name": "RNA Editing / Correction",
+    "description": "Repair pathogenic RNA sequences or correct disease-causing RNA alterations without modifying genomic DNA."
+  },
+  "TG04": {
+    "name": "RNA Processing Modulation",
+    "description": "Modify RNA maturation, including splicing, polyadenylation, transcript processing, and RNA stability."
+  },
+  "TG05": {
+    "name": "RNA Neutralization",
+    "description": "Neutralize toxic RNA molecules or block pathogenic RNA–protein interactions without necessarily degrading the RNA."
+  },
+  "TG06": {
+    "name": "Translational Regulation",
+    "description": "Increase or decrease protein synthesis by regulating mRNA translation without altering RNA abundance."
+  },
+  "TG07": {
+    "name": "Isoform Engineering",
+    "description": "Generate therapeutically beneficial transcript or protein isoforms by modifying RNA processing or transcript architecture."
+  },
+  "TG08": {
+    "name": "Protein Replacement",
+    "description": "Restore protein function by delivering therapeutic RNA molecules that encode the missing or defective protein."
+  },
+  "TG09": {
+    "name": "Protein Function Modulation",
+    "description": "Modulate protein activity directly using RNA molecules that bind and regulate protein function rather than gene expression."
+  }
+}

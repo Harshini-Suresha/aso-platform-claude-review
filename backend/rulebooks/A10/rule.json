@@ -1,0 +1,57 @@
+{
+  "id": "A10",
+  "enabled": true,
+  "name": "Cryptic Splice Site Blocking",
+  "category": "Splice modulation",
+  "therapeuticGoalIds": [
+    "TG04",
+    "TG07"
+  ],
+  "therapeuticGoalDescription": "Restore normal pre-mRNA splicing by masking a pathogenic cryptic splice donor or acceptor site and promoting use of the authentic splice site.",
+  "molecularDefect": "Mutations create or strengthen cryptic splice donor/acceptor sites, resulting in aberrant exon truncation, exon extension, or abnormal exon inclusion.",
+  "diseaseMechanism": "The spliceosome preferentially recognizes a cryptic splice site instead of the authentic splice site, producing an abnormal transcript. Steric-blocking ASOs prevent recognition of the cryptic site, allowing restoration of normal splicing.",
+  "suitableVariantTypes": "Cryptic splice-site variants; deep intronic variants activating cryptic splice sites; exonic or intronic variants that alter splice-site selection.",
+  "typicalDiseases": "β-thalassemia (HBB); Stargardt disease (ABCA4); Cystic fibrosis (CFTR); Neurofibromatosis type 1 (NF1); several inherited retinal and neuromuscular disorders with cryptic splice-site mutations.",
+  "rnaTargetRegion": "Cryptic splice donor site; cryptic splice acceptor site; adjacent splice-regulatory sequences within pre-mRNA.",
+  "transcriptRequirement": "Presence of a validated pathogenic cryptic splice site whose masking restores normal splicing.",
+  "asoChemistry": "RNase H-independent steric-blocking ASOs; commonly 2′-O-methyl phosphorothioate (2′-OMe PS), PMO, and related splice-switching chemistries.",
+  "typicalLength": "Approximately 18–25 nucleotides, depending on target sequence and chemistry.",
+  "designRules": "Literature synthesis: design ASOs complementary to the cryptic splice site or nearby splice-regulatory elements; avoid RNase H activation; experimentally verify restoration of normal splicing by RT-PCR and sequencing.",
+  "secondaryStructureRequirement": "Accessible pre-mRNA regions surrounding the cryptic splice site are preferred to facilitate efficient ASO binding.",
+  "offTargetConsiderations": "Potential unintended modulation of normal alternative splicing in partially complementary transcripts; transcriptome-wide splice analysis is recommended.",
+  "advantages": "Corrects disease-causing aberrant splicing while preserving endogenous gene regulation; highly mutation-specific; reversible.",
+  "limitations": "Applicable only to mutations that activate cryptic splice sites; requires precise molecular diagnosis and transcript characterization; repeated administration required.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "QR-1011 (ABCA4, investigational); several mutation-specific splice-correction programs in inherited retinal disorders and β-thalassemia remain under investigation.",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Strong mechanistic evidence and multiple preclinical/early clinical studies, but no approved therapy specifically for this mechanism."
+  },
+  "referencesSummary": "Anna & Monika (2018); Chen et al. (2024); Aartsma-Rus & Corey reviews; Sangermano et al.",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Anna A, Monika G. Splicing mutations in human genetic disorders: examples, detection, and confirmation. Journal of Applied Genetics (2018)",
+      "doi": "DOI: 10.1007/s13353-018-0444-7",
+      "usedFor": "Cryptic splice sites and splice mutations."
+    },
+    {
+      "refId": "R2",
+      "paper": "Chen S. et al. Splice-Modulating Antisense Oligonucleotides as Therapeutics. Molecular Therapy – Nucleic Acids (2024)",
+      "doi": "Review",
+      "usedFor": "Splice-switching ASOs targeting cryptic splice sites."
+    },
+    {
+      "refId": "R3",
+      "paper": "Aartsma-Rus A., Corey DR. Reviews on splice-switching ASOs",
+      "doi": "Review",
+      "usedFor": "Therapeutic splice correction strategies."
+    },
+    {
+      "refId": "R4",
+      "paper": "Sangermano R. et al. ABCA4 deep-intronic correction studies",
+      "doi": "Original research",
+      "usedFor": "Examples of cryptic splice-site targeting."
+    }
+  ]
+}

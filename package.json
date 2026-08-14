@@ -1,0 +1,22 @@
+{
+  "name": "aso-platform",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "dev": "cd frontend && npm run dev",
+    "start": "cd frontend && npm start",
+    "lint": "cd frontend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "echo 'Run: python -m pytest backend/tests/'",
+    "test": "python -m pytest backend/tests/ -v",
+    "test:features": "python -m pytest backend/tests/test_features.py -v -s",
+    "test:dataset": "python -m pytest backend/tests/test_dataset.py -v -s",
+    "train": "python -m backend.train",
+    "evaluate": "python -m backend.evaluate",
+    "embed": "python -m backend.features.embed_cache"
+  },
+  "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.12"
+  }
+}

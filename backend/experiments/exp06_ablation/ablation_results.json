@@ -1,0 +1,44 @@
+[
+  {
+    "model": "Handcrafted features only (9-dim)",
+    "pearson_mean": 0.2967,
+    "pearson_sd": 0.0512,
+    "r2_mean": 0.0855,
+    "r2_sd": 0.0301
+  },
+  {
+    "model": "RNA-FM embeddings only (1280-dim)",
+    "pearson_mean": 0.5641,
+    "pearson_sd": 0.0097,
+    "r2_mean": 0.2892,
+    "r2_sd": 0.0158
+  },
+  {
+    "model": "Accessibility features only (11-dim)",
+    "pearson_mean": 0.1189,
+    "pearson_sd": 0.0609,
+    "r2_mean": 0.0098,
+    "r2_sd": 0.015
+  },
+  {
+    "model": "RNA-FM + Accessibility (1291-dim)",
+    "pearson_mean": 0.537,
+    "pearson_sd": 0.0388,
+    "r2_mean": 0.2764,
+    "r2_sd": 0.0509
+  },
+  {
+    "model": "RNA-FM + Handcrafted (1289-dim)",
+    "pearson_mean": 0.5507,
+    "pearson_sd": 0.0248,
+    "r2_mean": 0.2885,
+    "r2_sd": 0.0275
+  },
+  {
+    "model": "Full FusionNet (1300-dim)",
+    "pearson_mean": 0.552,
+    "pearson_sd": 0.0183,
+    "r2_mean": 0.2735,
+    "r2_sd": 0.0307
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "id": "A20",
+  "enabled": true,
+  "name": "Spliceosome-Mediated RNA Trans-splicing (SMaRT)",
+  "category": "RNA Repair / Transcript Replacement",
+  "therapeuticGoalIds": [
+    "TG03"
+  ],
+  "therapeuticGoalDescription": "Replace the mutant portion of a pre-mRNA with a corrected RNA sequence through spliceosome-mediated trans-splicing, restoring a functional transcript and protein.",
+  "molecularDefect": "Mutations affecting coding regions where replacement of part of the transcript is preferable to transcript degradation or exon skipping.",
+  "diseaseMechanism": "An engineered RNA trans-splicing molecule binds the target pre-mRNA through a binding domain and recruits the endogenous spliceosome to perform trans-splicing, replacing the mutant RNA segment with a therapeutic sequence.",
+  "suitableVariantTypes": "Coding-region mutations; nonsense mutations; frameshift mutations; selected missense mutations; multi-exon pathogenic regions.",
+  "typicalDiseases": "Cystic Fibrosis (CFTR); Hemophilia A (F8); Epidermolysis Bullosa (COL7A1); Retinitis Pigmentosa (experimental); Huntington disease (experimental).",
+  "rnaTargetRegion": "Intronic sequences adjacent to the intended trans-splicing site within the target pre-mRNA.",
+  "transcriptRequirement": "Active transcription of the target gene to provide endogenous pre-mRNA substrate.",
+  "asoChemistry": null,
+  "typicalLength": "Typically >1 kb (platform dependent).",
+  "designRules": "Identify an efficient intronic binding site; optimize splice donor/acceptor elements; minimize competition with endogenous cis-splicing; validate repaired transcript by RT-PCR and sequencing.",
+  "secondaryStructureRequirement": "Accessible pre-mRNA binding regions are preferred to facilitate RTM hybridization.",
+  "offTargetConsiderations": "Off-target trans-splicing; formation of aberrant chimeric transcripts; unintended splice junctions.",
+  "advantages": "Can replace large mutant transcript regions; potentially mutation-independent within the replaced segment; preserves endogenous gene regulation.",
+  "limitations": "Low trans-splicing efficiency; competition with endogenous cis-splicing; challenging delivery; no approved therapies.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "None identified (preclinical platform).",
+  "evidenceLevel": {
+    "rating": "Moderate (extensive preclinical evidence).",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": []
+}

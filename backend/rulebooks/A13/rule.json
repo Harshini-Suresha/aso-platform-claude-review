@@ -1,0 +1,56 @@
+{
+  "id": "A13",
+  "enabled": true,
+  "name": "ADAR-Mediated Site-Directed RNA Editing (SDRE)",
+  "category": "RNA editing",
+  "therapeuticGoalIds": [
+    "TG03"
+  ],
+  "therapeuticGoalDescription": "Correct pathogenic RNA sequences by recruiting endogenous ADAR enzymes to catalyze adenosine-to-inosine (A→I) editing without altering genomic DNA.",
+  "molecularDefect": "Pathogenic variants that can be functionally corrected through A→I (interpreted as G) RNA editing.",
+  "diseaseMechanism": "A chemically modified antisense guide RNA hybridizes with the target transcript, forming a duplex that recruits endogenous ADAR. ADAR deaminates a specific adenosine to inosine, restoring correct RNA sequence or protein function.",
+  "suitableVariantTypes": "G>A pathogenic variants (or mutations correctable by A→I editing); selected nonsense and missense mutations where editing restores protein function.",
+  "typicalDiseases": "Hurler syndrome (proof-of-concept); inherited retinal diseases; neurological disorders; additional monogenic diseases under preclinical investigation.",
+  "rnaTargetRegion": "Target adenosine within pre-mRNA or mature mRNA that is accessible for guide-RNA binding and ADAR recruitment.",
+  "transcriptRequirement": "Target transcript must contain an editable adenosine and permit formation of a suitable ADAR-recognition duplex.",
+  "asoChemistry": "Chemically modified ADAR-recruiting antisense oligonucleotides (e.g., phosphorothioate, 2′-OMe, LNA-containing guide oligonucleotides depending on platform).",
+  "typicalLength": "Approximately 20–30 nucleotides, depending on guide design and ADAR recruitment strategy.",
+  "designRules": "Literature synthesis: create a stable RNA duplex; position the editable adenosine opposite the designed mismatch; optimize ADAR recruitment while minimizing bystander editing; experimentally confirm editing efficiency by RNA sequencing.",
+  "secondaryStructureRequirement": "Target region should be accessible for guide-RNA hybridization and formation of an ADAR-compatible double-stranded RNA substrate.",
+  "offTargetConsiderations": "Bystander A→I editing within the guide-RNA duplex; unintended editing at partially complementary transcripts; transcriptome-wide RNA editing analysis is recommended.",
+  "advantages": "Reversible; no permanent DNA modification; exploits endogenous ADAR enzymes; enables correction of selected pathogenic variants at the RNA level.",
+  "limitations": "Restricted to editable adenosines; editing efficiency varies among tissues and targets; potential bystander editing; no approved therapeutic yet.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "Preclinical and early translational ADAR-editing platforms (e.g., RESTORE, LEAPER, CLUSTER); no late-stage approved clinical program yet. (Nature)",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Strong mechanistic and preclinical evidence; clinical translation is ongoing."
+  },
+  "referencesSummary": "Qu et al. (2019); Merkle et al. (2019); Bertoli et al. (2025); Fisher (2024).",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Qu L. et al. Programmable RNA editing by recruiting endogenous ADAR using engineered RNAs. Nature Biotechnology (2019)",
+      "doi": "DOI: 10.1038/s41587-019-0178-3",
+      "usedFor": "First programmable endogenous ADAR recruitment (LEAPER). (Nature)"
+    },
+    {
+      "refId": "R2",
+      "paper": "Merkle T. et al. Precise RNA editing by recruiting endogenous ADARs with antisense oligonucleotides (RESTORE). Nature Biotechnology (2019)",
+      "doi": "DOI: 10.1038/s41587-019-0179-2",
+      "usedFor": "RESTORE oligonucleotide platform. (Nature)"
+    },
+    {
+      "refId": "R3",
+      "paper": "Bertoli M. et al. ADAR Therapeutics as a New Tool for Personalized Medicine. (2025)",
+      "doi": "Review",
+      "usedFor": "Clinical perspective and therapeutic applications. (PubMed Central)"
+    },
+    {
+      "refId": "R4",
+      "paper": "Fisher AJ. Structural perspectives on adenosine-to-inosine RNA editing. (2024)",
+      "doi": "Review",
+      "usedFor": "ADAR biology and structural mechanism. (ScienceDirect)"
+    }
+  ]
+}

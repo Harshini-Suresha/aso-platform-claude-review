@@ -1,0 +1,56 @@
+{
+  "id": "A23",
+  "enabled": true,
+  "name": "Small Activating RNA (saRNA)-Mediated Transcriptional Activation",
+  "category": "Transcriptional Gene Activation",
+  "therapeuticGoalIds": [
+    "TG02"
+  ],
+  "therapeuticGoalDescription": "Increase endogenous gene expression by activating transcription of the target gene.",
+  "molecularDefect": "Diseases caused by reduced gene expression, epigenetic silencing, or insufficient production of a protective protein.",
+  "diseaseMechanism": "Double-stranded saRNAs target promoter-associated transcripts or promoter regions, recruiting AGO proteins and transcriptional regulatory complexes to enhance transcription of the endogenous gene.",
+  "suitableVariantTypes": "Haploinsufficiency; epigenetic silencing; reduced transcription; promoter dysfunction without irreversible gene loss.",
+  "typicalDiseases": "Hepatocellular carcinoma (CEBPA activation); Liver fibrosis (experimental); Metabolic disorders (experimental); Neurological disorders with reduced gene expression (preclinical).",
+  "rnaTargetRegion": "Promoter-associated RNA (paRNA); promoter-adjacent regions; transcription start site (TSS)-associated transcripts.",
+  "transcriptRequirement": "Functional endogenous promoter capable of transcriptional activation.",
+  "asoChemistry": null,
+  "typicalLength": "Approximately 21 nucleotides (double-stranded RNA).",
+  "designRules": "Identify promoter-associated target sequences; optimize guide strand selection; experimentally confirm transcriptional activation by qPCR and protein assays; assess chromatin changes where appropriate.",
+  "secondaryStructureRequirement": "Accessible promoter-associated transcript or regulatory RNA region.",
+  "offTargetConsiderations": "Activation of unintended genes; seed-sequence-mediated effects; promoter cross-reactivity.",
+  "advantages": "Activates the endogenous gene; preserves physiological regulation; avoids permanent genome modification.",
+  "limitations": "Mechanism remains incompletely understood; tissue-specific responses; delivery challenges; no FDA-approved saRNA therapeutics.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "MTL-CEBPA (clinical development for liver cancer).",
+  "evidenceLevel": {
+    "rating": "Moderate (clinical-stage platform, no approved therapy).",
+    "note": null
+  },
+  "referencesSummary": null,
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Li LC et al. Small dsRNAs induce transcriptional activation in human cells.",
+      "doi": "PMID: 16365077",
+      "usedFor": "DOI: 10.1073/pnas.0507015103"
+    },
+    {
+      "refId": "R2",
+      "paper": "Place RF et al. MicroRNA-373 induces gene expression.",
+      "doi": "PMID: 17334357",
+      "usedFor": "DOI: 10.1073/pnas.0610731104"
+    },
+    {
+      "refId": "R3",
+      "paper": "Reviews on RNA activation (RNAa) and saRNA therapeutics",
+      "doi": "Review",
+      "usedFor": "Mechanism, therapeutic development, and clinical applications."
+    },
+    {
+      "refId": "R4",
+      "paper": "Clinical development publications describing MTL-CEBPA",
+      "doi": "Needs verification",
+      "usedFor": "Clinical translation of saRNA therapeutics."
+    }
+  ]
+}

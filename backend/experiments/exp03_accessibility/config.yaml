@@ -1,0 +1,22 @@
+experiment: exp03_accessibility
+description: Accessibility features only (11-dim)
+feature_families:
+- accessibility
+input_dim: 11
+hyperparameters:
+  learning_rate: 0.001
+  dropout: 0.2
+  weight_decay: 1.0e-05
+  batch_size: 32
+  epochs: 100
+  patience: 10
+  n_folds: 5
+  seed: 42
+architecture:
+- 64
+- 32
+results:
+  pearson_mean: 0.11893637858812176
+  pearson_sd: 0.060909571399345754
+  r2_mean: 0.00981278419494629
+  r2_sd: 0.014989841228903655

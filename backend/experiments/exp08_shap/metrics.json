@@ -1,0 +1,107 @@
+{
+  "explainer": "LinearExplainer",
+  "surrogate_model": "Ridge(alpha=1.0)",
+  "surrogate_r2": 0.9998885989189148,
+  "n_background": 50,
+  "n_explain": 80,
+  "family_importance_raw": {
+    "rnafm_siRNA": 2.8040738105773926,
+    "rnafm_mRNA": 2.903792381286621,
+    "accessibility": 0.019191738218069077,
+    "handcrafted": 0.027758542448282242
+  },
+  "family_importance_normalized": {
+    "rnafm_siRNA": 0.487256861094035,
+    "rnafm_mRNA": 0.5045847065927087,
+    "accessibility": 0.0033349001327283964,
+    "handcrafted": 0.004823532180527895
+  },
+  "top_features": [
+    {
+      "feature": "rnafm_si_638",
+      "mean_abs_shap": 0.022043665871024132
+    },
+    {
+      "feature": "rnafm_si_158",
+      "mean_abs_shap": 0.021060461178421974
+    },
+    {
+      "feature": "rnafm_si_239",
+      "mean_abs_shap": 0.020192351192235947
+    },
+    {
+      "feature": "rnafm_mrna_288",
+      "mean_abs_shap": 0.019570348784327507
+    },
+    {
+      "feature": "rnafm_mrna_571",
+      "mean_abs_shap": 0.01898263581097126
+    },
+    {
+      "feature": "rnafm_mrna_107",
+      "mean_abs_shap": 0.01898106001317501
+    },
+    {
+      "feature": "rnafm_si_297",
+      "mean_abs_shap": 0.0182684063911438
+    },
+    {
+      "feature": "rnafm_mrna_330",
+      "mean_abs_shap": 0.016687825322151184
+    },
+    {
+      "feature": "rnafm_mrna_237",
+      "mean_abs_shap": 0.016500454396009445
+    },
+    {
+      "feature": "rnafm_si_577",
+      "mean_abs_shap": 0.016078898683190346
+    },
+    {
+      "feature": "rnafm_si_274",
+      "mean_abs_shap": 0.0159284807741642
+    },
+    {
+      "feature": "rnafm_mrna_565",
+      "mean_abs_shap": 0.015866486355662346
+    },
+    {
+      "feature": "rnafm_si_108",
+      "mean_abs_shap": 0.015407505445182323
+    },
+    {
+      "feature": "rnafm_mrna_69",
+      "mean_abs_shap": 0.015368834137916565
+    },
+    {
+      "feature": "rnafm_mrna_505",
+      "mean_abs_shap": 0.015349028632044792
+    },
+    {
+      "feature": "rnafm_mrna_421",
+      "mean_abs_shap": 0.015086881816387177
+    },
+    {
+      "feature": "rnafm_si_107",
+      "mean_abs_shap": 0.015020271763205528
+    },
+    {
+      "feature": "rnafm_si_24",
+      "mean_abs_shap": 0.014820573851466179
+    },
+    {
+      "feature": "rnafm_mrna_319",
+      "mean_abs_shap": 0.014425707049667835
+    },
+    {
+      "feature": "rnafm_si_601",
+      "mean_abs_shap": 0.014347800984978676
+    }
+  ],
+  "prediction_stats": {
+    "pred_mean": 0.4957245886325836,
+    "pred_std": 0.1310335248708725,
+    "true_mean": 0.45984339714050293,
+    "true_std": 0.13783860206604004
+  }
+}

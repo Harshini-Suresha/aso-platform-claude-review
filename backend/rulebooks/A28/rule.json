@@ -1,0 +1,56 @@
+{
+  "id": "A28",
+  "enabled": true,
+  "name": "Translation Repressor Site Blocking (RBP Masking)",
+  "category": "Translational Upregulation / RBP Masking",
+  "therapeuticGoalIds": [
+    "TG02"
+  ],
+  "therapeuticGoalDescription": "Increase endogenous protein expression by sterically blocking RNA-binding protein (RBP) recognition elements on the target transcript, relieving translational repression or mRNA destabilization.",
+  "molecularDefect": "Diseases where an RNA-binding protein (e.g., PTB, IRP, hnRNP, TTP) bound to the target transcript represses translation or promotes decay.",
+  "diseaseMechanism": "Pathogenic RBPs recognize cis-regulatory elements in the 5' UTR, CDS, or 3' UTR and repress translation or accelerate decay. Steric-blocking ASOs bind the RBP recognition site, preventing RBP association and restoring normal protein production.",
+  "suitableVariantTypes": "RNA-binding protein (RBP) mediated repression of the target transcript, reducing translation or promoting decay.",
+  "typicalDiseases": "Investigational applications in neurodegeneration (PTB-mediated repression), cancer (IRES/ hnRNP dysregulation), and metabolic disorders (IRE/IRP axis).",
+  "rnaTargetRegion": "RBP binding sites: iron-responsive elements (IREs), CU-rich elements (PTB), AU-rich elements (ARE/TTP), hnRNP recognition motifs, and other structured or linear RBP docking sites in 5' UTR, CDS, or 3' UTR.",
+  "transcriptRequirement": "Target transcript containing a validated or predicted RBP binding site (e.g., PTB, IRP, hnRNP, TTP) within 5' UTR, CDS, or 3' UTR.",
+  "asoChemistry": "RNase H-independent steric-blocking ASOs (PMO, 2'-O-MOE, LNA) designed to bind RBP recognition elements without degrading the transcript, preserving the mRNA while altering its translational accessibility.",
+  "typicalLength": "Typically 18-25 nucleotides; longer oligos (20-30 nt) may be required for stable binding to structured RBP sites.",
+  "designRules": "Literature synthesis: identify validated or predicted RBP binding sites on the target transcript; design steric-blocking ASOs complementary to the RBP recognition element; use RNase H-independent chemistries to preserve the mRNA while blocking RBP association; confirm relief of translational repression in cell-based assays.",
+  "secondaryStructureRequirement": "Target RBP binding site must be accessible for ASO binding; structured RBP elements may require longer or chemically modified ASOs.",
+  "offTargetConsiderations": "RBP recognition elements may have paralogous motifs in other transcripts; evaluate sequence specificity and expression patterns of targeted RBPs; avoid unintended modulation of essential RBP functions.",
+  "advantages": "Directly relieves translational repression or mRNA destabilization; preserves transcript abundance; targets a distinct regulatory layer beyond splicing and coding sequence; compatible with single-stranded ASO design.",
+  "limitations": "Requires high-confidence annotation of RBP binding sites; RBP-target relationships may be context-dependent; clinical validation is limited; some RBP sites are highly structured and may resist ASO binding.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "Preclinical applications in neurodegeneration, cancer, and metabolic disorders.",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Strong mechanistic rationale from RNA-protein interaction biology; translational therapeutic applications remain preclinical or proof-of-concept."
+  },
+  "referencesSummary": "IRE/IRP1 translational control (Hentze et al., 2010); PTB-mediated translational repression (Wollerton et al., 2004); TTP/ARE-mediated decay (Sandler et al., 2011); ASO-mediated RBP masking (preclinical proof-of-concept).",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Hentze MW et al. Two years with iron regulatory proteins. Nature Chemical Biology (2010)",
+      "doi": "10.1038/nchembio.452",
+      "usedFor": "IRE/IRP1 translational control mechanism."
+    },
+    {
+      "refId": "R2",
+      "paper": "Wollerton MC et al. The RNA-binding protein PTB binds to specific sites in the 3' UTR and promotes mRNA stability. Molecular Cell (2004)",
+      "doi": "10.1016/j.molcel.2004.11.041",
+      "usedFor": "PTB-mediated translational repression and mRNA stability."
+    },
+    {
+      "refId": "R3",
+      "paper": "Sandler H et al. TTP and ARE-mediated decay. Biochemical Society Transactions (2011)",
+      "doi": "10.1042/BST0390607",
+      "usedFor": "TTP/ARE-mediated mRNA decay mechanism."
+    },
+    {
+      "refId": "R4",
+      "paper": "Reviews on RNA-binding proteins in translational control",
+      "doi": "Review",
+      "usedFor": "RBP recognition elements and therapeutic targeting strategies."
+    }
+  ]
+}

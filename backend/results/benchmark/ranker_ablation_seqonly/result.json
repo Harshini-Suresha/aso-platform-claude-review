@@ -1,0 +1,16 @@
+{
+  "mode": "seqonly",
+  "n_test_experiments": 488,
+  "n_test_rows": 48997,
+  "spearman_w": 0.3253419730533585,
+  "topk_w": 0.32716956486243776,
+  "pearson_z_w": 0.3325360233252144,
+  "median_exp_size": 77,
+  "train_seconds": 280.2,
+  "checkpoint": "backend/results/benchmark/ranker_ablation_seqonly/ranker.pt",
+  "split": "gene",
+  "holdout_chemistry": null,
+  "train_modality": null,
+  "eval_modality": null,
+  "epochs": 15
+}

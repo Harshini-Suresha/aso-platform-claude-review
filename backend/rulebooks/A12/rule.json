@@ -1,0 +1,58 @@
+{
+  "id": "A12",
+  "enabled": true,
+  "name": "microRNA Inhibition (Anti-miR / AntagomiR)",
+  "category": "microRNA modulation",
+  "therapeuticGoalIds": [
+    "TG01",
+    "TG05"
+  ],
+  "therapeuticGoalDescription": "Inhibit a pathogenic microRNA to restore expression of its downstream target genes.",
+  "molecularDefect": "Diseases caused by overexpression or aberrant activity of a pathogenic microRNA.",
+  "diseaseMechanism": "A pathogenic miRNA suppresses translation and/or promotes degradation of multiple target mRNAs. Anti-miRs bind directly to the mature miRNA, preventing interaction with all of its target transcripts.",
+  "suitableVariantTypes": "Regulatory disorders involving miRNA dysregulation rather than DNA sequence variants; diseases driven by pathogenic miRNA overexpression.",
+  "typicalDiseases": "Hepatitis C (miR-122); cardiovascular diseases; liver fibrosis; cancer; metabolic disorders; kidney disease.",
+  "rnaTargetRegion": "Mature microRNA sequence (typically seed region and adjacent nucleotides).",
+  "transcriptRequirement": "Experimentally validated disease-associated miRNA regulating the phenotype.",
+  "asoChemistry": "Fully modified RNase H-independent oligonucleotides including LNA, 2′-O-Me, 2′-MOE and phosphorothioate chemistries.",
+  "typicalLength": "Approximately 15–23 nucleotides, complementary to the mature miRNA.",
+  "designRules": "Literature synthesis: target mature miRNA sequence; optimize affinity for seed-region binding; avoid RNase H activation; experimentally validate derepression of downstream targets.",
+  "scoring": "Candidates are ranked by predicted target duplex free energy (ΔG, kcal/mol) computed using ViennaRNA duplexfold — more negative values indicate stronger predicted ASO-target binding. Biophysical metrics reported: GC content, nearest-neighbor Tm (primer3), self-structure MFE (ViennaRNA fold), poly-G tracts, CpG count, homopolymer runs, purine content, GC skew, sequence complexity, molecular weight, extinction coefficient. Drug-like estimates: nuclease resistance, cellular uptake, BBB crossing, off-target risk, immune stimulation, synthesis difficulty.",
+  "secondaryStructureRequirement": "Minimal concern because mature miRNAs are short single-stranded RNAs within the RISC complex; accessibility of the miRNA-RISC complex remains an experimental consideration.",
+  "offTargetConsiderations": "Because one miRNA regulates many transcripts, inhibition may affect multiple biological pathways; evaluate transcriptome-wide downstream effects.",
+  "advantages": "Can simultaneously restore multiple disease-relevant genes regulated by a single pathogenic miRNA.",
+  "limitations": "Broad downstream effects due to multiple miRNA targets; potential unintended pathway perturbation; repeated administration generally required.",
+  "fdaApprovedDrugs": "None",
+  "clinicalTrialExamples": "Miravirsen (anti-miR-122 for Hepatitis C); Cobomarsen (anti-miR-155, investigational oncology).",
+  "evidenceLevel": {
+    "rating": "Moderate",
+    "note": "Strong preclinical evidence and human clinical trials, but no FDA-approved therapy."
+  },
+  "referencesSummary": "Krützfeldt et al. (2005); van Rooij & Kauppinen (2014); Rupaimoole & Slack (2017); Chakraborty et al. (2021).",
+  "references": [
+    {
+      "refId": "R1",
+      "paper": "Krützfeldt J. et al. Silencing of microRNAs in vivo with 'antagomirs'. Nature (2005)",
+      "doi": "DOI: 10.1038/nature04303",
+      "usedFor": "First antagomir paper."
+    },
+    {
+      "refId": "R2",
+      "paper": "van Rooij E., Kauppinen S. Development of microRNA therapeutics is coming of age. EMBO Mol Med (2014)",
+      "doi": "DOI: 10.15252/emmm.201100899",
+      "usedFor": "Therapeutic anti-miRs."
+    },
+    {
+      "refId": "R3",
+      "paper": "Rupaimoole R., Slack FJ. MicroRNA therapeutics: towards a new era for the management of cancer and other diseases. Nat Rev Drug Discov (2017)",
+      "doi": "DOI: 10.1038/nrd.2016.246",
+      "usedFor": "Clinical applications."
+    },
+    {
+      "refId": "R4",
+      "paper": "Chakraborty C. et al. MicroRNA therapeutics: challenges and opportunities. (2021)",
+      "doi": "Review",
+      "usedFor": "Modern therapeutic overview."
+    }
+  ]
+}

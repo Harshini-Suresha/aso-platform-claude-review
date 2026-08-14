@@ -1,0 +1,32 @@
+{
+  "rnafm_only": {
+    "pearson_mean": 0.5641,
+    "pearson_sd": 0.0097,
+    "r2_mean": 0.2892,
+    "r2_sd": 0.0158
+  },
+  "fusion": {
+    "pearson_mean": 0.552,
+    "pearson_sd": 0.0183,
+    "r2_mean": 0.2735,
+    "r2_sd": 0.0307
+  },
+  "gated": {
+    "pearson_mean": 0.5848,
+    "pearson_sd": 0.0223,
+    "r2_mean": 0.3309,
+    "r2_sd": 0.0288
+  },
+  "cross_attention": {
+    "pearson_mean": 0.5843,
+    "pearson_sd": 0.0244,
+    "r2_mean": 0.3261,
+    "r2_sd": 0.0283
+  },
+  "token_cross_attention": {
+    "pearson_mean": 0.6194538686738211,
+    "pearson_sd": 0.026425319320779562,
+    "r2_mean": 0.37204301357269287,
+    "r2_sd": 0.04108307600781794
+  }
+}
