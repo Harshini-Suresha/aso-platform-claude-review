@@ -154,6 +154,11 @@ def build_vocab(df: pd.DataFrame) -> dict[str, int]:
     return {c: i for i, c in enumerate(sorted(df["chemistry"].unique()))}
 
 
+# Minimum mean rows per target_gene for a gene split to be meaningful.
+# Below this the column is effectively a row identifier, not a group key.
+MIN_ROWS_PER_GENE = 2.0
+
+
 def split_experiments(df: pd.DataFrame, split: str,
                       gene_split_genes: set[str] | None = None):
     exps = sorted(df["experiment_id"].unique())
@@ -163,6 +168,29 @@ def split_experiments(df: pd.DataFrame, split: str,
         n = int(len(exps) * 0.75)
         return set(exps[:n]), set(exps[n:])
     if split == "gene":
+        # PHASE-0 GUARD. A "gene split" is only a gene split if target_gene
+        # actually groups rows. When the column is unannotated (NA) or holds
+        # a near-unique value per row -- as it did for siRNA, where the
+        # target-site SEQUENCE had been renamed to target_gene -- this branch
+        # silently degrades to a random row split while still reporting
+        # "split": "gene". Refuse instead of lying about the protocol.
+        n_na = int(df["target_gene"].isna().sum())
+        if n_na:
+            raise ValueError(
+                f"--split gene: {n_na}/{len(df)} rows have no target_gene "
+                f"annotation. Annotate them (see "
+                f"data_curation/annotate_sirna_genes.py) or restrict the run "
+                f"to annotated modalities."
+            )
+        n_genes = df["target_gene"].nunique()
+        rows_per_gene = len(df) / max(n_genes, 1)
+        if rows_per_gene < MIN_ROWS_PER_GENE:
+            raise ValueError(
+                f"--split gene: {n_genes} distinct target_gene values for "
+                f"{len(df)} rows ({rows_per_gene:.2f} rows/gene). The column "
+                f"is not grouping anything, so this is a random row split "
+                f"with a misleading label. Fix the annotation first."
+            )
         genes = sorted(df["target_gene"].unique())
         rng = np.random.default_rng(0)
         rng.shuffle(genes)

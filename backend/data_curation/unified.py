@@ -58,8 +58,9 @@ def load_aso(parquet_path: Path) -> pd.DataFrame:
     df["cell_line"] = df["cell_line"].map(_norm_cell)
     df["source"] = "aso_atlas"
     df["seq"] = df["aseq"].map(_norm_seq)
+    df["target_gene_source"] = "ASO_ATLAS"
     return df[["seq", "modality", "experiment_id", "target_gene", "label",
-               "chemistry", "cell_line", "source"]].copy()
+               "chemistry", "cell_line", "source", "target_gene_source"]].copy()
 
 
 def load_sirbench(dir_path: Path) -> pd.DataFrame:
@@ -70,8 +71,21 @@ def load_sirbench(dir_path: Path) -> pd.DataFrame:
             continue
         parts.append(pd.read_csv(p))
     d = pd.concat(parts, ignore_index=True)
-    d = d.rename(columns={"siRNA": "seq", "mRNA": "target_gene",
+    # PHASE-0 FIX. The siRBench `mRNA` column holds the ~19 nt TARGET SITE
+    # SEQUENCE, not a gene symbol or accession. Renaming it to `target_gene`
+    # produced one distinct "gene" per row (3,947 genes / 3,947 rows), which
+    # silently turned every `--split gene` run into a plain random row split
+    # for this modality. siRBench carries no gene identifier at all, so the
+    # annotation cannot be recovered here -- see
+    # data_curation/annotate_sirna_genes.py, which must be run where a
+    # sequence-search backend is reachable.
+    #
+    # Until then target_gene is NA and grouped splits must refuse to run
+    # rather than silently degrade (see split_experiments).
+    d = d.rename(columns={"siRNA": "seq", "mRNA": "target_site_seq",
                           "efficiency": "label"})
+    d["target_gene"] = pd.NA
+    d["target_gene_source"] = "UNANNOTATED"
     d["seq"] = d["seq"].map(_norm_seq)
     d["modality"] = "sirna"
     d["cell_line"] = d["cell_line"].map(_norm_cell)
@@ -80,7 +94,7 @@ def load_sirbench(dir_path: Path) -> pd.DataFrame:
     d["chemistry"] = "unmodified"
     d["label"] = d["label"].astype(float).mul(100.0)  # 0-1 -> 0-100
     return d[["seq", "modality", "experiment_id", "target_gene", "label",
-              "chemistry", "cell_line", "source"]].copy()
+              "chemistry", "cell_line", "source", "target_gene_source"]].copy()
 
 
 def build(df: pd.DataFrame) -> pd.DataFrame:
@@ -104,6 +118,18 @@ def build(df: pd.DataFrame) -> pd.DataFrame:
     df["rank_label"] = df.groupby("experiment_id")["label"].rank(pct=True).mul(100.0)
     gz = df.groupby("experiment_id")["label"]
     df["label_z"] = (df["label"] - gz.transform("mean")) / gz.transform("std").replace(0.0, 1.0)
+
+    # PHASE-0 FIX. Dedup above is per (seq, modality), so a sequence present
+    # under two modalities survives twice. 106 sequences appeared in both
+    # rnase_h and splice_switching -- leakage along exactly the axis the
+    # cross-mechanism transfer claim tests. Drop them from both and record
+    # the count rather than silently keeping them.
+    dupes = df.groupby("seq")["modality"].nunique()
+    cross = set(dupes[dupes > 1].index)
+    if cross:
+        print(f"[phase0] dropping {len(cross)} sequences present under "
+              f"more than one modality (cross-modality leakage)")
+        df = df[~df["seq"].isin(cross)].copy()
 
     df["is_train_source"] = df["source"] != "leftout"
     return df.reset_index(drop=True)
@@ -129,6 +155,21 @@ def main() -> None:
         "experiments": int(df["experiment_id"].nunique()),
         "chemistry_classes": int(df["chemistry"].nunique()),
         "target_genes": int(df["target_gene"].nunique()),
+        # PHASE-0 FIX. Row counts overstate sample size badly here: splice
+        # switching is ~2.3k rows across 6 genes, and siRNA has no gene
+        # annotation at all. Report effective n per modality so no downstream
+        # reader mistakes rows for independent observations.
+        "effective_n": {
+            m: {
+                "rows": int(len(g)),
+                "unique_seqs": int(g["seq"].nunique()),
+                "annotated_genes": int(g["target_gene"].nunique(dropna=True)),
+                "gene_annotation": sorted(
+                    g["target_gene_source"].dropna().unique().tolist()),
+                "experiments": int(g["experiment_id"].nunique()),
+            }
+            for m, g in df.groupby("modality")
+        },
         "seq_len_range": [int(df["seq_len"].min()), int(df["seq_len"].max())],
         "label_corr_rank_raw": float(df.groupby("experiment_id").apply(
             lambda g: g["label"].corr(g["rank_label"]) if len(g) > 1 else 0.0

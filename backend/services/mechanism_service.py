@@ -105,6 +105,21 @@ DEFECT_TYPES = {
     "overexpression": "Gene overexpression / oncogene activation",
     "mirna_dysregulation": "Pathogenic microRNA dysregulation",
     "viral_toxic_rna": "Viral RNA / toxic transcript",
+    # PHASE-0 ADDITION. The vocabulary previously had no term for the single
+    # largest class of approved ASO: a NORMAL, non-mutant protein whose
+    # reduction is therapeutically useful. Mipomersen (ApoB-100 in homozygous
+    # familial hypercholesterolaemia) is the clearest case -- ApoB-100 is
+    # neither overexpressed nor gain-of-function. Inotersen and eplontersen
+    # also lower wild-type transthyretin wholesale.
+    #
+    # Without this term a user had to mis-enter such cases as
+    # "overexpression", which routes to transcriptional silencing (A15)
+    # rather than RNase H knockdown (A1). See mechanism_recovery_benchmark:
+    # mipomersen ranked 2nd behind A15 for exactly this reason.
+    "therapeutic_reduction": (
+        "Normal (non-mutant) protein whose reduction is therapeutically "
+        "beneficial"
+    ),
 }
 
 SILENCING_SCOPES = {
@@ -113,11 +128,17 @@ SILENCING_SCOPES = {
 }
 
 DEFECT_COMPATIBILITY = {
-    "A1": {"gain_of_function", "viral_toxic_rna"},
-    "A2": {"gain_of_function", "viral_toxic_rna"},
+    # therapeutic_reduction is compatible with the post-transcriptional
+    # knockdown mechanisms (A1 degradation, A2 steric block, A21 RNAi) but
+    # NOT with A15: transcriptional silencing of a normal, physiologically
+    # required gene is not an established therapeutic strategy, and A15's own
+    # rulebook scopes it to pathogenic overexpression.
+    "A1": {"gain_of_function", "viral_toxic_rna", "therapeutic_reduction"},
+    "A2": {"gain_of_function", "viral_toxic_rna", "therapeutic_reduction"},
     "A12": {"mirna_dysregulation"},
     "A15": {"overexpression"},
-    "A21": {"gain_of_function", "overexpression", "viral_toxic_rna"},
+    "A21": {"gain_of_function", "overexpression", "viral_toxic_rna",
+            "therapeutic_reduction"},
 }
 
 SCOPE_COMPATIBILITY = {
