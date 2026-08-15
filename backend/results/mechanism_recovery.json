@@ -324,8 +324,8 @@
       "delivery": "cns",
       "truth": "A10",
       "truth_family": [
-        "A10",
-        "A9"
+        "A9",
+        "A10"
       ],
       "input_note": "CONTESTED TRUTH. A SINE-VNTR-Alu insertion creates a cryptic splice acceptor. The source calls it a cryptic splice-acceptor site (-> A10); calling the inserted element a pseudoexon (-> A9) is equally defensible. Scored at all three resolutions (S6.4b); not resolved here.",
       "goal": "TG04",
