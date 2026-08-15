@@ -99,13 +99,23 @@ def main() -> None:
             f"annotation. Annotate them or restrict to annotated modalities."
         )
     all_genes = np.unique(genes)
-    rows_per_gene = len(genes) / max(len(all_genes), 1)
-    if rows_per_gene < 2.0:
-        raise ValueError(
-            f"gene split: {len(all_genes)} distinct genes for {len(genes)} "
-            f"rows ({rows_per_gene:.2f} rows/gene) -- the column is not "
-            f"grouping anything. Fix the annotation first."
-        )
+    # The guard must run PER MODALITY. Checking the global mean lets a broken
+    # arm through on the strength of a healthy one: rnase_h contributes
+    # 159,215 rows over 339 genes (470 rows/gene), which drags the global
+    # average to 38.6 and hides the siRNA arm sitting at exactly 1.00
+    # rows/gene -- 3,947 rows, 3,947 distinct "genes", because that column
+    # holds the mRNA target site rather than a gene symbol.
+    for modality, sub in df.groupby("modality"):
+        n_genes = sub["target_gene"].nunique()
+        rows_per_gene = len(sub) / max(n_genes, 1)
+        if rows_per_gene < 2.0:
+            raise ValueError(
+                f"gene split: modality '{modality}' has {n_genes} distinct "
+                f"genes for {len(sub)} rows ({rows_per_gene:.2f} rows/gene) "
+                f"-- the column is not grouping anything, so a split on it is "
+                f"a random row split wearing a gene-split label. Re-annotate "
+                f"target_gene from the source datasets first."
+            )
     test_genes = all_genes[rng.permutation(len(all_genes))[: int(len(all_genes) * TEST_GENE_FRAC)]]
     tr = ~np.isin(genes, test_genes)
     te = np.isin(genes, test_genes)
