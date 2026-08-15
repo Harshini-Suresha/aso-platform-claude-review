@@ -66,10 +66,11 @@
     "excludedTranscriptClasses": [],
     "requiresIntrons": false,
     "requiredFeatures": [
-      "F13"
+      "F13a",
+      "F13b"
     ],
     "forbiddenFeatures": [],
-    "note": "F13 (polyadenylation site usage) has no wired predictor. A11 halts on ABSENT rather than guessing (plan S6.4, item 9).",
+    "note": "F13 is split: F13a (an alternative polyadenylation site exists) is an annotation lookup, F13b (shifting usage is therapeutically beneficial in this gene) is per-gene curation. A11 requires BOTH. Site presence alone is not sufficient — most human genes carry alternative poly(A) sites, so F13a on its own would fire A11 almost everywhere. Neither table is populated, so A11 halts.",
     "discriminatingFeatures": [],
     "designAvailable": true
   }

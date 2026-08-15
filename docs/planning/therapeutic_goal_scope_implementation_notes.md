@@ -81,9 +81,10 @@ The plans' own critique of TG04 is that the defect dropdown already contains
 the answer; this makes that legible in the output and measurable in the
 benchmark (`stand_in_only`), instead of leaving it as a footnote.
 
-**Two features deliberately have no user rung**: F11 and F13. Naming a target
-RBP says which protein you have in mind; it is not evidence that a repressive
-site exists in this transcript. A28 and A11 therefore always halt.
+**Three features deliberately have no user rung**: F11, F13a and F13b. Naming
+a target RBP says which protein you have in mind; it is not evidence that a
+repressive site exists in this transcript. A28 and A11 therefore always halt
+until their reference tables have rows.
 
 ### 2.4 New vocabulary terms
 
@@ -113,12 +114,50 @@ with yes. The specific numbers are a defensible default, not a settled
 decision. They affect presentation only — no cap changes which mechanisms are
 eligible.
 
-### 2.6 P6 has an interim proxy
+### 2.6 F13 is split, and A11 needs both halves
 
-`data_sources_halted_flagged.md` specifies ClinGen Dosage Sensitivity as the
-P6 source, with a curated exclusion list beside it. Neither is populated.
+`data_sources_halted_flagged.md` §3 splits F13 into **F13a** (an alternative
+polyadenylation site exists — annotatable) and **F13b** (shifting usage is
+therapeutically beneficial in this gene — per-gene curation). A11 requires
+both.
 
-Until they are, P6 resolves from one inference: a user who classified the
+The conjunction is load-bearing, not bookkeeping: most human genes carry an
+alternative polyadenylation site, so F13a on its own would fire A11 almost
+everywhere. A test asserts the requirement so the pair cannot be loosened to
+one by accident.
+
+### 2.7 F11 takes the curated route
+
+The data-sources document recommends implementing F11 as a short,
+literature-curated list of validated repressive sites rather than deriving it
+from a CLIP-seq atlas, and that is what was built. An atlas answers "an RBP
+binds here", not "a repressor binds here and masking it raises protein
+output" — binding is not repression, and most RNA-binding proteins are
+context-dependent. A28 stays halted until the list has rows.
+
+### 2.8 A fifth provenance tier
+
+The data-sources document uses **CONFIRMED** for a curated, citation-carrying
+catalogue entry, distinct from a bulk annotation lookup. That distinction is
+real, so it became its own tier rather than being folded into ANNOTATION:
+
+    measured 1.00 > confirmed 0.95 > annotation 0.90 > predicted 0.75 > user_asserted 0.60
+
+### 2.9 P6 has an interim proxy
+
+ClinGen Dosage Sensitivity and the curated exclusion list are both wired, and
+both tables are empty. P6 is read from them in opposite directions: a curated
+dominant-negative row SUPPRESSES the replacement flag and outranks everything
+else; a ClinGen haploinsufficiency score of 3 PERMITS it.
+
+`haploinsufficiency_score` is deliberately handled as a **code, not an
+integer**. Code 30 means "autosomal recessive phenotype" and code 40 means
+"dosage sensitivity unlikely"; comparing the column numerically would read 40
+as the strongest evidence available and invert the meaning of the field. Only
+score 3 resolves; every other code leaves P6 unresolved and withholds the
+flag. A test pins this (SO-DATA-02).
+
+Until the tables have rows, P6 resolves from one inference: a user who classified the
 defect as `haploinsufficiency` has said the disease is a dosage problem, and
 haploinsufficiency and dominant-negative are the standard contrasting models
 for a dominant disorder. That is recorded at the `user_asserted` tier and is
@@ -209,7 +248,7 @@ Carried forward from v3 §9, plus what the implementation added.
 - **Items 7–9 (SpliceAI, TargetScan, methylation atlas)** — not wired. These
   need model installs and licensed data. F1–F3, F7 and F8 fall back to the
   user's defect selection, marked as stand-ins; A15 halts.
-- **Reference tables** — schemas and loader shipped, all four tables
+- **Reference tables** — schemas and loader shipped, all eight tables
   header-only. Populating them from recalled knowledge would put unverifiable
   data behind an `annotation` provenance label, which is the strongest tier
   short of experimental measurement. See

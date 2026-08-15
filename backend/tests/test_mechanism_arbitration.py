@@ -117,7 +117,7 @@ def test_mechanisms_with_no_wired_feature_source_halt():
         ("rbp_mediated_repression", "A28"),
         ("apa_dysregulation", "A11"),
         ("toxic_rna_gain_of_function", "A14"),
-    ):
+    ):  # noqa: E501
         out = A.arbitrate(A.ArbitrationContext(
             gene_symbol="X", molecular_defect=defect))
         assert _status(out, mechanism) == A.HALTED, mechanism
@@ -357,3 +357,57 @@ def test_no_rulebook_claims_an_fda_drug_it_does_not_have():
         if rating.strip().lower() == "very high":
             drugs = rule.get("fdaApprovedDrugs") or ""
             assert drugs and not drugs.lower().startswith("none"), mid
+
+
+# ---------------------------------------------------------------------------
+# Reference tables (data_sources_halted_flagged.md)
+# ---------------------------------------------------------------------------
+
+def test_reference_tables_ship_empty_and_that_is_the_intended_state():
+    """An unpopulated table must halt the mechanism, not pass it.
+
+    Every source behind these tables is marked MUST VERIFY by a human.
+    Populating them from recalled knowledge would put unverifiable data
+    behind a `confirmed` or `annotation` provenance label — the strongest
+    tiers the feature layer has.
+    """
+    from services import reference_tables as RT
+    status = RT.status()
+    assert set(status) == set(RT.TABLES)
+    for name, info in status.items():
+        assert info["present"], f"{name} missing"
+        assert not info["populated"], (
+            f"{name} has rows — every row needs a verified source"
+        )
+
+
+def test_a11_needs_both_halves_of_f13():
+    """Site presence alone would fire A11 almost everywhere.
+
+    Most human genes carry an alternative polyadenylation site, so F13a
+    without F13b is not evidence that shifting usage helps.
+    """
+    arb = A.load_rule("A11")["arbitration"]
+    assert set(arb["requiredFeatures"]) == {"F13a", "F13b"}
+
+
+def test_clingen_haploinsufficiency_score_is_not_treated_as_ordinal():
+    """Code 40 means "dosage sensitivity unlikely", not "strongest evidence".
+
+    Comparing the column as an integer would invert the meaning of the two
+    highest-numbered codes.
+    """
+    assert F.CLINGEN_HI_SUFFICIENT == "3"
+    assert F.CLINGEN_HI_UNLIKELY == "40"
+    assert F.CLINGEN_HI_AUTOSOMAL_RECESSIVE == "30"
+    # The codes are strings precisely so no ordinal comparison compiles.
+    assert all(isinstance(c, str) for c in (
+        F.CLINGEN_HI_SUFFICIENT, F.CLINGEN_HI_UNLIKELY,
+        F.CLINGEN_HI_AUTOSOMAL_RECESSIVE))
+
+
+def test_curated_entries_outrank_bulk_annotation():
+    """A hand-curated, citation-carrying row is trusted above a bulk lookup."""
+    assert F.PROVENANCE_CAP[F.CONFIRMED] > F.PROVENANCE_CAP[F.ANNOTATION]
+    assert F.PROVENANCE_CAP[F.ANNOTATION] > F.PROVENANCE_CAP[F.PREDICTED]
+    assert F.PROVENANCE_CAP[F.PREDICTED] > F.PROVENANCE_CAP[F.USER_ASSERTED]

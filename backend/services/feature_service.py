@@ -82,12 +82,14 @@ UNRESOLVED = "UNRESOLVED"
 # it. Carrying an `evidence_tier` field with no rule that reads it would be
 # decoration. If a genuine second axis appears later, it belongs here.
 MEASURED = "measured"
+CONFIRMED = "confirmed"
 ANNOTATION = "annotation"
 PREDICTED = "predicted"
 USER_ASSERTED = "user_asserted"
 
 PROVENANCE_CAP: dict[str, float] = {
     MEASURED: 1.00,
+    CONFIRMED: 0.95,
     ANNOTATION: 0.90,
     PREDICTED: 0.75,
     USER_ASSERTED: 0.60,
@@ -95,6 +97,7 @@ PROVENANCE_CAP: dict[str, float] = {
 
 PROVENANCE_LABEL: dict[str, str] = {
     MEASURED: "Experimentally validated for this transcript",
+    CONFIRMED: "Curated catalogue entry, carrying a citation",
     ANNOTATION: "Genome annotation lookup",
     PREDICTED: "Model prediction",
     USER_ASSERTED: "Supplied by the user on the input form",
@@ -213,7 +216,13 @@ FEATURE_CATALOG: dict[str, dict[str, Any]] = {
     },
     "F11": {
         "label": "Repressive RNA-binding-protein site in the transcript",
-        "intendedSource": "CLIP-seq derived binding atlas (MUST VERIFY)",
+        # Deliberately the curated route, not the atlas route. An atlas
+        # answers "an RBP binds here", not "a repressor binds here and
+        # masking it raises protein output" — binding is not repression, and
+        # most RNA-binding proteins are context-dependent. A short list of
+        # validated cases is worth more than genome-wide coverage of a
+        # quantity that cannot be interpreted.
+        "intendedSource": "curated list of validated repressive RBP sites",
         "wired": False,
         "blocks": ["A28"],
     },
@@ -223,9 +232,19 @@ FEATURE_CATALOG: dict[str, dict[str, Any]] = {
         "wired": False,
         "blocks": ["A14"],
     },
-    "F13": {
-        "label": "Polyadenylation site usage",
-        "intendedSource": "polyadenylation-site predictor (none exists)",
+    # F13 is split. Site LOCATION is annotatable; site usage SHIFTING being
+    # therapeutic is not. Most human genes carry alternative polyadenylation
+    # sites, so F13a alone would fire A11 almost everywhere — A11 requires
+    # both halves.
+    "F13a": {
+        "label": "Alternative polyadenylation site present",
+        "intendedSource": "PolyASite / PolyA_DB / APAatlas (MUST VERIFY)",
+        "wired": False,
+        "blocks": ["A11"],
+    },
+    "F13b": {
+        "label": "Shifting polyadenylation usage is therapeutically beneficial",
+        "intendedSource": "per-gene disease-specific curation",
         "wired": False,
         "blocks": ["A11"],
     },
@@ -633,7 +652,7 @@ def _repeat_from_catalogue(ctx: FeatureContext) -> Feature | None:
         id="F12",
         state=PRESENT,
         probability=0.95,
-        provenance=ANNOTATION,
+        provenance=CONFIRMED,
         source=RT.provenance_of(row) or "repeat-expansion catalogue",
         call=region or None,
         detail=(
@@ -698,7 +717,7 @@ def _dominant_negative_from_table(ctx: FeatureContext) -> Feature | None:
         id="P6",
         state=PRESENT,
         probability=0.9,
-        provenance=ANNOTATION,
+        provenance=CONFIRMED,
         source=RT.provenance_of(row) or "curated dominant-negative list",
         detail=(
             f"{ctx.gene_symbol} is curated as having a documented "
@@ -747,6 +766,71 @@ def _classify_expression(tpm: float, source: str) -> Feature:
     )
 
 
+def _rbp_site_from_curation(ctx: FeatureContext) -> Feature | None:
+    """F11 from the curated validated-repressive-site list."""
+    row = RT.row_for("rbp_repressor_sites", ctx.gene_symbol)
+    if not row:
+        return None
+    return Feature(
+        id="F11",
+        state=PRESENT,
+        probability=0.9,
+        provenance=CONFIRMED,
+        source=RT.provenance_of(row) or "curated repressive RBP site list",
+        call=(row.get("transcript_region") or "").strip() or None,
+        detail=(
+            f"{row.get('rbp')} has a validated repressive site in "
+            f"{ctx.gene_symbol}"
+            + (f" ({row.get('transcript_region')})" if row.get("transcript_region") else "")
+            + (f", PMID {row.get('pmid')}" if row.get("pmid") else "")
+        ),
+    )
+
+
+def _apa_site_from_table(ctx: FeatureContext) -> Feature | None:
+    """F13a — is there an alternative polyadenylation site at all?"""
+    row = RT.row_for("polyadenylation_sites", ctx.gene_symbol)
+    if not row:
+        return None
+    n = (row.get("alternative_site_count") or "").strip()
+    try:
+        count = int(n)
+    except (TypeError, ValueError):
+        return None
+    return Feature(
+        id="F13a",
+        state=PRESENT if count > 0 else ABSENT,
+        probability=0.9 if count > 0 else 0.05,
+        provenance=ANNOTATION,
+        source=RT.provenance_of(row) or "polyadenylation site atlas",
+        detail=(
+            f"{count} alternative polyadenylation site(s) annotated for "
+            f"{ctx.gene_symbol}. Presence alone is not sufficient for A11 — "
+            "most human genes have them."
+        ),
+    )
+
+
+def _apa_benefit_from_curation(ctx: FeatureContext) -> Feature | None:
+    """F13b — is shifting the site actually therapeutic for this gene?"""
+    row = RT.row_for("apa_therapeutic_benefit", ctx.gene_symbol)
+    if not row:
+        return None
+    return Feature(
+        id="F13b",
+        state=PRESENT,
+        probability=0.9,
+        provenance=CONFIRMED,
+        source=RT.provenance_of(row) or "curated APA benefit list",
+        detail=(
+            (row.get("evidence_summary") or
+             f"Shifting polyadenylation usage is curated as therapeutic in "
+             f"{ctx.gene_symbol}")
+            + (f" (PMID {row.get('pmid')})" if row.get("pmid") else "")
+        ),
+    )
+
+
 def _residual_transcript(ctx: FeatureContext) -> Feature | None:
     """P2 — is there endogenous transcript left for a boosting mechanism?
 
@@ -758,6 +842,56 @@ def _residual_transcript(ctx: FeatureContext) -> Feature | None:
         return None
     return _classify_expression(
         ctx.tissue_tpm, "tissue expression (TPM) supplied by the gene pipeline")
+
+
+# ClinGen haploinsufficiency codes. NOT an ordinal 0-3 scale: 30 and 40 are
+# categorical codes that happen to be written as numbers, and treating the
+# field as an integer to compare would read "dosage sensitivity unlikely" as
+# the strongest possible evidence. SO-DATA-02.
+CLINGEN_HI_SUFFICIENT = "3"          # sufficient evidence for dosage sensitivity
+CLINGEN_HI_AUTOSOMAL_RECESSIVE = "30"
+CLINGEN_HI_UNLIKELY = "40"
+
+
+def _dominant_negative_from_clingen(ctx: FeatureContext) -> Feature | None:
+    """P6 from ClinGen Dosage Sensitivity curations.
+
+    The logic, from the data-sources document:
+
+      HI score 3   loss of function through DOSAGE is the established
+                   mechanism, so dominant-negative is unlikely -> P6 ABSENT,
+                   replacement flag permitted
+      HI 0/1/2     dosage insufficiency is not established, so the mechanism
+                   may be something else including dominant-negative ->
+                   unresolved, flag suppressed pending curation
+      30           autosomal recessive phenotype -> not a dominant-negative
+                   question; unresolved
+      40           dosage sensitivity unlikely -> unresolved
+      not curated  unresolved, flag suppressed
+
+    Only score 3 resolves. Everything else withholds the flag, which is the
+    safe direction: a missing suggestion costs a prompt, a wrong suggestion
+    to replace a protein in a dominant-negative disease is harmful.
+    """
+    row = RT.row_for("clingen_dosage", ctx.gene_symbol)
+    if not row:
+        return None
+    score = (row.get("haploinsufficiency_score") or "").strip()
+    if score != CLINGEN_HI_SUFFICIENT:
+        return None
+    return Feature(
+        id="P6",
+        state=ABSENT,
+        probability=0.1,
+        provenance=ANNOTATION,
+        source=RT.provenance_of(row) or "ClinGen Dosage Sensitivity",
+        call=f"HI={score}",
+        detail=(
+            f"ClinGen records sufficient evidence that {ctx.gene_symbol} is "
+            "haploinsufficient, so loss of function through dosage is the "
+            "established mechanism and a dominant-negative one is unlikely."
+        ),
+    )
 
 
 def _dominant_negative(ctx: FeatureContext) -> Feature | None:
@@ -936,24 +1070,36 @@ _LADDERS: dict[str, list[Callable[[FeatureContext], Feature | None]]] = {
     "F10a": [],
     "F10b": [],
     # Deliberately empty — plan §6.2 and §6.4.
-    "F11": [],
-    "F13": [],
+    "F11": [_rbp_site_from_curation],
+    "F13a": [_apa_site_from_table],
+    "F13b": [_apa_benefit_from_curation],
     "F12": [_repeat_from_catalogue, _from_repeat_text],
     # Modality-flag family. Unresolved simply withholds the flag.
     "P2": [_residual_transcript, _expression_from_table],
-    "P6": [_dominant_negative_from_table, _dominant_negative],
+    # A curated dominant-negative finding (which SUPPRESSES the flag) outranks
+    # a ClinGen haploinsufficiency call (which PERMITS it), which outranks the
+    # user's own defect classification.
+    "P6": [_dominant_negative_from_table, _dominant_negative_from_clingen,
+           _dominant_negative],
     "B1": [_localisation_from_table, _extracellular_target],
 }
 
 _NO_SOURCE_REASON = {
     "F11": (
-        "No repressive-RBP-site source is wired. Candidate sources are "
-        "CLIP-seq derived binding atlases; none has been verified, so this "
-        "feature cannot be established and A28 halts rather than guessing."
+        "No curated list of validated repressive RBP sites has been "
+        "populated. An atlas would answer 'an RBP binds here', not 'a "
+        "repressor binds here and masking it helps', so A28 halts rather "
+        "than scoring on a quantity that cannot be interpreted."
     ),
-    "F13": (
-        "No polyadenylation-site predictor is wired, so which poly(A) site is "
-        "used cannot be established and A11 halts rather than guessing."
+    "F13a": (
+        "No polyadenylation-site table has been populated, so whether this "
+        "transcript has an alternative poly(A) site is not established."
+    ),
+    "F13b": (
+        "Whether shifting polyadenylation usage is therapeutically useful in "
+        "this gene is a disease-specific judgement and has not been curated. "
+        "A11 halts rather than guessing — an alternative site exists in most "
+        "human genes, so site presence alone would fire it almost everywhere."
     ),
 }
 
