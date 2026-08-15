@@ -53,5 +53,26 @@
       "doi": "JBC 2023",
       "usedFor": "Therapeutic BlockmiR application. (JBC)"
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG02",
+      "TG06"
+    ],
+    "primaryGoal": "TG02",
+    "defectClasses": [
+      "haploinsufficiency",
+      "mirna_mediated_repression"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F7"
+    ],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }

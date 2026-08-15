@@ -53,5 +53,25 @@
       "doi": "Original research",
       "usedFor": "Examples of cryptic splice-site targeting."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG04",
+      "TG07"
+    ],
+    "primaryGoal": "TG04",
+    "defectClasses": [
+      "cryptic_splice_site"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F2"
+    ],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }

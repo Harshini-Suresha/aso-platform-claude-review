@@ -46,5 +46,23 @@
       "doi": "Review",
       "usedFor": "Stability, translation, and delivery."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "out_of_scope",
+    "designable": false,
+    "nonDesignableReason": "Not designable in this pipeline: circular RNA protein replacement is a kilobase-scale engineered transcript, not an oligonucleotide. The rulebook is retained as reference content.",
+    "goalTags": [
+      "TG08"
+    ],
+    "primaryGoal": "TG08",
+    "defectClasses": [
+      "haploinsufficiency"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }

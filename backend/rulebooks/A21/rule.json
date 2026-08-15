@@ -47,5 +47,28 @@
       "doi": "Review",
       "usedFor": "Clinical development and therapeutic applications of siRNA."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": false,
+    "nonDesignableReason": "Not designable in this pipeline: RNA interference (A21) requires a double-stranded siRNA duplex, which the single-stranded ASO designer cannot generate. Choose a single-stranded mechanism (A1, A2, A12, A15).",
+    "goalTags": [
+      "TG01"
+    ],
+    "primaryGoal": "TG01",
+    "defectClasses": [
+      "gain_of_function",
+      "overexpression",
+      "viral_toxic_rna",
+      "therapeutic_reduction"
+    ],
+    "alleleSelective": true,
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "note": "Biologically valid and kept in full; the single-stranded designer cannot emit a duplex, so it is never a selectable design option.",
+    "discriminatingFeatures": []
+  }
 }

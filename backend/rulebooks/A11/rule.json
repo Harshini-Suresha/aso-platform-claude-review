@@ -52,5 +52,25 @@
       "doi": "Review",
       "usedFor": "Therapeutic applications of APA modulation."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG04"
+    ],
+    "primaryGoal": "TG04",
+    "defectClasses": [
+      "apa_dysregulation"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F13"
+    ],
+    "forbiddenFeatures": [],
+    "note": "F13 (polyadenylation site usage) has no wired predictor. A11 halts on ABSENT rather than guessing (plan S6.4, item 9).",
+    "discriminatingFeatures": []
+  }
 }

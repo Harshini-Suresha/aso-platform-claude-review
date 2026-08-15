@@ -53,5 +53,25 @@
       "doi": "FDA",
       "usedFor": "Approved drugs and indications."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG04",
+      "TG07"
+    ],
+    "primaryGoal": "TG04",
+    "defectClasses": [
+      "exon_skipping_mutation"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F1"
+    ],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }

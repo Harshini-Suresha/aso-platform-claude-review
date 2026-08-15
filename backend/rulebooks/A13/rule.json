@@ -52,5 +52,24 @@
       "doi": "Review",
       "usedFor": "ADAR biology and structural mechanism. (ScienceDirect)"
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG03"
+    ],
+    "primaryGoal": "TG03",
+    "defectClasses": [
+      "correctable_point_variant"
+    ],
+    "editTypes": [
+      "a_to_i"
+    ],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }

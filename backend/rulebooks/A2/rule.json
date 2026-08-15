@@ -54,5 +54,29 @@
       "doi": "10.4062/biomolther.2023.001",
       "usedFor": "Steric-blocking mechanism and chemistry. (biomolther.org)"
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG01",
+      "TG06"
+    ],
+    "primaryGoal": "TG01",
+    "defectClasses": [
+      "gain_of_function",
+      "viral_toxic_rna",
+      "therapeutic_reduction"
+    ],
+    "alleleSelective": false,
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "note": "Also carries the translational-regulation display tag; TG06 is no longer a scoring partition (plan S3.1).",
+    "discriminatingFeatures": [
+      "F10b"
+    ]
+  }
 }

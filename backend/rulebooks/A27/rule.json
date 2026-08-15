@@ -46,5 +46,23 @@
       "doi": "10.1038/s41573-023-00645-1",
       "usedFor": "Riboswitch RNA structure targeting approaches."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG06"
+    ],
+    "primaryGoal": "TG06",
+    "defectClasses": [
+      "structured_element_dysregulation"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "note": "Only mechanism uniquely TG06. Low evidence, no FDA drug, no clinical programme. Kept and allowed to compete honestly. Its defect class is quoted from its own molecularDefect field, which had no term in the old per-goal vocabularies because TG06 gated on a (goal, element) pair instead.",
+    "discriminatingFeatures": []
+  }
 }

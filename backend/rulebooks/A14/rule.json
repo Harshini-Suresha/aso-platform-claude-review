@@ -46,5 +46,26 @@
       "doi": "Review",
       "usedFor": "Modern overview of steric blocking strategies for toxic RNA neutralization."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG05"
+    ],
+    "primaryGoal": "TG05",
+    "defectClasses": [
+      "toxic_rna_gain_of_function",
+      "rbp_sequestration"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F12"
+    ],
+    "forbiddenFeatures": [],
+    "note": "F12 (repeat expansion, unit + length) is currently user-supplied free text, not an annotation lookup. It resolves at the user_asserted provenance tier and caps confidence accordingly; with no repeat supplied at all, A14 halts (plan S5, item 9).",
+    "discriminatingFeatures": []
+  }
 }

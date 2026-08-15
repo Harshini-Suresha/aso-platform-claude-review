@@ -54,5 +54,27 @@
       "doi": "Review",
       "usedFor": "Modern therapeutic overview."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG01",
+      "TG05"
+    ],
+    "primaryGoal": "TG01",
+    "defectClasses": [
+      "mirna_dysregulation"
+    ],
+    "alleleSelective": false,
+    "editTypes": [],
+    "excludedTranscriptClasses": [
+      "protein_coding"
+    ],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "note": "Antagomirs act on small non-coding RNAs, not protein-coding pre-mRNAs; the transcript-class gate is transcribed from the existing TG05 protein-coding check.",
+    "discriminatingFeatures": []
+  }
 }

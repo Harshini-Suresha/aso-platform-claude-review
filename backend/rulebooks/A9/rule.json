@@ -53,5 +53,25 @@
       "doi": "Review",
       "usedFor": "General splice correction."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG04",
+      "TG07"
+    ],
+    "primaryGoal": "TG04",
+    "defectClasses": [
+      "pseudoexon_activation"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F3"
+    ],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }

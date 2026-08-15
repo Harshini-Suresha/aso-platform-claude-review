@@ -46,5 +46,23 @@
       "doi": "Review",
       "usedFor": "Clinical applications and delivery strategies."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "out_of_scope",
+    "designable": false,
+    "nonDesignableReason": "Not designable in this pipeline: messenger RNA replacement is a kilobase-scale mRNA, not an oligonucleotide. Different length scale, manufacturing, delivery and regulatory path; none of the ASO chemistry, hepatotoxicity or off-target logic in this platform applies to it. The rulebook is retained as reference content.",
+    "goalTags": [
+      "TG08"
+    ],
+    "primaryGoal": "TG08",
+    "defectClasses": [
+      "haploinsufficiency"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }

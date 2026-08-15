@@ -52,5 +52,25 @@
       "doi": "DOI in journal",
       "usedFor": "Updated review of NAT biology and therapeutic applications. (Taylor & Francis Online)"
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "designable": true,
+    "goalTags": [
+      "TG02"
+    ],
+    "primaryGoal": "TG02",
+    "defectClasses": [
+      "haploinsufficiency",
+      "nat_mediated_repression"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F6"
+    ],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }

@@ -53,5 +53,22 @@
       "doi": "PMID: Needs verification",
       "usedFor": "Development and clinical use in age-related macular degeneration."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "lookup",
+    "designable": false,
+    "nonDesignableReason": "Returned as a direct rulebook lookup rather than a ranked candidate: aptamer design is structure-selection against a protein surface, not antisense complementarity, and shares almost no design logic with the sequence designer. Pegaptanib is a real approved drug; the mechanism is kept in full, but this pipeline does not design it.",
+    "goalTags": [
+      "TG09",
+      "TG05"
+    ],
+    "primaryGoal": "TG09",
+    "defectClasses": [],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": []
+  }
 }
