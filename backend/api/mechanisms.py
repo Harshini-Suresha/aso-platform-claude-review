@@ -3,31 +3,62 @@ Mechanism selection endpoints. Kept separate from main.py's gene retrieval
 pipeline since this is a distinct concern (Rulebook Engine, not the
 Biological Information Retrieval Engine).
 
-Supports multiple therapeutic goals:
-- TG01: Gene Silencing (A1, A2, A12, A15, A21)
-- TG02: Gene Activation / Upregulation (A3, A4, A5, A6, A23, A28)
-- TG03: RNA Editing / Correction (A13, A16, A17, A18, A19, A20)
-- TG04: RNA Processing Modulation (A7, A8, A9, A10, A11)
-- TG05: RNA Neutralization (A12, A14, A25)
-- TG06: Translational Regulation (A2, A5, A6, A27)
-- TG07: Isoform Engineering (A7, A8, A9, A10)
-- TG09: Protein Function Modulation (A23)
+`POST /api/mechanisms/arbitrate` is the primary endpoint: it scores every
+designable mechanism in one pass and reports the therapeutic goal as an
+OUTPUT. The per-goal endpoints below remain for the existing goal-routed
+pages and are now filters over that same ranking, not separate scorers.
+
+Goal status after the scope review (see
+docs/planning/therapeutic_goal_scope_plan_v3.md):
+
+- TG01 Gene Silencing              scored   A1, A2, A12, A15; A21 scored too
+- TG02 Gene Activation             scored   A3, A4, A5, A6, A23; A28 halts
+- TG03 RNA Editing                 deferred A13, A16-A20; no arbitration claimed
+- TG04 RNA Processing              scored   A7, A8, A9, A10; A11 halts
+- TG05 RNA Neutralization          narrow   A14 (halts pending F12)
+- TG06 Translational Regulation    retired as a scoring partition; display tag
+- TG07 Isoform Engineering         retired as a scoring partition; display tag
+- TG08 Protein Replacement         flag only; A24, A26 never scored
+- TG09 Protein Function Modulation flag only; A25 never scored
+
+Four mechanism states, and only the last is absence — nothing is in it:
+
+  SCORED + DESIGNABLE            competes; this platform emits candidates
+  SCORED + DESIGN UNAVAILABLE    competes; another pipeline required (A21)
+  HALTED                         in the choice set, required feature absent
+  FLAGGED                        surfaced qualitatively, never scored
+  REMOVED                        nothing
+
+A21 is scored despite being undesignable here because siRNA is a genuine
+alternative to RNase H knockdown and five approved drugs make it fully
+validatable. A24/A25/A26 are flagged instead because no approved therapy
+exists in their indication class, so any number attached to them could not be
+checked against anything. The distinction is validatability, not modality.
+
+No mechanism was deleted and every rulebook is retained.
 """
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional
 
+from services.mechanism_arbitration import (
+    ArbitrationContext,
+    MOLECULAR_DEFECTS,
+    RETIRED_AS_SCORING_PARTITION,
+    arbitrate,
+    therapeutic_goals,
+)
 from services.mechanism_service import (
     rank_gene_silencing_mechanisms,
     rank_gene_upregulation_mechanisms,
     rank_rna_processing_mechanisms,
     rank_rna_editing_mechanisms,
     rank_rna_neutralization_mechanisms,
-    rank_translational_regulation_mechanisms,
-    rank_rna_engineering_mechanisms,
-    rank_isoform_engineering_mechanisms,
-    generate_rna_engineering_candidates,
+    filter_translational_regulation,
+    filter_isoform_engineering,
+    lookup_protein_function_modulation,
+    protein_replacement_scope_notice,
     DEFECT_TYPES,
     SILENCING_SCOPES,
     GENE_UPREGULATION_DEFECT_TYPES,
@@ -53,6 +84,7 @@ from services.mechanism_service import (
     ISOFORM_GOAL_DEFECT_MAP,
 )
 from services.gene_feature_service import analyze_gene_features
+from services.reference_tables import status as reference_table_status
 
 router = APIRouter()
 
@@ -379,18 +411,19 @@ async def translational_regulation_mechanisms(payload: TranslationalRegulationRe
              detail=f"Unknown steric_chemistry: {payload.steric_chemistry}",
          )
 
-     results = rank_translational_regulation_mechanisms(
+     # TG06 is no longer a scoring partition. This is the unified ranking
+     # filtered to the translational-regulation display tag.
+     results = filter_translational_regulation(
          translational_goal=payload.translational_goal,
          target_element=payload.target_element,
-         steric_chemistry=payload.steric_chemistry,
-         target_rbp=payload.target_rbp,
-         oligo_length=payload.oligo_length,
          delivery_context=payload.delivery_context,
+         oligo_length=payload.oligo_length,
      )
 
      return {
          "geneSymbol": payload.gene_symbol.strip().upper(),
          "therapeuticGoal": "Translational Regulation",
+         "goalNotice": RETIRED_AS_SCORING_PARTITION["TG06"],
          "inputs": {
              "translationalGoal": payload.translational_goal,
              "targetElement": payload.target_element,
@@ -431,28 +464,22 @@ async def rna_engineering_mechanisms(payload: RnaEngineeringRequest):
             detail=f"Unknown kd_goal: {payload.kd_goal}",
         )
 
-    mechanisms = rank_rna_engineering_mechanisms(
-        structural_class=payload.structural_class,
-        target_type=payload.target_type,
-        scaffold=payload.scaffold,
-        chem_stabilization=payload.chem_stabilization,
-        kd_goal=payload.kd_goal,
-        gene_symbol=payload.gene_symbol,
-        delivery_context=payload.delivery_context,
-    )
-
-    candidates = generate_rna_engineering_candidates(
-        structural_class=payload.structural_class,
-        target_type=payload.target_type,
-        scaffold=payload.scaffold,
-        chem_stabilization=payload.chem_stabilization,
-        kd_goal=payload.kd_goal,
-        gene_symbol=payload.gene_symbol,
-    )
+    # TG09 is a flag, not a ranking: it contains one mechanism (A25), and a
+    # ranking over a single item is not a ranking. The generated aptamer
+    # candidates this endpoint used to return — sequence, Tm, ΔG, predicted
+    # Kd, serum half-life — were all derived from hash() of the form inputs.
+    # They were not predictions and they are not returned any more.
+    #
+    # Whether the aptamer flag actually fires for a given target is decided by
+    # the unified pass from feature B1; call /api/mechanisms/arbitrate for
+    # that. This endpoint returns the rulebook content behind the flag.
+    lookup = lookup_protein_function_modulation()
 
     return {
         "geneSymbol": payload.gene_symbol.strip().upper(),
         "therapeuticGoal": "Protein Function Modulation",
+        "status": "FLAGGED",
+        "goalNotice": RETIRED_AS_SCORING_PARTITION["TG09"],
         "inputs": {
             "structuralClass": payload.structural_class,
             "targetType": payload.target_type,
@@ -461,8 +488,9 @@ async def rna_engineering_mechanisms(payload: RnaEngineeringRequest):
             "kdGoal": payload.kd_goal,
             "deliveryContext": payload.delivery_context,
         },
-        "mechanisms": mechanisms,
-        "candidates": candidates,
+        "mechanism": lookup,
+        "mechanisms": [],
+        "candidates": [],
     }
 
 
@@ -474,17 +502,21 @@ async def isoform_engineering_mechanisms(payload: IsoformEngineeringRequest):
             detail=f"Unknown isoform_goal: {payload.isoform_goal}",
         )
 
-    results = rank_isoform_engineering_mechanisms(
+    # TG07 is no longer a scoring partition: every one of its mechanisms is a
+    # TG04 mechanism. This is the unified ranking filtered to the
+    # isoform-engineering display tag, so it can no longer disagree with the
+    # RNA-processing page about the same transcript.
+    results = filter_isoform_engineering(
         isoform_goal=payload.isoform_goal,
         target_exon_locus=payload.target_exon_locus,
         splice_element_target=payload.splice_element_target,
-        steric_chemistry=payload.steric_chemistry,
         delivery_context=payload.delivery_context,
     )
 
     return {
         "geneSymbol": payload.gene_symbol.strip().upper(),
         "therapeuticGoal": "Isoform Engineering",
+        "goalNotice": RETIRED_AS_SCORING_PARTITION["TG07"],
         "inputs": {
             "isoformGoal": payload.isoform_goal,
             "targetExonLocus": payload.target_exon_locus,
@@ -493,6 +525,106 @@ async def isoform_engineering_mechanisms(payload: IsoformEngineeringRequest):
             "deliveryContext": payload.delivery_context,
         },
         "results": results,
+    }
+
+
+class ArbitrationRequest(BaseModel):
+    """Inputs to the unified pass.
+
+    Note what is NOT here: a therapeutic goal. `goal_filter` narrows the
+    finished ranking for a user who already knows what they want; it never
+    decides what gets scored.
+    """
+
+    gene_symbol: str
+    molecular_defect: Optional[str] = None
+    allele_selective: Optional[bool] = None
+    transcript_class: Optional[str] = None
+    edit_type: Optional[str] = None
+    variant_hgvs: Optional[str] = None
+    known_variant: Optional[str] = None
+    delivery_context: Optional[str] = None
+    exon_count: Optional[int] = None
+    intron_count: Optional[int] = None
+    total_transcripts: Optional[int] = None
+    gene_features: Optional[dict] = None
+    transcript_sequence: Optional[str] = None
+    cds_start: Optional[int] = None
+    repeat_unit: Optional[str] = None
+    repeat_count: Optional[str] = None
+    oligo_length: int = 18
+    # Modality-flag inputs. Never scored; they decide only whether a
+    # qualitative signpost toward an undesigned modality is shown.
+    tissue_tpm: Optional[float] = None
+    protein_localisation: Optional[str] = None
+    goal_filter: Optional[list[str]] = None
+
+
+@router.post("/api/mechanisms/arbitrate")
+async def arbitrate_mechanisms(payload: ArbitrationRequest):
+    """Score every designable mechanism in one pass.
+
+    The therapeutic goal comes back as an output label on the winning
+    mechanism. This is the endpoint that makes the nusinersen class of
+    failure impossible: a splice-modulating answer surfaces for an
+    upregulation intent because nothing was filtered before scoring.
+    """
+    if payload.molecular_defect and payload.molecular_defect not in MOLECULAR_DEFECTS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unknown molecular_defect: {payload.molecular_defect}",
+        )
+    if payload.edit_type and payload.edit_type not in EDIT_TYPES:
+        raise HTTPException(
+            status_code=400, detail=f"Unknown edit_type: {payload.edit_type}"
+        )
+    goals = therapeutic_goals()
+    for goal in payload.goal_filter or []:
+        if goal not in goals:
+            raise HTTPException(
+                status_code=400, detail=f"Unknown therapeutic goal: {goal}"
+            )
+
+    ctx = ArbitrationContext(
+        gene_symbol=payload.gene_symbol,
+        molecular_defect=payload.molecular_defect,
+        allele_selective=payload.allele_selective,
+        transcript_class=payload.transcript_class,
+        edit_type=payload.edit_type,
+        variant_hgvs=payload.variant_hgvs,
+        known_variant=payload.known_variant,
+        delivery_context=payload.delivery_context,
+        exon_count=payload.exon_count,
+        intron_count=payload.intron_count,
+        total_transcripts=payload.total_transcripts,
+        gene_features=payload.gene_features,
+        transcript_sequence=payload.transcript_sequence,
+        cds_start=payload.cds_start,
+        repeat_unit=payload.repeat_unit,
+        repeat_count=payload.repeat_count,
+        oligo_length=payload.oligo_length,
+        tissue_tpm=payload.tissue_tpm,
+        protein_localisation=payload.protein_localisation,
+        goal_filter=payload.goal_filter,
+    )
+    return arbitrate(ctx)
+
+
+@router.get("/api/mechanisms/scope")
+async def mechanism_scope():
+    """What this designer scores, defers, and refuses — and why."""
+    return {
+        "goals": therapeutic_goals(),
+        "retiredAsScoringPartition": RETIRED_AS_SCORING_PARTITION,
+        "proteinReplacement": protein_replacement_scope_notice(),
+        "proteinFunctionModulation": lookup_protein_function_modulation(),
+        "molecularDefects": [
+            {"id": k, "label": v} for k, v in MOLECULAR_DEFECTS.items()
+        ],
+        # Which reference tables are populated. An unpopulated table is why a
+        # mechanism halts or a modality flag is withheld, so the answer to
+        # "why did I get nothing?" is visible rather than buried.
+        "referenceTables": reference_table_status(),
     }
 
 

@@ -515,8 +515,19 @@ def analyze_gene_features(
     # Build feature availability map. A tri-state value (True/False/None) keeps
     # "verified absent" distinct from "could not verify".
     features = {
+        # sourceWired=False marks the three entries below as placeholders that
+        # return True for every gene. "All protein-coding genes have promoters"
+        # is true and useless: it is not evidence that THIS promoter is
+        # silenced, that THIS 3' UTR carries a repressive miRNA site, or that
+        # THIS transcript carries a repressive RBP site. The real sources
+        # (methylation atlas / TargetScan context++ / a CLIP-derived binding
+        # atlas) are F8, F7 and F11 in the feature plan and none is wired, so
+        # feature_service leaves them unresolved rather than reading these as
+        # positive findings.
         "saRNA": {
             "available": True,
+            "verified": False,
+            "sourceWired": False,
             "reason": "All protein-coding genes have promoter regions that can be targeted by saRNA",
         },
         "uORF": _feature_entry(
@@ -560,10 +571,14 @@ def analyze_gene_features(
         ),
         "miRNA_block": {
             "available": True,
+            "verified": False,
+            "sourceWired": False,
             "reason": "Most protein-coding mRNAs contain miRNA binding sites in their 3' UTR",
         },
         "RBP_block": {
             "available": True,
+            "verified": False,
+            "sourceWired": False,
             "reason": "Protein-coding transcripts contain RNA-binding protein (RBP) binding sites that can be masked to relieve translational repression",
         },
     }
@@ -639,9 +654,17 @@ def _feature_entry(
     None means the structural check could not be run — treat the mechanism
     as available (so it is not silently dropped from the ranking) with an
     honest note rather than a definitive negative.
+
+    ``verified`` preserves the tri-state that ``available`` flattens. The
+    permissive True-on-unknown behaviour is deliberate for the ranking UI,
+    but it means ``available`` alone cannot distinguish "we checked and it is
+    there" from "we could not check". feature_service reads ``verified`` to
+    decide whether a feature resolves at the annotation provenance tier or
+    stays unresolved, so an unverifiable gene halts a mechanism instead of
+    scoring it on an assumption.
     """
     if available is None:
-        return {"available": True, "reason": reason_unknown}
+        return {"available": True, "verified": False, "reason": reason_unknown}
     if available:
-        return {"available": True, "reason": reason_yes}
-    return {"available": False, "reason": reason_no}
+        return {"available": True, "verified": True, "reason": reason_yes}
+    return {"available": False, "verified": True, "reason": reason_no}

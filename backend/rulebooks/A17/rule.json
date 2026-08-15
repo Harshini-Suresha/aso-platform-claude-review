@@ -52,5 +52,24 @@
       "doi": "Needs verification",
       "usedFor": "Comparison of RNA editing platforms."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG03"
+    ],
+    "primaryGoal": "TG03",
+    "defectClasses": [
+      "correctable_point_variant"
+    ],
+    "editTypes": [
+      "a_to_i"
+    ],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": [],
+    "designAvailable": true
+  }
 }

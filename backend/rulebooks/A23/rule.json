@@ -52,5 +52,25 @@
       "doi": "Needs verification",
       "usedFor": "Clinical translation of saRNA therapeutics."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG02"
+    ],
+    "primaryGoal": "TG02",
+    "defectClasses": [
+      "haploinsufficiency",
+      "epigenetic_promoter_silencing"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F8"
+    ],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": [],
+    "designAvailable": true
+  }
 }

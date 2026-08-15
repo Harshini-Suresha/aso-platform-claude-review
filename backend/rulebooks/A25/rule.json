@@ -53,5 +53,23 @@
       "doi": "PMID: Needs verification",
       "usedFor": "Development and clinical use in age-related macular degeneration."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "flag_only",
+    "goalTags": [
+      "TG09",
+      "TG05"
+    ],
+    "primaryGoal": "TG09",
+    "defectClasses": [],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": [],
+    "designAvailable": false,
+    "designUnavailableReason": "Requires structure-based selection (SELEX), not antisense complementarity.",
+    "flagReason": "Pegaptanib is a real approved drug, but aptamer design shares almost no logic with the sequence designer and TG09 contains one mechanism — a ranking over a single item is not a ranking. Surfaced qualitatively instead of scored."
+  }
 }

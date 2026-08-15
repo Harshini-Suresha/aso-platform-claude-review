@@ -52,5 +52,26 @@
       "doi": "Review",
       "usedFor": "Therapeutic applications of APA modulation."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG04"
+    ],
+    "primaryGoal": "TG04",
+    "defectClasses": [
+      "apa_dysregulation"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F13a",
+      "F13b"
+    ],
+    "forbiddenFeatures": [],
+    "note": "F13 is split: F13a (an alternative polyadenylation site exists) is an annotation lookup, F13b (shifting usage is therapeutically beneficial in this gene) is per-gene curation. A11 requires BOTH. Site presence alone is not sufficient — most human genes carry alternative poly(A) sites, so F13a on its own would fire A11 almost everywhere. Neither table is populated, so A11 halts.",
+    "discriminatingFeatures": [],
+    "designAvailable": true
+  }
 }

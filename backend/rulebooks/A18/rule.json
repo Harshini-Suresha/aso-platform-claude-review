@@ -46,5 +46,24 @@
       "doi": "Needs verification",
       "usedFor": "Comparison of CIRTS, LEAPER, CRISPR-Cas13, and engineered ADAR systems."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG03"
+    ],
+    "primaryGoal": "TG03",
+    "defectClasses": [
+      "correctable_point_variant"
+    ],
+    "editTypes": [
+      "a_to_i"
+    ],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": [],
+    "designAvailable": true
+  }
 }

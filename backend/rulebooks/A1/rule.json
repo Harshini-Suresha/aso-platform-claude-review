@@ -71,5 +71,29 @@
       "doi": null,
       "usedFor": "Approved drugs, indications."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG01"
+    ],
+    "primaryGoal": "TG01",
+    "defectClasses": [
+      "gain_of_function",
+      "viral_toxic_rna",
+      "therapeutic_reduction"
+    ],
+    "alleleSelective": true,
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "note": "F10a is the transcript-wide accessible-site query. A1 needs an accessible cleavable site anywhere in the transcript; A2 needs one specifically at the 5' UTR / start codon (F10b). Splitting the two queries is what breaks the A1/A2 tie (plan item 8).",
+    "discriminatingFeatures": [
+      "F10a",
+      "F9"
+    ],
+    "designAvailable": true
+  }
 }

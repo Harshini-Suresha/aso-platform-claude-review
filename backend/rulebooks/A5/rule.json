@@ -47,5 +47,25 @@
       "doi": "DOI: 10.1016/j.omtn.2024.102406",
       "usedFor": "Independent reproduction study challenging the original RNASEH1 findings. (ScienceDirect)"
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG02",
+      "TG06"
+    ],
+    "primaryGoal": "TG02",
+    "defectClasses": [
+      "uorf_mediated_repression"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F5"
+    ],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": [],
+    "designAvailable": true
+  }
 }

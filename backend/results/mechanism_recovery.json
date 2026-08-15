@@ -18,10 +18,8 @@
         "A15"
       ],
       "scores": {
-        "A1": 15,
-        "A2": 15,
-        "A12": 5,
-        "A15": 5
+        "A1": 1.0,
+        "A2": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -48,10 +46,8 @@
         "A15"
       ],
       "scores": {
-        "A1": 15,
-        "A2": 15,
-        "A12": 5,
-        "A15": 5
+        "A1": 1.0,
+        "A2": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -78,10 +74,8 @@
         "A15"
       ],
       "scores": {
-        "A1": 15,
-        "A2": 15,
-        "A12": 5,
-        "A15": 5
+        "A1": 1.0,
+        "A2": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -112,10 +106,8 @@
         "A15"
       ],
       "scores": {
-        "A1": 15,
-        "A2": 15,
-        "A12": 5,
-        "A15": 5
+        "A1": 1.0,
+        "A2": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -142,10 +134,8 @@
         "A15"
       ],
       "scores": {
-        "A1": 15,
-        "A2": 15,
-        "A12": 5,
-        "A15": 5
+        "A1": 1.0,
+        "A2": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -173,11 +163,7 @@
         "A11"
       ],
       "scores": {
-        "A7": 13,
-        "A8": 3,
-        "A9": 3,
-        "A10": 3,
-        "A11": 3
+        "A7": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -205,11 +191,7 @@
         "A11"
       ],
       "scores": {
-        "A7": 13,
-        "A8": 3,
-        "A9": 3,
-        "A10": 3,
-        "A11": 3
+        "A7": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -237,11 +219,7 @@
         "A11"
       ],
       "scores": {
-        "A7": 13,
-        "A8": 3,
-        "A9": 3,
-        "A10": 3,
-        "A11": 3
+        "A7": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -269,11 +247,7 @@
         "A11"
       ],
       "scores": {
-        "A7": 13,
-        "A8": 3,
-        "A9": 3,
-        "A10": 3,
-        "A11": 3
+        "A7": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -301,11 +275,7 @@
         "A11"
       ],
       "scores": {
-        "A8": 13,
-        "A7": 3,
-        "A9": 3,
-        "A10": 3,
-        "A11": 3
+        "A8": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -337,11 +307,7 @@
         "A11"
       ],
       "scores": {
-        "A10": 13,
-        "A7": 3,
-        "A8": 3,
-        "A9": 3,
-        "A11": 3
+        "A10": 1.0
       },
       "top1_exact": true,
       "top1_family": true,
@@ -367,8 +333,8 @@
       ],
       "alt_ranking": [
         "A1",
-        "A2",
         "A12",
+        "A2",
         "A15"
       ],
       "answer_changed": false
@@ -399,5 +365,583 @@
     "top1_goal": 1.0,
     "outright_top1": 1.0,
     "top3_exact": 1.0
+  },
+  "goal_agnostic": {
+    "defect_only": {
+      "rows": [
+        {
+          "drug": "Inotersen",
+          "gene": "TTR",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A2",
+            "A7",
+            "A8",
+            "A3"
+          ],
+          "n_eligible": 2,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 2,
+          "outright": false
+        },
+        {
+          "drug": "Eplontersen",
+          "gene": "TTR",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A2",
+            "A7",
+            "A8",
+            "A3"
+          ],
+          "n_eligible": 2,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 2,
+          "outright": false
+        },
+        {
+          "drug": "Fomivirsen",
+          "gene": "HCMV IE2",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A2",
+            "A7",
+            "A8",
+            "A3"
+          ],
+          "n_eligible": 2,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 2,
+          "outright": false
+        },
+        {
+          "drug": "Tofersen",
+          "gene": "SOD1",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A2",
+            "A7",
+            "A8",
+            "A3"
+          ],
+          "n_eligible": 2,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 2,
+          "outright": false
+        },
+        {
+          "drug": "Mipomersen",
+          "gene": "APOB",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A2",
+            "A7",
+            "A8",
+            "A3"
+          ],
+          "n_eligible": 2,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 2,
+          "outright": false
+        },
+        {
+          "drug": "Eteplirsen",
+          "gene": "DMD",
+          "truth": "A7",
+          "goal": "TG04",
+          "ranked": [
+            "A7",
+            "A1",
+            "A8",
+            "A3",
+            "A9"
+          ],
+          "n_eligible": 1,
+          "reported_goal": "TG04",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": true,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 1,
+          "outright": true
+        },
+        {
+          "drug": "Golodirsen",
+          "gene": "DMD",
+          "truth": "A7",
+          "goal": "TG04",
+          "ranked": [
+            "A7",
+            "A1",
+            "A8",
+            "A3",
+            "A9"
+          ],
+          "n_eligible": 1,
+          "reported_goal": "TG04",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": true,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 1,
+          "outright": true
+        },
+        {
+          "drug": "Viltolarsen",
+          "gene": "DMD",
+          "truth": "A7",
+          "goal": "TG04",
+          "ranked": [
+            "A7",
+            "A1",
+            "A8",
+            "A3",
+            "A9"
+          ],
+          "n_eligible": 1,
+          "reported_goal": "TG04",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": true,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 1,
+          "outright": true
+        },
+        {
+          "drug": "Casimersen",
+          "gene": "DMD",
+          "truth": "A7",
+          "goal": "TG04",
+          "ranked": [
+            "A7",
+            "A1",
+            "A8",
+            "A3",
+            "A9"
+          ],
+          "n_eligible": 1,
+          "reported_goal": "TG04",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": true,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 1,
+          "outright": true
+        },
+        {
+          "drug": "Nusinersen",
+          "gene": "SMN2",
+          "truth": "A8",
+          "goal": "TG04",
+          "ranked": [
+            "A8",
+            "A1",
+            "A7",
+            "A3",
+            "A9"
+          ],
+          "n_eligible": 1,
+          "reported_goal": "TG04",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": true,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 1,
+          "outright": true
+        },
+        {
+          "drug": "Milasen",
+          "gene": "MFSD8 (CLN7)",
+          "truth": "A10",
+          "goal": "TG04",
+          "ranked": [
+            "A10",
+            "A1",
+            "A7",
+            "A8",
+            "A3"
+          ],
+          "n_eligible": 1,
+          "reported_goal": "TG04",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": true,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 1,
+          "outright": true
+        }
+      ],
+      "agg": {
+        "n": 11,
+        "top1_exact": 1.0,
+        "outright_top1": 0.545,
+        "top3_exact": 1.0,
+        "goal_label_correct": 1.0,
+        "mean_eligible": 1.45,
+        "stand_in_only": 0.545
+      }
+    },
+    "gene_only": {
+      "rows": [
+        {
+          "drug": "Inotersen",
+          "gene": "TTR",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Eplontersen",
+          "gene": "TTR",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Fomivirsen",
+          "gene": "HCMV IE2",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Tofersen",
+          "gene": "SOD1",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Mipomersen",
+          "gene": "APOB",
+          "truth": "A1",
+          "goal": "TG01",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": true,
+          "truth_status": "ELIGIBLE",
+          "stand_in_only": false,
+          "top1_exact": true,
+          "top1_family": true,
+          "top1_goal": true,
+          "top3_exact": true,
+          "rank": 1,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Eteplirsen",
+          "gene": "DMD",
+          "truth": "A7",
+          "goal": "TG04",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": false,
+          "truth_status": "HALTED",
+          "stand_in_only": false,
+          "top1_exact": false,
+          "top1_family": false,
+          "top1_goal": false,
+          "top3_exact": false,
+          "rank": 12,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Golodirsen",
+          "gene": "DMD",
+          "truth": "A7",
+          "goal": "TG04",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": false,
+          "truth_status": "HALTED",
+          "stand_in_only": false,
+          "top1_exact": false,
+          "top1_family": false,
+          "top1_goal": false,
+          "top3_exact": false,
+          "rank": 12,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Viltolarsen",
+          "gene": "DMD",
+          "truth": "A7",
+          "goal": "TG04",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": false,
+          "truth_status": "HALTED",
+          "stand_in_only": false,
+          "top1_exact": false,
+          "top1_family": false,
+          "top1_goal": false,
+          "top3_exact": false,
+          "rank": 12,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Casimersen",
+          "gene": "DMD",
+          "truth": "A7",
+          "goal": "TG04",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": false,
+          "truth_status": "HALTED",
+          "stand_in_only": false,
+          "top1_exact": false,
+          "top1_family": false,
+          "top1_goal": false,
+          "top3_exact": false,
+          "rank": 12,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Nusinersen",
+          "gene": "SMN2",
+          "truth": "A8",
+          "goal": "TG04",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": false,
+          "truth_status": "HALTED",
+          "stand_in_only": false,
+          "top1_exact": false,
+          "top1_family": false,
+          "top1_goal": false,
+          "top3_exact": false,
+          "rank": 13,
+          "tied_at_top": 11,
+          "outright": false
+        },
+        {
+          "drug": "Milasen",
+          "gene": "MFSD8 (CLN7)",
+          "truth": "A10",
+          "goal": "TG04",
+          "ranked": [
+            "A1",
+            "A12",
+            "A13",
+            "A16",
+            "A17"
+          ],
+          "n_eligible": 11,
+          "reported_goal": "TG01",
+          "goal_label_correct": false,
+          "truth_status": "HALTED",
+          "stand_in_only": false,
+          "top1_exact": false,
+          "top1_family": false,
+          "top1_goal": false,
+          "top3_exact": false,
+          "rank": 16,
+          "tied_at_top": 11,
+          "outright": false
+        }
+      ],
+      "agg": {
+        "n": 11,
+        "top1_exact": 0.455,
+        "outright_top1": 0.0,
+        "top3_exact": 0.455,
+        "goal_label_correct": 0.455,
+        "mean_eligible": 11.0,
+        "stand_in_only": 0.0
+      }
+    }
   }
 }

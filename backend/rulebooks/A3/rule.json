@@ -52,5 +52,27 @@
       "doi": "To verify",
       "usedFor": "Poison exon biology and ASO rescue in SCN1A. (JCI Insight)"
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG02"
+    ],
+    "primaryGoal": "TG02",
+    "defectClasses": [
+      "haploinsufficiency",
+      "poison_exon_inclusion"
+    ],
+    "editTypes": [],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [
+      "F4"
+    ],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": [
+      "F1"
+    ],
+    "designAvailable": true
+  }
 }

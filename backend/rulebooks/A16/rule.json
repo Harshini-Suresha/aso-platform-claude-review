@@ -46,5 +46,24 @@
       "doi": "Review",
       "usedFor": "Comparison of A-to-I and C-to-U RNA editing technologies and therapeutic applications."
     }
-  ]
+  ],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG03"
+    ],
+    "primaryGoal": "TG03",
+    "defectClasses": [
+      "correctable_point_variant"
+    ],
+    "editTypes": [
+      "c_to_u"
+    ],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": false,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": [],
+    "designAvailable": true
+  }
 }

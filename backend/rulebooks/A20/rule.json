@@ -27,5 +27,24 @@
     "note": null
   },
   "referencesSummary": null,
-  "references": []
+  "references": [],
+  "arbitration": {
+    "scoringMode": "scored",
+    "goalTags": [
+      "TG03"
+    ],
+    "primaryGoal": "TG03",
+    "defectClasses": [
+      "coding_region_lesion"
+    ],
+    "editTypes": [
+      "trans_splicing"
+    ],
+    "excludedTranscriptClasses": [],
+    "requiresIntrons": true,
+    "requiredFeatures": [],
+    "forbiddenFeatures": [],
+    "discriminatingFeatures": [],
+    "designAvailable": true
+  }
 }
