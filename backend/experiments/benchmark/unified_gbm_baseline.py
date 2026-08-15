@@ -89,7 +89,23 @@ def main() -> None:
     print(f"loaded {len(df)} rows, X={X.shape}")
 
     rng = np.random.default_rng(SEED)
+    # PHASE-0 GUARD -- mirrors invariant_ranker.split_experiments. A gene
+    # split with ~1 row per gene is a random row split wearing a gene-split
+    # label. Refuse rather than report a protocol we are not running.
+    n_missing = int(pd.isna(genes).sum())
+    if n_missing:
+        raise ValueError(
+            f"gene split: {n_missing}/{len(genes)} rows have no target_gene "
+            f"annotation. Annotate them or restrict to annotated modalities."
+        )
     all_genes = np.unique(genes)
+    rows_per_gene = len(genes) / max(len(all_genes), 1)
+    if rows_per_gene < 2.0:
+        raise ValueError(
+            f"gene split: {len(all_genes)} distinct genes for {len(genes)} "
+            f"rows ({rows_per_gene:.2f} rows/gene) -- the column is not "
+            f"grouping anything. Fix the annotation first."
+        )
     test_genes = all_genes[rng.permutation(len(all_genes))[: int(len(all_genes) * TEST_GENE_FRAC)]]
     tr = ~np.isin(genes, test_genes)
     te = np.isin(genes, test_genes)

@@ -1,0 +1,403 @@
+{
+  "source": "Sang et al. BioDrugs 2024;38(4):511-526. PMID 38914784, Table 1.",
+  "rows": [
+    {
+      "drug": "Inotersen",
+      "gene": "TTR",
+      "disease": "hATTR",
+      "defect": "gain_of_function",
+      "scope": "total_knockdown",
+      "delivery": "liver",
+      "truth": "A1",
+      "input_note": null,
+      "goal": "TG01",
+      "ranked": [
+        "A1",
+        "A2",
+        "A12",
+        "A15"
+      ],
+      "scores": {
+        "A1": 15,
+        "A2": 15,
+        "A12": 5,
+        "A15": 5
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 2,
+      "outright": false
+    },
+    {
+      "drug": "Eplontersen",
+      "gene": "TTR",
+      "disease": "hATTR",
+      "defect": "gain_of_function",
+      "scope": "total_knockdown",
+      "delivery": "liver",
+      "truth": "A1",
+      "input_note": null,
+      "goal": "TG01",
+      "ranked": [
+        "A1",
+        "A2",
+        "A12",
+        "A15"
+      ],
+      "scores": {
+        "A1": 15,
+        "A2": 15,
+        "A12": 5,
+        "A15": 5
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 2,
+      "outright": false
+    },
+    {
+      "drug": "Fomivirsen",
+      "gene": "HCMV IE2",
+      "disease": "CMV retinitis",
+      "defect": "viral_toxic_rna",
+      "scope": "total_knockdown",
+      "delivery": null,
+      "truth": "A1",
+      "input_note": null,
+      "goal": "TG01",
+      "ranked": [
+        "A1",
+        "A2",
+        "A12",
+        "A15"
+      ],
+      "scores": {
+        "A1": 15,
+        "A2": 15,
+        "A12": 5,
+        "A15": 5
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 2,
+      "outright": false
+    },
+    {
+      "drug": "Tofersen",
+      "gene": "SOD1",
+      "disease": "SOD1-ALS",
+      "defect": "gain_of_function",
+      "scope": "total_knockdown",
+      "delivery": "cns",
+      "truth": "A1",
+      "input_note": null,
+      "alt_input": {
+        "scope": "allele_specific"
+      },
+      "alt_note": "INPUT SENSITIVITY. The biology reads as gain-of-function, which invites a user to enter allele_specific; but tofersen is not allele-selective and lowers WT and mutant alike. Both inputs are run and reported (S6.4c).",
+      "goal": "TG01",
+      "ranked": [
+        "A1",
+        "A2",
+        "A12",
+        "A15"
+      ],
+      "scores": {
+        "A1": 15,
+        "A2": 15,
+        "A12": 5,
+        "A15": 5
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 2,
+      "outright": false
+    },
+    {
+      "drug": "Mipomersen",
+      "gene": "APOB",
+      "disease": "HoFH",
+      "defect": "therapeutic_reduction",
+      "scope": "total_knockdown",
+      "delivery": "liver",
+      "truth": "A1",
+      "input_note": null,
+      "goal": "TG01",
+      "ranked": [
+        "A1",
+        "A2",
+        "A12",
+        "A15"
+      ],
+      "scores": {
+        "A1": 15,
+        "A2": 15,
+        "A12": 5,
+        "A15": 5
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 2,
+      "outright": false
+    },
+    {
+      "drug": "Eteplirsen",
+      "gene": "DMD",
+      "disease": "DMD (exon 51 skip)",
+      "defect": "exon_skipping_mutation",
+      "exon": "51",
+      "delivery": "local_intramuscular",
+      "truth": "A7",
+      "input_note": null,
+      "goal": "TG04",
+      "ranked": [
+        "A7",
+        "A8",
+        "A9",
+        "A10",
+        "A11"
+      ],
+      "scores": {
+        "A7": 13,
+        "A8": 3,
+        "A9": 3,
+        "A10": 3,
+        "A11": 3
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 1,
+      "outright": true
+    },
+    {
+      "drug": "Golodirsen",
+      "gene": "DMD",
+      "disease": "DMD (exon 53 skip)",
+      "defect": "exon_skipping_mutation",
+      "exon": "53",
+      "delivery": null,
+      "truth": "A7",
+      "input_note": null,
+      "goal": "TG04",
+      "ranked": [
+        "A7",
+        "A8",
+        "A9",
+        "A10",
+        "A11"
+      ],
+      "scores": {
+        "A7": 13,
+        "A8": 3,
+        "A9": 3,
+        "A10": 3,
+        "A11": 3
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 1,
+      "outright": true
+    },
+    {
+      "drug": "Viltolarsen",
+      "gene": "DMD",
+      "disease": "DMD (exon 53 skip)",
+      "defect": "exon_skipping_mutation",
+      "exon": "53",
+      "delivery": null,
+      "truth": "A7",
+      "input_note": null,
+      "goal": "TG04",
+      "ranked": [
+        "A7",
+        "A8",
+        "A9",
+        "A10",
+        "A11"
+      ],
+      "scores": {
+        "A7": 13,
+        "A8": 3,
+        "A9": 3,
+        "A10": 3,
+        "A11": 3
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 1,
+      "outright": true
+    },
+    {
+      "drug": "Casimersen",
+      "gene": "DMD",
+      "disease": "DMD (exon 45 skip)",
+      "defect": "exon_skipping_mutation",
+      "exon": "45",
+      "delivery": null,
+      "truth": "A7",
+      "input_note": null,
+      "goal": "TG04",
+      "ranked": [
+        "A7",
+        "A8",
+        "A9",
+        "A10",
+        "A11"
+      ],
+      "scores": {
+        "A7": 13,
+        "A8": 3,
+        "A9": 3,
+        "A10": 3,
+        "A11": 3
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 1,
+      "outright": true
+    },
+    {
+      "drug": "Nusinersen",
+      "gene": "SMN2",
+      "disease": "SMA",
+      "defect": "exon_inclusion_defect",
+      "exon": "7",
+      "delivery": "cns",
+      "truth": "A8",
+      "input_note": "GOAL-ROUTING AMBIGUITY. The therapeutic intent is to RAISE SMN protein (TG02, upregulation); the mechanism is splice modulation (TG04). A user who picks TG02 never sees A8 at all.",
+      "goal": "TG04",
+      "ranked": [
+        "A8",
+        "A7",
+        "A9",
+        "A10",
+        "A11"
+      ],
+      "scores": {
+        "A8": 13,
+        "A7": 3,
+        "A9": 3,
+        "A10": 3,
+        "A11": 3
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 1,
+      "outright": true
+    },
+    {
+      "drug": "Milasen",
+      "gene": "MFSD8 (CLN7)",
+      "disease": "Batten disease, n-of-1",
+      "defect": "cryptic_splice_site",
+      "exon": "6",
+      "delivery": "cns",
+      "truth": "A10",
+      "truth_family": [
+        "A10",
+        "A9"
+      ],
+      "input_note": "CONTESTED TRUTH. A SINE-VNTR-Alu insertion creates a cryptic splice acceptor. The source calls it a cryptic splice-acceptor site (-> A10); calling the inserted element a pseudoexon (-> A9) is equally defensible. Scored at all three resolutions (S6.4b); not resolved here.",
+      "goal": "TG04",
+      "ranked": [
+        "A10",
+        "A7",
+        "A8",
+        "A9",
+        "A11"
+      ],
+      "scores": {
+        "A10": 13,
+        "A7": 3,
+        "A8": 3,
+        "A9": 3,
+        "A11": 3
+      },
+      "top1_exact": true,
+      "top1_family": true,
+      "top1_goal": true,
+      "top3_exact": true,
+      "rank": 1,
+      "tied_at_top": 1,
+      "outright": true
+    }
+  ],
+  "sensitivity": [
+    {
+      "drug": "Tofersen",
+      "note": "INPUT SENSITIVITY. The biology reads as gain-of-function, which invites a user to enter allele_specific; but tofersen is not allele-selective and lowers WT and mutant alike. Both inputs are run and reported (S6.4c).",
+      "alt_input": {
+        "scope": "allele_specific"
+      },
+      "base_ranking": [
+        "A1",
+        "A2",
+        "A12",
+        "A15"
+      ],
+      "alt_ranking": [
+        "A1",
+        "A2",
+        "A12",
+        "A15"
+      ],
+      "answer_changed": false
+    }
+  ],
+  "n_drugs": 11,
+  "n_unique_gene_mechanism": 7,
+  "strict": {
+    "n": 11,
+    "top1_exact": 1.0,
+    "top1_family": 1.0,
+    "top1_goal": 1.0,
+    "outright_top1": 0.545,
+    "top3_exact": 1.0
+  },
+  "unambiguous_only": {
+    "n": 9,
+    "top1_exact": 1.0,
+    "top1_family": 1.0,
+    "top1_goal": 1.0,
+    "outright_top1": 0.444,
+    "top3_exact": 1.0
+  },
+  "contested": {
+    "n": 2,
+    "top1_exact": 1.0,
+    "top1_family": 1.0,
+    "top1_goal": 1.0,
+    "outright_top1": 1.0,
+    "top3_exact": 1.0
+  }
+}
