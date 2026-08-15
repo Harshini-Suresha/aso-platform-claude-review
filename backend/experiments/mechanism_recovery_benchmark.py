@@ -22,9 +22,22 @@ Nothing is recalled from memory.
 
 SCOPE
 -----
-Only single-stranded ASOs are included. siRNA drugs (patisiran, givosiran,
-inclisiran, ...) all map to A21, which this platform marks NON-DESIGNABLE and
-drops from the ranking, so they cannot be scored here.
+Both single-stranded ASOs and siRNA drugs are included.
+
+siRNA used to be excluded: every siRNA drug maps to A21, which the platform
+marked NON-DESIGNABLE and dropped from the ranking, so those drugs could not
+be scored. A21 is now SCORED and competes — siRNA is a genuine alternative to
+RNase H knockdown for any knockdown target, and with five approved drugs it is
+fully validatable — so excluding the drugs that validate it would leave the
+benchmark measuring a mechanism set the platform no longer uses.
+
+Adding them changes the headline: A21 carries a Very High evidence rating
+against A1's High, so it outranks A1 on every knockdown case. Read
+`design_available` alongside `strict`. The gap between them is the honest
+statement of the problem: on gene, defect and delivery alone this platform
+cannot tell a gapmer target from an siRNA target, because nothing in those
+inputs distinguishes them. TTR is the clearest case — inotersen (A1) and
+patisiran (A21) are both approved, for the same gene, defect and route.
 
 The `defect` and `scope` fields are the INPUTS a user would supply. Where the
 mapping from the published disease biology onto the platform's fixed
@@ -73,6 +86,59 @@ TG01_CASES = [
          defect="therapeutic_reduction", scope="total_knockdown",
          delivery="liver", truth="A1", input_note=None),
 ]
+
+# ---------------------------------------------------------------------------
+# TG01 -- RNAi (A21). Added when A21 became a scored, competing mechanism.
+#
+# PROVENANCE, DIFFERENT FROM THE ROWS ABOVE. The five drug names come from
+# A21's own rulebook `fdaApprovedDrugs` field. The gene and indication for
+# each is the drug's well-known approved target. Sang et al. is an
+# antisense-oligonucleotide review; it is NOT being cited as the table these
+# five rows were transcribed from.
+#
+# MUST VERIFY before publishing: pin each row to a specific source line
+# (FDA label or a review that tabulates siRNA drugs) the way the ASO rows are
+# pinned to Sang et al. Table 1.
+#
+# Every row carries an input_note, so all five land in the `contested` bucket
+# and none of them moves the unambiguous headline. The defect classification
+# is the reason: four of the five knock down a NORMAL gene whose reduction is
+# therapeutic rather than a mutant one, which is a judgement call on this
+# platform's defect vocabulary, not a fact from a table.
+# ---------------------------------------------------------------------------
+SIRNA_CASES = [
+    dict(drug="Patisiran", gene="TTR", disease="hATTR polyneuropathy",
+         defect="gain_of_function", scope="total_knockdown",
+         delivery="liver", truth="A21",
+         input_note="COLLIDES WITH INOTERSEN. Same gene, same defect, same "
+                    "delivery route as an approved gapmer (A1). Both drugs "
+                    "exist; the inputs cannot separate them. This row and the "
+                    "inotersen row cannot both be top-1 correct."),
+    dict(drug="Vutrisiran", gene="TTR", disease="hATTR polyneuropathy",
+         defect="gain_of_function", scope="total_knockdown",
+         delivery="liver", truth="A21",
+         input_note="Collides with inotersen/eplontersen as above."),
+    dict(drug="Givosiran", gene="ALAS1", disease="Acute hepatic porphyria",
+         defect="therapeutic_reduction", scope="total_knockdown",
+         delivery="liver", truth="A21",
+         input_note="DEFECT CLASSIFICATION IS A JUDGEMENT CALL. ALAS1 is not "
+                    "the mutated gene in AHP (HMBS is); ALAS1 is induced and "
+                    "lowering it reduces toxic intermediates. Entered as "
+                    "therapeutic_reduction; 'overexpression' is defensible."),
+    dict(drug="Lumasiran", gene="HAO1", disease="Primary hyperoxaluria type 1",
+         defect="therapeutic_reduction", scope="total_knockdown",
+         delivery="liver", truth="A21",
+         input_note="Substrate reduction therapy against a normal gene; the "
+                    "mutated gene is AGXT. Same classification call as "
+                    "givosiran."),
+    dict(drug="Inclisiran", gene="PCSK9", disease="Hypercholesterolaemia",
+         defect="therapeutic_reduction", scope="total_knockdown",
+         delivery="liver", truth="A21",
+         input_note="Normal protein whose reduction is therapeutic. Same "
+                    "class as mipomersen (A1), which is the same defect entry "
+                    "with a different mechanism outcome."),
+]
+
 
 # ---------------------------------------------------------------------------
 # TG04 -- RNA processing modulation (splice-modulating MOA in the source table)
@@ -152,7 +218,13 @@ def _evaluate(ranked_ids: list[str], scores: dict, truth: str,
     family = truth_family or {truth}
     goal_set = GOAL_MECHANISMS.get(goal, set())
     if truth not in ranked_ids:
-        return dict(top1_exact=False, top1_family=False, top1_goal=False,
+        # The truth mechanism is not in the ranking at all (it was filtered
+        # out, e.g. A21 under the design-available reading). Nothing about it
+        # can be scored — but whether the top answer landed in the right
+        # therapeutic goal is still a fact worth keeping, since that is the
+        # metric that separates goal ROUTING from mechanism CHOICE.
+        return dict(top1_exact=False, top1_family=False,
+                    top1_goal=bool(ranked_ids) and ranked_ids[0] in goal_set,
                     top3_exact=False, rank=None, tied_at_top=0,
                     outright=False)
     rank = ranked_ids.index(truth) + 1
@@ -191,7 +263,7 @@ def _evaluate(ranked_ids: list[str], scores: dict, truth: str,
 #                 rather than the system's.
 # ---------------------------------------------------------------------------
 
-ALL_CASES = [dict(c, goal="TG01") for c in TG01_CASES] + \
+ALL_CASES = [dict(c, goal="TG01") for c in TG01_CASES + SIRNA_CASES] + \
             [dict(c, goal="TG04") for c in TG04_CASES]
 
 
@@ -248,23 +320,41 @@ def run_goal_agnostic() -> dict:
 def run() -> dict:
     rows = []
 
-    for c in TG01_CASES:
+    for c in TG01_CASES + SIRNA_CASES:
         res = M.rank_gene_silencing_mechanisms(
             c["defect"], c["scope"], c["delivery"], None)
         ids = _rank_ids(res)
         scores = _eligible_scores(res)
-        rows.append({**c, "goal": "TG01", "ranked": ids, "scores": scores,
-                     **_evaluate(ids, scores, c["truth"], "TG01",
-                                 c.get("truth_family"))})
+        row = {**c, "goal": "TG01", "ranked": ids, "scores": scores,
+               **_evaluate(ids, scores, c["truth"], "TG01",
+                           c.get("truth_family"))}
+        # Second reading: restricted to mechanisms this pipeline can actually
+        # emit a design for. A21 is scored and competes, but a user of THIS
+        # designer cannot act on it, so both numbers are meaningful and they
+        # answer different questions.
+        buildable = [r for r in res if r.get("designAvailable", True)]
+        row["design_available"] = _evaluate(
+            _rank_ids(buildable), _eligible_scores(buildable), c["truth"],
+            "TG01", c.get("truth_family"))
+        rows.append(row)
 
     for c in TG04_CASES:
         res = M.rank_rna_processing_mechanisms(
             c["defect"], c.get("exon"), c["delivery"], None)
         ids = _rank_ids(res)
         scores = _eligible_scores(res)
-        rows.append({**c, "goal": "TG04", "ranked": ids, "scores": scores,
-                     **_evaluate(ids, scores, c["truth"], "TG04",
-                                 c.get("truth_family"))})
+        row = {**c, "goal": "TG04", "ranked": ids, "scores": scores,
+               **_evaluate(ids, scores, c["truth"], "TG04",
+                           c.get("truth_family"))}
+        # No TG04 mechanism is design-unavailable, so this reading is
+        # identical to the unrestricted one. Computed anyway so the aggregate
+        # covers every row.
+        row["design_available"] = {
+            k: row[k] for k in
+            ("top1_exact", "top1_family", "top1_goal", "top3_exact",
+             "rank", "tied_at_top", "outright")
+        }
+        rows.append(row)
 
     # Input-sensitivity runs (S6.4c). Not scored into the headline -- these
     # report whether a defensible ALTERNATIVE user input changes the answer.
@@ -307,6 +397,7 @@ def run() -> dict:
                 n_drugs=len(rows), n_unique_gene_mechanism=len(unique_cases),
                 strict=agg(rows), unambiguous_only=agg(clean),
                 contested=agg(contested),
+                design_available=agg([r["design_available"] for r in rows]),
                 goal_agnostic=goal_agnostic)
 
 
@@ -330,9 +421,27 @@ def main() -> None:
               f"{'>'.join(r['ranked'])}{mark}")
 
     print()
-    for k in ("strict", "unambiguous_only", "contested"):
+    for k in ("strict", "unambiguous_only", "contested", "design_available"):
         if out[k]:
             print(f"{k:<18}", json.dumps(out[k]))
+    print()
+    print("design_available -- same cases, ranking restricted to mechanisms")
+    print("    this pipeline can emit a design for. The gap against `strict`")
+    print("    is A21: it is scored and competes on merit (Very High evidence,")
+    print("    five approved drugs), but a user of this single-stranded")
+    print("    designer cannot act on it. Neither number alone is the answer.")
+    print()
+    print("    The two top1_exact figures being equal is a coincidence, not a")
+    print("    bug: they are right about DIFFERENT rows. `strict` recovers the")
+    print("    five siRNA drugs and misses the five gapmers; restricting to")
+    print("    design-available recovers the five gapmers and loses A21")
+    print("    entirely. Both get the six splice-modulating rows.")
+    print()
+    print("    WHAT THIS EXPOSES. On gene, defect and delivery alone the")
+    print("    platform cannot separate a gapmer target from an siRNA target,")
+    print("    because nothing in those inputs distinguishes them. TTR carries")
+    print("    an approved drug of each kind at identical inputs, so no")
+    print("    ranking over this input set can be right about both.")
 
     ga = out["goal_agnostic"]
     print()

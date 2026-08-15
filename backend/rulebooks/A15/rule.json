@@ -56,7 +56,6 @@
   ],
   "arbitration": {
     "scoringMode": "scored",
-    "designable": true,
     "goalTags": [
       "TG01"
     ],
@@ -68,9 +67,12 @@
     "editTypes": [],
     "excludedTranscriptClasses": [],
     "requiresIntrons": false,
-    "requiredFeatures": [],
+    "requiredFeatures": [
+      "F8"
+    ],
     "forbiddenFeatures": [],
     "note": "Low-Moderate evidence, no FDA drug. Confidence is capped from the rulebook evidence rating so it cannot outrank A1 on a therapeutic-reduction case (plan S2, SO-TG-04).",
-    "discriminatingFeatures": []
+    "discriminatingFeatures": [],
+    "designAvailable": true
   }
 }

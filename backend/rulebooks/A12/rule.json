@@ -57,7 +57,6 @@
   ],
   "arbitration": {
     "scoringMode": "scored",
-    "designable": true,
     "goalTags": [
       "TG01",
       "TG05"
@@ -75,6 +74,7 @@
     "requiredFeatures": [],
     "forbiddenFeatures": [],
     "note": "Antagomirs act on small non-coding RNAs, not protein-coding pre-mRNAs; the transcript-class gate is transcribed from the existing TG05 protein-coding check.",
-    "discriminatingFeatures": []
+    "discriminatingFeatures": [],
+    "designAvailable": true
   }
 }

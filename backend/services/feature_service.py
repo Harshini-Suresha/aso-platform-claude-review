@@ -181,9 +181,12 @@ FEATURE_CATALOG: dict[str, dict[str, Any]] = {
         "wired": False,
     },
     "F8": {
-        "label": "Promoter methylated / silenced in the target tissue",
+        "label": "Promoter methylation / accessibility in the target tissue",
         "intendedSource": "methylation atlas",
         "wired": False,
+        # Serves A23 (activate a silenced promoter) and A15 (silence an
+        # accessible one) — the same measurement, opposite intents.
+        "serves": ["A23", "A15"],
     },
     "F9": {
         "label": "Allele-distinguishing variant in the transcript",
@@ -218,7 +221,42 @@ FEATURE_CATALOG: dict[str, dict[str, Any]] = {
         "wired": False,
         "blocks": ["A11"],
     },
+    # --- modality-flag features (NOT part of the scored family) -------------
+    # These three feed the qualitative modality flag and nothing else. They
+    # never enter an applicability interval and never contribute to a score.
+    # Family T features answer "how well does this mechanism fit this
+    # transcript"; these answer "is a transcript-acting mechanism the right
+    # kind of answer at all".
+    "P2": {
+        "label": "Residual endogenous transcript present and boostable",
+        "intendedSource": "tissue expression atlas",
+        "wired": False,
+        "family": "modality_flag",
+    },
+    "P6": {
+        "label": "Dominant-negative allele present",
+        "intendedSource": "ClinVar + literature",
+        "wired": False,
+        "family": "modality_flag",
+    },
+    "B1": {
+        "label": "Target protein is extracellular or cell-surface",
+        "intendedSource": "UniProt subcellular localisation",
+        "wired": False,
+        "family": "modality_flag",
+    },
 }
+
+MODALITY_FLAG_FEATURES = ("P2", "P6", "B1")
+
+# Below this transcript abundance in the target tissue there is not enough
+# endogenous message for a transcript-boosting mechanism to act on.
+#
+# DE-NOVO PARAMETER — SO-TG-09. This number is not derived from any
+# measurement and needs a calibration register entry before it is relied on.
+# It decides only whether a qualitative signpost is shown; it never enters a
+# score, and nothing downstream is multiplied by it.
+BOOSTABLE_TRANSCRIPT_TPM = 1.0
 
 
 # ---------------------------------------------------------------------------
@@ -238,12 +276,16 @@ class FeatureContext:
     known_variant: str | None = None
     variant_hgvs: str | None = None
     transcript_class: str | None = None
+    allele_selective: bool | None = None
     gene_features: dict | None = None
     transcript_sequence: str | None = None
     cds_start: int | None = None
     repeat_unit: str | None = None
     repeat_count: str | None = None
     oligo_length: int = 18
+    # Modality-flag inputs.
+    tissue_tpm: float | None = None
+    protein_localisation: str | None = None
     extras: dict = field(default_factory=dict)
 
     def gene_feature(self, key: str) -> dict | None:
@@ -525,7 +567,16 @@ def _from_repeat_text(ctx: FeatureContext) -> Feature | None:
 
 
 def _from_variant_text(ctx: FeatureContext) -> Feature | None:
-    """F9 from a user-supplied variant description."""
+    """F9 from a user-supplied variant description.
+
+    Only resolved when allele-selective silencing is actually requested. F9
+    asks whether there is a variant the oligo can discriminate on; for a
+    total-knockdown design there is nothing to discriminate, so a variant
+    description in the free-text box is not evidence about anything the
+    design depends on.
+    """
+    if not ctx.allele_selective:
+        return None
     text = (ctx.variant_hgvs or ctx.known_variant or "").strip()
     if not text:
         return None
@@ -539,6 +590,107 @@ def _from_variant_text(ctx: FeatureContext) -> Feature | None:
         detail=(
             f"'{text}' taken as an allele-distinguishing variant. Not checked "
             "against dbSNP or ClinVar — no variant database is wired."
+        ),
+    )
+
+
+def _residual_transcript(ctx: FeatureContext) -> Feature | None:
+    """P2 — is there endogenous transcript left for a boosting mechanism?
+
+    This is the load-bearing feature for the TG02 correctness fix. Without
+    it, gene activation recommends transcript-boosting unconditionally,
+    including for genes where no boostable transcript exists.
+    """
+    if ctx.tissue_tpm is None:
+        return None
+    boostable = ctx.tissue_tpm >= BOOSTABLE_TRANSCRIPT_TPM
+    return Feature(
+        id="P2",
+        state=PRESENT if boostable else ABSENT,
+        probability=0.9 if boostable else 0.05,
+        provenance=ANNOTATION,
+        source="tissue expression (TPM) supplied by the gene pipeline",
+        detail=(
+            f"{ctx.tissue_tpm:.1f} TPM in the target tissue — "
+            + (
+                "enough endogenous transcript for a boosting mechanism to act on"
+                if boostable
+                else "at or below the level where there is a transcript to boost"
+            )
+            + f" (threshold {BOOSTABLE_TRANSCRIPT_TPM} TPM, SO-TG-09)"
+        ),
+    )
+
+
+def _dominant_negative(ctx: FeatureContext) -> Feature | None:
+    """P6 — is the disease driven by a dominant-negative allele?
+
+    Hard suppressor of the replacement flag: supplying more wild-type protein
+    does not fix a dominant-negative disease, because the mutant product
+    actively interferes.
+
+    No ClinVar lookup is wired. The one inference available is from the
+    user's own defect selection: haploinsufficiency and dominant-negative are
+    the two standard, mutually exclusive models for a dominant disorder, so
+    a user who has classified the defect as haploinsufficiency has said the
+    disease is a dosage problem rather than an interference one. That is a
+    user assertion, recorded as such, and it is the tier a real ClinVar
+    lookup should displace.
+
+    Any other defect leaves P6 unresolved, which withholds the flag. That is
+    the safe direction: the cost of not showing a signpost is much lower than
+    the cost of recommending replacement for a dominant-negative disease.
+    """
+    if ctx.molecular_defect != "haploinsufficiency":
+        return None
+    return Feature(
+        id="P6",
+        state=ABSENT,
+        probability=0.1,
+        provenance=USER_ASSERTED,
+        source="user-selected molecular defect 'haploinsufficiency'",
+        stand_in=True,
+        detail=(
+            "Defect classified as haploinsufficiency, a dosage model rather "
+            "than a dominant-negative one. Not checked against ClinVar — no "
+            "variant database is wired."
+        ),
+    )
+
+
+# Localisation strings that place a protein where a circulating aptamer can
+# reach it. Pegaptanib is intravitreal against a secreted factor (VEGF165);
+# an aptamer has no route to a cytoplasmic or nuclear target.
+_ACCESSIBLE_LOCALISATIONS = (
+    "secreted",
+    "extracellular",
+    "cell surface",
+    "cell_surface",
+    "membrane",
+    "plasma membrane",
+)
+
+
+def _extracellular_target(ctx: FeatureContext) -> Feature | None:
+    """B1 — is the target protein reachable by an aptamer?"""
+    loc = (ctx.protein_localisation or "").strip().lower()
+    if not loc:
+        return None
+    accessible = any(k in loc for k in _ACCESSIBLE_LOCALISATIONS)
+    return Feature(
+        id="B1",
+        state=PRESENT if accessible else ABSENT,
+        probability=0.85 if accessible else 0.05,
+        provenance=ANNOTATION,
+        source="UniProt subcellular localisation",
+        detail=(
+            f"Localisation '{ctx.protein_localisation}' — "
+            + (
+                "reachable by a circulating or locally delivered aptamer"
+                if accessible
+                else "not reachable by an aptamer, which cannot cross into "
+                     "the cytoplasm or nucleus"
+            )
         ),
     )
 
@@ -623,6 +775,10 @@ _LADDERS: dict[str, list[Callable[[FeatureContext], Feature | None]]] = {
     "F11": [],
     "F13": [],
     "F12": [_from_repeat_text],
+    # Modality-flag family. Unresolved simply withholds the flag.
+    "P2": [_residual_transcript],
+    "P6": [_dominant_negative],
+    "B1": [_extracellular_target],
 }
 
 _NO_SOURCE_REASON = {

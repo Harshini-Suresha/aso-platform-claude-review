@@ -55,7 +55,6 @@
   ],
   "arbitration": {
     "scoringMode": "scored",
-    "designable": true,
     "goalTags": [
       "TG02"
     ],
@@ -71,6 +70,7 @@
     ],
     "forbiddenFeatures": [],
     "note": "F11 (repressive RBP site) has no wired source. A28 halts on ABSENT rather than scoring (plan S6.2, item 9).",
-    "discriminatingFeatures": []
+    "discriminatingFeatures": [],
+    "designAvailable": true
   }
 }

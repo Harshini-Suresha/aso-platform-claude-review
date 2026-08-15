@@ -50,8 +50,6 @@
   ],
   "arbitration": {
     "scoringMode": "scored",
-    "designable": false,
-    "nonDesignableReason": "Not designable in this pipeline: RNA interference (A21) requires a double-stranded siRNA duplex, which the single-stranded ASO designer cannot generate. Choose a single-stranded mechanism (A1, A2, A12, A15).",
     "goalTags": [
       "TG01"
     ],
@@ -69,6 +67,8 @@
     "requiredFeatures": [],
     "forbiddenFeatures": [],
     "note": "Biologically valid and kept in full; the single-stranded designer cannot emit a duplex, so it is never a selectable design option.",
-    "discriminatingFeatures": []
+    "discriminatingFeatures": [],
+    "designAvailable": false,
+    "designUnavailableReason": "Requires a double-stranded siRNA duplex; this designer emits single strands only. The mechanism still competes: siRNA is a genuine alternative to RNase H knockdown for any knockdown target, and with five approved drugs it is fully validatable. Taking it forward needs a duplex design pipeline."
   }
 }

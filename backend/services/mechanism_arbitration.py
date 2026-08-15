@@ -67,22 +67,33 @@ RULEBOOKS_DIR = os.path.join(
 ELIGIBLE = "ELIGIBLE"
 HALTED = "HALTED"
 REJECTED = "REJECTED"
-NOT_DESIGNABLE = "NOT_DESIGNABLE"
-OUT_OF_SCOPE = "OUT_OF_SCOPE"
-LOOKUP = "LOOKUP"
+FLAGGED = "FLAGGED"
 
 # Ranking order. ELIGIBLE first; everything else is reported but never
 # competes for the top slot. HALTED sorts above REJECTED because "we could
 # not establish the evidence" is a different and more actionable answer than
 # "this mechanism does not address your defect".
+#
+# FLAGGED mechanisms never enter the ranking at all — they are surfaced
+# separately as text (see `modality_flags`). They carry this rank only so a
+# stray flagged result cannot land above a scored one.
 _STATUS_RANK = {
     ELIGIBLE: 0,
     HALTED: 1,
     REJECTED: 2,
-    LOOKUP: 3,
-    NOT_DESIGNABLE: 4,
-    OUT_OF_SCOPE: 5,
+    FLAGGED: 3,
 }
+
+# `design_available` is orthogonal to status, and deliberately so. A21 is
+# SCORED and COMPETES — siRNA is a genuine alternative to RNase H knockdown
+# for any knockdown target, a real decision a scientist makes, and with five
+# approved drugs it is fully validatable. What it is not is designable *here*:
+# this pipeline emits single strands. Collapsing "cannot design it" into "do
+# not rank it" hid a mechanism the user needs to see.
+#
+# The distinction against A24/A26 is validatability, not modality. Those have
+# no approved therapy in their indication class, so any number attached to
+# them could not be checked against anything.
 
 # ---------------------------------------------------------------------------
 # Unified molecular-defect vocabulary
@@ -288,13 +299,19 @@ RETIRED_AS_SCORING_PARTITION = {
         "as a display tag."
     ),
     "TG08": (
-        "Out of scope for this designer: mRNA (A24) and circRNA (A26) "
-        "replacement are kilobase-scale transcripts, not oligonucleotides. "
-        "The rulebooks are retained as reference content."
+        "Flag only, not scored: there is no approved mRNA protein replacement "
+        "therapy and no approved circRNA therapy, so an applicability figure "
+        "for A24 or A26 could not be checked against any case in the world. "
+        "Surfaced qualitatively when no transcript-acting upregulation "
+        "mechanism is viable. Promote to a scored mechanism if an approved "
+        "replacement therapy appears in a validatable indication class — "
+        "protein replacement, not vaccination (SO-TG-10)."
     ),
     "TG09": (
-        "Demoted to a direct lookup: TG09 contains one mechanism (A25), and a "
-        "ranking over a single item is not a ranking."
+        "Flag only, not scored: TG09 contains one mechanism (A25), and a "
+        "ranking over a single item is not a ranking. Surfaced qualitatively "
+        "when no transcript-acting silencing mechanism is viable and the "
+        "target protein is extracellular or cell-surface."
     ),
 }
 
@@ -435,6 +452,11 @@ class ArbitrationContext:
     repeat_unit: str | None = None
     repeat_count: str | None = None
     oligo_length: int = 18
+    # Modality-flag inputs. These never enter a score; they decide only
+    # whether a qualitative signpost toward a modality this platform does not
+    # design is worth showing.
+    tissue_tpm: float | None = None
+    protein_localisation: str | None = None
     goal_filter: list[str] | None = None
     extras: dict = field(default_factory=dict)
 
@@ -445,12 +467,15 @@ class ArbitrationContext:
             known_variant=self.known_variant,
             variant_hgvs=self.variant_hgvs,
             transcript_class=self.transcript_class,
+            allele_selective=self.allele_selective,
             gene_features=self.gene_features,
             transcript_sequence=self.transcript_sequence,
             cds_start=self.cds_start,
             repeat_unit=self.repeat_unit,
             repeat_count=self.repeat_count,
             oligo_length=self.oligo_length,
+            tissue_tpm=self.tissue_tpm,
+            protein_localisation=self.protein_localisation,
         )
 
 
@@ -579,8 +604,15 @@ def _check_gates(
 def arbitrate(ctx: ArbitrationContext) -> dict:
     """Score every mechanism in one pass and return the full picture."""
     features = resolve_features(ctx.to_feature_context())
-    results = [_score_mechanism(mid, ctx, features) for mid in all_mechanism_ids()]
-    results = [r for r in results if r is not None]
+    scored = [_score_mechanism(mid, ctx, features) for mid in all_mechanism_ids()]
+    scored = [r for r in scored if r is not None]
+
+    # Flagged mechanisms are held out of the ranking entirely. They are not
+    # low-ranked candidates; they are a different kind of answer, and mixing
+    # them in would invite exactly the cross-family comparison there is no
+    # evidence to support.
+    flagged = [r for r in scored if r["status"] == FLAGGED]
+    results = [r for r in scored if r["status"] != FLAGGED]
     results.sort(key=_sort_key)
 
     filtered = results
@@ -601,6 +633,9 @@ def arbitrate(ctx: ArbitrationContext) -> dict:
         "therapeuticGoalName": top["primaryGoalName"] if top else None,
         "goalFilterApplied": applied_filter,
         "results": filtered,
+        # Qualitative, unscored, and reported alongside rather than inside the
+        # ranking. See modality_flags().
+        "modalityFlags": modality_flags(results, features, flagged),
         "features": {fid: f.to_dict() for fid, f in sorted(features.items())},
         "summary": _summarise(results, features),
     }
@@ -626,17 +661,17 @@ def _score_mechanism(
         mid, ctx.delivery_context
     )
 
-    # --- platform capability, before anything else ---------------------------
+    # --- flag-only mechanisms never enter the ranking -------------------------
     scoring_mode = arb.get("scoringMode", "scored")
-    if scoring_mode == "out_of_scope":
-        status = OUT_OF_SCOPE
-        rationale.append(arb["nonDesignableReason"])
-    elif scoring_mode == "lookup":
-        status = LOOKUP
-        rationale.append(arb["nonDesignableReason"])
-    elif not arb.get("designable", True):
-        status = NOT_DESIGNABLE
-        rationale.append(arb["nonDesignableReason"])
+    design_available = arb.get("designAvailable", True)
+    if scoring_mode == "flag_only":
+        status = FLAGGED
+        rationale.append(arb["flagReason"])
+        rationale.append(arb["designUnavailableReason"])
+    elif not design_available:
+        # Scored, competing, but this pipeline cannot emit the molecule. The
+        # mechanism keeps its place in the ranking and carries the reason.
+        rationale.append(arb["designUnavailableReason"])
 
     required_ids = arb.get("requiredFeatures") or []
     discriminating_ids = arb.get("discriminatingFeatures") or []
@@ -744,7 +779,11 @@ def _score_mechanism(
         # `eligible` and `designable` are kept so existing callers and the
         # frontend keep working against the richer `status`.
         "eligible": status == ELIGIBLE,
-        "designable": arb.get("designable", True),
+        "designable": design_available,
+        "designAvailable": design_available,
+        "designUnavailableReason": (
+            None if design_available else arb.get("designUnavailableReason")
+        ),
         "scoringMode": scoring_mode,
         "goalTags": goal_tags,
         "primaryGoal": primary,
@@ -780,6 +819,172 @@ def _score_mechanism(
         "offTargetConsiderations": rule.get("offTargetConsiderations"),
         "references": rule.get("references", [])[:3],
     }
+
+
+# ---------------------------------------------------------------------------
+# Modality flags — qualitative, unscored
+#
+# The problem these solve: for a haploinsufficient gene with no poison exon,
+# no uORF, no natural antisense transcript and no repressive miRNA site, every
+# transcript-acting upregulation mechanism scores near zero. With no
+# representation of protein replacement, gene activation returns either "no
+# suitable mechanism" or the least-bad ASO at a low applicability — and
+# recommends transcript-boosting for a gene with no boostable transcript. That
+# is a wrong answer produced confidently. It is a correctness bug, not a
+# coverage gap.
+#
+# The fix emits TEXT, not a number. There is no approved mRNA protein
+# replacement therapy and no approved circRNA therapy, so an applicability of
+# 0.81 for A24 could not be checked against any case in the world. The
+# mechanism-recovery benchmark cannot score it and the calibration work cannot
+# calibrate it. In a system whose rule is that every number traces to a rule
+# id, a citation or a calibration parameter, an unverifiable probability is a
+# worse defect than the missing coverage it was meant to fix.
+# ---------------------------------------------------------------------------
+
+# Applicability below which a transcript-acting mechanism is treated as
+# non-viable for this target.
+#
+# DE-NOVO PARAMETER — SO-TG-09. Not derived from any measurement; needs a
+# value agreed in the calibration register. It gates whether a qualitative
+# signpost appears and nothing else — no score is multiplied by it.
+VIABILITY_THRESHOLD = 0.30
+
+_UPREGULATION_GOAL = "TG02"
+_SILENCING_GOAL = "TG01"
+
+
+def _has_viable(results: list[dict], goal: str) -> bool:
+    """Is any transcript-acting mechanism for this goal actually usable?"""
+    return any(
+        r["status"] == ELIGIBLE
+        and r["primaryGoal"] == goal
+        and r["applicability"]["upper"] >= VIABILITY_THRESHOLD
+        for r in results
+    )
+
+
+def modality_flags(
+    results: list[dict], features: dict[str, Feature], flagged: list[dict]
+) -> list[dict]:
+    """Qualitative signposts toward modalities this platform does not design.
+
+    Never scored, never ranked, never compared against a transcript-acting
+    mechanism. Each flag either fires with its reasoning or explains what it
+    would need to fire.
+    """
+    out: list[dict] = []
+    by_id = {r["id"]: r for r in flagged}
+
+    p2, p6, b1 = features.get("P2"), features.get("P6"), features.get("B1")
+
+    # --- replacement flag (A24, A26) ---------------------------------------
+    no_boost = not _has_viable(results, _UPREGULATION_GOAL)
+    blockers: list[str] = []
+    if not no_boost:
+        blockers.append(
+            "a transcript-acting upregulation mechanism is still viable for "
+            "this gene"
+        )
+    if p2 is None or p2.state == UNRESOLVED:
+        blockers.append(
+            "no tissue expression was supplied, so whether any boostable "
+            "transcript remains is unknown (P2)"
+        )
+    elif p2.state == PRESENT:
+        blockers.append("endogenous transcript is present and boostable (P2)")
+    if p6 is None or p6.state == UNRESOLVED:
+        blockers.append(
+            "whether a dominant-negative allele is present is unknown (P6); "
+            "replacement is not suggested without that, because supplying "
+            "more wild-type protein does not fix a dominant-negative disease"
+        )
+    elif p6.state == PRESENT:
+        blockers.append(
+            "a dominant-negative allele is recorded (P6) — more wild-type "
+            "protein would not correct the phenotype"
+        )
+
+    out.append({
+        "flag": "protein_replacement",
+        "mechanisms": ["A24", "A26"],
+        "raised": not blockers,
+        "message": (
+            _replacement_message(results)
+            if not blockers
+            else None
+        ),
+        "withheldBecause": blockers or None,
+        "reasons": [by_id[m]["rationale"] for m in ("A24", "A26") if m in by_id],
+        "scored": False,
+        "note": (
+            "This platform does not evaluate or design replacement therapies."
+        ),
+    })
+
+    # --- aptamer flag (A25) -------------------------------------------------
+    no_silencing = not _has_viable(results, _SILENCING_GOAL)
+    ap_blockers: list[str] = []
+    if not no_silencing:
+        ap_blockers.append(
+            "a transcript-acting silencing mechanism is still viable for this "
+            "gene"
+        )
+    if b1 is None or b1.state == UNRESOLVED:
+        ap_blockers.append(
+            "no subcellular localisation was supplied, so whether the target "
+            "protein is reachable by an aptamer is unknown (B1)"
+        )
+    elif b1.state == ABSENT:
+        ap_blockers.append(
+            "the target protein is not extracellular or cell-surface (B1) — "
+            "an aptamer cannot reach an intracellular target"
+        )
+
+    out.append({
+        "flag": "aptamer",
+        "mechanisms": ["A25"],
+        "raised": not ap_blockers,
+        "message": (
+            "No transcript-acting silencing mechanism is viable for this "
+            "gene, and the target protein is extracellular or cell-surface. "
+            "An RNA aptamer against the protein may be worth considering.\n\n"
+            "This platform does not design aptamers — selection is "
+            "structure-based (SELEX), not antisense complementarity."
+            if not ap_blockers
+            else None
+        ),
+        "withheldBecause": ap_blockers or None,
+        "reasons": [by_id["A25"]["rationale"]] if "A25" in by_id else [],
+        "scored": False,
+        "note": "This platform does not evaluate or design aptamers.",
+    })
+
+    return out
+
+
+def _replacement_message(results: list[dict]) -> str:
+    """Name the specific features that came up empty, not just the verdict."""
+    missing = []
+    for mid, phrase in (
+        ("A3", "no poison exon"),
+        ("A5", "no repressive uORF"),
+        ("A4", "no overlapping antisense transcript"),
+        ("A6", "no repressive miRNA site"),
+    ):
+        row = next((r for r in results if r["id"] == mid), None)
+        if row and row["status"] in (HALTED, REJECTED):
+            missing.append(phrase)
+        elif row and row["applicability"]["upper"] < VIABILITY_THRESHOLD:
+            missing.append(phrase)
+    detail = ", ".join(missing) if missing else "no viable regulatory element"
+    return (
+        "No transcript-acting upregulation mechanism is viable for this "
+        f"gene: {detail} detected.\n\n"
+        "Protein replacement may be worth considering — endogenous "
+        "transcript is low and no dominant-negative allele is recorded.\n\n"
+        "This platform does not evaluate or design replacement therapies."
+    )
 
 
 def _sort_key(result: dict) -> tuple:

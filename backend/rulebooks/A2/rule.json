@@ -57,7 +57,6 @@
   ],
   "arbitration": {
     "scoringMode": "scored",
-    "designable": true,
     "goalTags": [
       "TG01",
       "TG06"
@@ -76,7 +75,9 @@
     "forbiddenFeatures": [],
     "note": "Also carries the translational-regulation display tag; TG06 is no longer a scoring partition (plan S3.1).",
     "discriminatingFeatures": [
-      "F10b"
-    ]
+      "F10b",
+      "F9"
+    ],
+    "designAvailable": true
   }
 }

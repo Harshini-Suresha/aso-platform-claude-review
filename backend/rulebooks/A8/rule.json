@@ -56,7 +56,6 @@
   ],
   "arbitration": {
     "scoringMode": "scored",
-    "designable": true,
     "goalTags": [
       "TG04",
       "TG07"
@@ -72,6 +71,7 @@
       "F1"
     ],
     "forbiddenFeatures": [],
-    "discriminatingFeatures": []
+    "discriminatingFeatures": [],
+    "designAvailable": true
   }
 }

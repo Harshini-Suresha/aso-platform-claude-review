@@ -11,15 +11,29 @@ pages and are now filters over that same ranking, not separate scorers.
 Goal status after the scope review (see
 docs/planning/therapeutic_goal_scope_plan.md):
 
-- TG01 Gene Silencing              scored   A1, A2, A12, A15 (A21 non-designable)
-- TG02 Gene Activation             scored   A3, A4, A5, A6, A23, A28
+- TG01 Gene Silencing              scored   A1, A2, A12, A15; A21 scored too
+- TG02 Gene Activation             scored   A3, A4, A5, A6, A23; A28 halts
 - TG03 RNA Editing                 deferred A13, A16-A20; no arbitration claimed
-- TG04 RNA Processing              scored   A7, A8, A9, A10, A11
-- TG05 RNA Neutralization          scored   A14 (A12, A25 scored elsewhere)
+- TG04 RNA Processing              scored   A7, A8, A9, A10; A11 halts
+- TG05 RNA Neutralization          narrow   A14 (halts pending F12)
 - TG06 Translational Regulation    retired as a scoring partition; display tag
 - TG07 Isoform Engineering         retired as a scoring partition; display tag
-- TG08 Protein Replacement         out of scope; A24, A26 non-designable
-- TG09 Protein Function Modulation lookup only; A25 returned directly
+- TG08 Protein Replacement         flag only; A24, A26 never scored
+- TG09 Protein Function Modulation flag only; A25 never scored
+
+Four mechanism states, and only the last is absence — nothing is in it:
+
+  SCORED + DESIGNABLE            competes; this platform emits candidates
+  SCORED + DESIGN UNAVAILABLE    competes; another pipeline required (A21)
+  HALTED                         in the choice set, required feature absent
+  FLAGGED                        surfaced qualitatively, never scored
+  REMOVED                        nothing
+
+A21 is scored despite being undesignable here because siRNA is a genuine
+alternative to RNase H knockdown and five approved drugs make it fully
+validatable. A24/A25/A26 are flagged instead because no approved therapy
+exists in their indication class, so any number attached to them could not be
+checked against anything. The distinction is validatability, not modality.
 
 No mechanism was deleted and every rulebook is retained.
 """
@@ -449,17 +463,21 @@ async def rna_engineering_mechanisms(payload: RnaEngineeringRequest):
             detail=f"Unknown kd_goal: {payload.kd_goal}",
         )
 
-    # TG09 is a lookup, not a ranking: it contains one mechanism (A25), and a
+    # TG09 is a flag, not a ranking: it contains one mechanism (A25), and a
     # ranking over a single item is not a ranking. The generated aptamer
     # candidates this endpoint used to return — sequence, Tm, ΔG, predicted
     # Kd, serum half-life — were all derived from hash() of the form inputs.
     # They were not predictions and they are not returned any more.
+    #
+    # Whether the aptamer flag actually fires for a given target is decided by
+    # the unified pass from feature B1; call /api/mechanisms/arbitrate for
+    # that. This endpoint returns the rulebook content behind the flag.
     lookup = lookup_protein_function_modulation()
 
     return {
         "geneSymbol": payload.gene_symbol.strip().upper(),
         "therapeuticGoal": "Protein Function Modulation",
-        "status": "LOOKUP",
+        "status": "FLAGGED",
         "goalNotice": RETIRED_AS_SCORING_PARTITION["TG09"],
         "inputs": {
             "structuralClass": payload.structural_class,
@@ -534,6 +552,10 @@ class ArbitrationRequest(BaseModel):
     repeat_unit: Optional[str] = None
     repeat_count: Optional[str] = None
     oligo_length: int = 18
+    # Modality-flag inputs. Never scored; they decide only whether a
+    # qualitative signpost toward an undesigned modality is shown.
+    tissue_tpm: Optional[float] = None
+    protein_localisation: Optional[str] = None
     goal_filter: Optional[list[str]] = None
 
 
@@ -580,6 +602,8 @@ async def arbitrate_mechanisms(payload: ArbitrationRequest):
         repeat_unit=payload.repeat_unit,
         repeat_count=payload.repeat_count,
         oligo_length=payload.oligo_length,
+        tissue_tpm=payload.tissue_tpm,
+        protein_localisation=payload.protein_localisation,
         goal_filter=payload.goal_filter,
     )
     return arbitrate(ctx)

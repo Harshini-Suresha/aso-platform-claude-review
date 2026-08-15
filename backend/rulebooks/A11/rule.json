@@ -55,7 +55,6 @@
   ],
   "arbitration": {
     "scoringMode": "scored",
-    "designable": true,
     "goalTags": [
       "TG04"
     ],
@@ -71,6 +70,7 @@
     ],
     "forbiddenFeatures": [],
     "note": "F13 (polyadenylation site usage) has no wired predictor. A11 halts on ABSENT rather than guessing (plan S6.4, item 9).",
-    "discriminatingFeatures": []
+    "discriminatingFeatures": [],
+    "designAvailable": true
   }
 }

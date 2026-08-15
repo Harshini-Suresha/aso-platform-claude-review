@@ -55,9 +55,7 @@
     }
   ],
   "arbitration": {
-    "scoringMode": "lookup",
-    "designable": false,
-    "nonDesignableReason": "Returned as a direct rulebook lookup rather than a ranked candidate: aptamer design is structure-selection against a protein surface, not antisense complementarity, and shares almost no design logic with the sequence designer. Pegaptanib is a real approved drug; the mechanism is kept in full, but this pipeline does not design it.",
+    "scoringMode": "flag_only",
     "goalTags": [
       "TG09",
       "TG05"
@@ -69,6 +67,9 @@
     "requiresIntrons": false,
     "requiredFeatures": [],
     "forbiddenFeatures": [],
-    "discriminatingFeatures": []
+    "discriminatingFeatures": [],
+    "designAvailable": false,
+    "designUnavailableReason": "Requires structure-based selection (SELEX), not antisense complementarity.",
+    "flagReason": "Pegaptanib is a real approved drug, but aptamer design shares almost no logic with the sequence designer and TG09 contains one mechanism — a ranking over a single item is not a ranking. Surfaced qualitatively instead of scored."
   }
 }

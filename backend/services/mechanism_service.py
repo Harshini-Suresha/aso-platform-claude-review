@@ -266,15 +266,15 @@ def _legacy_shape(result: dict) -> dict:
     return {**result, "keywordMatch": False}
 
 
-def _drop_non_designable(results: list[dict]) -> list[dict]:
-    """Hide mechanisms this pipeline cannot produce a design for.
-
-    A21 (siRNA duplex), A24 (mRNA) and A26 (circRNA) stay in the rulebooks and
-    stay visible in the unified `/arbitrate` response with an honest reason.
-    The per-goal pages offer a design flow, so surfacing an option that
-    cannot reach a design is a dead end there.
-    """
-    return [r for r in results if r["status"] not in ("NOT_DESIGNABLE", "OUT_OF_SCOPE")]
+# Note: there is deliberately no "drop the ones we cannot design" filter here
+# any more. A21 is scored, ranked and shown, carrying `designAvailable: false`
+# and a reason string, because siRNA is a genuine competitor to RNase H
+# knockdown for any knockdown target and the scientist is really choosing
+# between them. Hiding it because this pipeline cannot emit a duplex removed a
+# real option from a real decision.
+#
+# A24, A25 and A26 never reach these functions: they are FLAGGED, held out of
+# the ranking by `arbitrate`, and surfaced through `modalityFlags`.
 
 
 # ---------------------------------------------------------------------------
@@ -305,7 +305,7 @@ def rank_gene_silencing_mechanisms(
         transcript_sequence=transcript_sequence,
         cds_start=cds_start,
     )
-    return _drop_non_designable(_filtered(ctx, "TG01"))
+    return (_filtered(ctx, "TG01"))
 
 
 # ---------------------------------------------------------------------------
@@ -324,7 +324,7 @@ def rank_gene_upregulation_mechanisms(
         known_variant=known_regulatory_element,
         gene_features=gene_features,
     )
-    return _drop_non_designable(_filtered(ctx, "TG02"))
+    return (_filtered(ctx, "TG02"))
 
 
 # ---------------------------------------------------------------------------
@@ -343,7 +343,7 @@ def rank_rna_processing_mechanisms(
         known_variant=known_variant,
         extras={"targetExon": target_exon},
     )
-    return _drop_non_designable(_filtered(ctx, "TG04"))
+    return (_filtered(ctx, "TG04"))
 
 
 # ---------------------------------------------------------------------------
@@ -388,7 +388,7 @@ def rank_rna_editing_mechanisms(
             "maxBystanderEdits": max_bystander_edits,
         },
     )
-    return _drop_non_designable(_filtered(ctx, "TG03"))
+    return (_filtered(ctx, "TG03"))
 
 
 # ---------------------------------------------------------------------------
@@ -447,7 +447,7 @@ def filter_translational_regulation(
         delivery_context=delivery_context,
         oligo_length=oligo_length or 18,
     )
-    return _drop_non_designable(_filtered(ctx, "TG06"))
+    return (_filtered(ctx, "TG06"))
 
 
 # ---------------------------------------------------------------------------
@@ -474,30 +474,35 @@ def filter_isoform_engineering(
             "spliceElementTarget": splice_element_target,
         },
     )
-    return _drop_non_designable(_filtered(ctx, "TG07"))
+    return (_filtered(ctx, "TG07"))
 
 
 # ---------------------------------------------------------------------------
-# TG09 — Protein Function Modulation (lookup only)
+# TG08 and TG09 — flagged modalities
+#
+# A24 (mRNA), A25 (aptamer) and A26 (circRNA) are surfaced qualitatively and
+# never scored. The reason is validatability, not modality: there is no
+# approved mRNA protein replacement therapy and no approved circRNA therapy,
+# so a stated applicability for either could not be checked against any case
+# in the world. Contrast A21, which IS scored despite being undesignable here,
+# because five approved siRNA drugs make it fully validatable.
+#
+# Whether a flag actually fires for a given target is decided by
+# mechanism_arbitration.modality_flags() from features P2, P6 and B1. These
+# helpers return the rulebook content behind each flag.
 # ---------------------------------------------------------------------------
 
-def lookup_protein_function_modulation() -> dict:
-    """Return A25 as rulebook content. No score, no rank.
-
-    TG09 contains exactly one mechanism, and a ranking over a single item is
-    not a ranking. A25 (RNA aptamer, pegaptanib) is a real approved drug, but
-    aptamer design is structure-selection against a protein surface rather
-    than antisense complementarity, so this sequence designer does not design
-    it.
-    """
-    rule = load_rule("A25") or {}
+def _flagged_mechanism(mechanism_id: str) -> dict:
+    rule = load_rule(mechanism_id) or {}
     arb = rule.get("arbitration", {})
     return {
-        "mechanismId": "A25",
+        "mechanismId": mechanism_id,
         "name": rule.get("name"),
         "category": rule.get("category"),
-        "status": "LOOKUP",
-        "outOfScopeReason": arb.get("nonDesignableReason"),
+        "status": "FLAGGED",
+        "scored": False,
+        "flagReason": arb.get("flagReason"),
+        "designUnavailableReason": arb.get("designUnavailableReason"),
         "evidenceLevel": rule.get("evidenceLevel"),
         "fdaApprovedDrugs": rule.get("fdaApprovedDrugs"),
         "clinicalTrialExamples": rule.get("clinicalTrialExamples"),
@@ -510,23 +515,16 @@ def lookup_protein_function_modulation() -> dict:
     }
 
 
-# ---------------------------------------------------------------------------
-# TG08 — Protein Replacement (out of scope)
-# ---------------------------------------------------------------------------
+def lookup_protein_function_modulation() -> dict:
+    """A25, as rulebook content. No score, no rank."""
+    return _flagged_mechanism("A25")
+
 
 def protein_replacement_scope_notice() -> dict:
-    """A24 and A26 are not oligonucleotides and are not designed here."""
+    """A24 and A26, as rulebook content. No score, no rank."""
     return {
-        "status": "OUT_OF_SCOPE",
-        "mechanisms": [
-            {
-                "mechanismId": mid,
-                "name": (load_rule(mid) or {}).get("name"),
-                "reason": (load_rule(mid) or {})
-                .get("arbitration", {})
-                .get("nonDesignableReason"),
-            }
-            for mid in ("A24", "A26")
-        ],
+        "status": "FLAGGED",
+        "scored": False,
+        "mechanisms": [_flagged_mechanism(m) for m in ("A24", "A26")],
         "goalNotice": RETIRED_AS_SCORING_PARTITION["TG08"],
     }
