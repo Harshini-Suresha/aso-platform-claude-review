@@ -9,7 +9,7 @@ OUTPUT. The per-goal endpoints below remain for the existing goal-routed
 pages and are now filters over that same ranking, not separate scorers.
 
 Goal status after the scope review (see
-docs/planning/therapeutic_goal_scope_plan.md):
+docs/planning/therapeutic_goal_scope_plan_v3.md):
 
 - TG01 Gene Silencing              scored   A1, A2, A12, A15; A21 scored too
 - TG02 Gene Activation             scored   A3, A4, A5, A6, A23; A28 halts
@@ -84,6 +84,7 @@ from services.mechanism_service import (
     ISOFORM_GOAL_DEFECT_MAP,
 )
 from services.gene_feature_service import analyze_gene_features
+from services.reference_tables import status as reference_table_status
 
 router = APIRouter()
 
@@ -620,6 +621,10 @@ async def mechanism_scope():
         "molecularDefects": [
             {"id": k, "label": v} for k, v in MOLECULAR_DEFECTS.items()
         ],
+        # Which reference tables are populated. An unpopulated table is why a
+        # mechanism halts or a modality flag is withheld, so the answer to
+        # "why did I get nothing?" is visible rather than buried.
+        "referenceTables": reference_table_status(),
     }
 
 

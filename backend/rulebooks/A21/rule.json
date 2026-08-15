@@ -67,7 +67,10 @@
     "requiredFeatures": [],
     "forbiddenFeatures": [],
     "note": "Biologically valid and kept in full; the single-stranded designer cannot emit a duplex, so it is never a selectable design option.",
-    "discriminatingFeatures": [],
+    "discriminatingFeatures": [
+      "F10a",
+      "F9"
+    ],
     "designAvailable": false,
     "designUnavailableReason": "Requires a double-stranded siRNA duplex; this designer emits single strands only. The mechanism still competes: siRNA is a genuine alternative to RNase H knockdown for any knockdown target, and with five approved drugs it is fully validatable. Taking it forward needs a duplex design pipeline."
   }

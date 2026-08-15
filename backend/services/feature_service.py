@@ -2,7 +2,7 @@
 
 Implements the fixed feature vocabulary from
 `docs/planning/scoring_and_ml_plan.md` §3.1 and the gap list in
-`docs/planning/therapeutic_goal_scope_plan.md` §6.
+`docs/planning/therapeutic_goal_scope_plan_v3.md` §6.
 
 WHAT A FEATURE IS
 -----------------
@@ -61,6 +61,8 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
+from . import reference_tables as RT
+
 # ---------------------------------------------------------------------------
 # States and provenance
 # ---------------------------------------------------------------------------
@@ -110,6 +112,11 @@ class Feature:
     source: str | None = None
     stand_in: bool = False
     detail: str | None = None
+    # Multi-way classification for features whose answer is a category rather
+    # than a yes/no — P2 (ABUNDANT / LOW / ABSENT_IN_TISSUE) and B1
+    # (secreted / membrane / intracellular / unknown). `state` still carries
+    # the gating answer; `call` carries the distinction underneath it.
+    call: str | None = None
 
     @property
     def resolved(self) -> bool:
@@ -131,6 +138,7 @@ class Feature:
             "provenance": self.provenance,
             "provenanceLabel": PROVENANCE_LABEL.get(self.provenance or ""),
             "source": self.source,
+            "call": self.call,
             "standIn": self.stand_in,
             "detail": self.detail,
         }
@@ -249,14 +257,28 @@ FEATURE_CATALOG: dict[str, dict[str, Any]] = {
 
 MODALITY_FLAG_FEATURES = ("P2", "P6", "B1")
 
-# Below this transcript abundance in the target tissue there is not enough
-# endogenous message for a transcript-boosting mechanism to act on.
-#
-# DE-NOVO PARAMETER — SO-TG-09. This number is not derived from any
-# measurement and needs a calibration register entry before it is relied on.
-# It decides only whether a qualitative signpost is shown; it never enters a
-# score, and nothing downstream is multiplied by it.
-BOOSTABLE_TRANSCRIPT_TPM = 1.0
+# P2 returns a three-way call, not a number: there is a real difference
+# between "expressed but low" and "not expressed in this tissue at all", and
+# the second is a much stronger signal that boosting has nothing to work on.
+P2_ABUNDANT = "ABUNDANT"
+P2_LOW = "LOW"
+P2_ABSENT_IN_TISSUE = "ABSENT_IN_TISSUE"
+
+# DE-NOVO PARAMETERS — SO-TG-09 / SO-DATA-01, on the critical path for TG02.
+# Neither cut point is derived from any measurement; both need calibration
+# register entries before they are relied on. They decide only whether a
+# qualitative signpost is shown — no score is multiplied by either.
+P2_ABUNDANT_TPM = 5.0
+P2_ABSENT_TPM = 0.5
+
+# B1 returns a localisation class. The aptamer flag fires only on the first
+# two: pegaptanib is delivered intravitreally against a secreted growth
+# factor, and an intracellular target is out of an aptamer's reach.
+B1_SECRETED = "secreted"
+B1_MEMBRANE = "membrane"
+B1_INTRACELLULAR = "intracellular"
+B1_UNKNOWN = "unknown"
+B1_APTAMER_ACCESSIBLE = (B1_SECRETED, B1_MEMBRANE)
 
 
 # ---------------------------------------------------------------------------
@@ -594,32 +616,148 @@ def _from_variant_text(ctx: FeatureContext) -> Feature | None:
     )
 
 
+def _repeat_from_catalogue(ctx: FeatureContext) -> Feature | None:
+    """F12 from the curated repeat-expansion catalogue.
+
+    The set of pathogenic repeat-expansion loci is small and closed — roughly
+    sixty diseases — so this is a lookup table, not a predictor. A gene that
+    is NOT in the catalogue leaves this rung unfired and falls through to the
+    user-supplied text; it is never read as "no repeat here".
+    """
+    row = RT.row_for("repeat_expansion_loci", ctx.gene_symbol)
+    if not row:
+        return None
+    unit = _normalize_repeat_unit(row.get("repeat_unit"))
+    region = (row.get("transcript_region") or "").strip()
+    return Feature(
+        id="F12",
+        state=PRESENT,
+        probability=0.95,
+        provenance=ANNOTATION,
+        source=RT.provenance_of(row) or "repeat-expansion catalogue",
+        call=region or None,
+        detail=(
+            f"{ctx.gene_symbol} is a curated repeat-expansion locus: "
+            f"{unit or row.get('repeat_unit')}"
+            + (f" in the {region}" if region else "")
+            + ". Repeat location is a design input, not just metadata — it "
+              "decides whether and where the transcript is targetable."
+        ),
+    )
+
+
+def _localisation_from_table(ctx: FeatureContext) -> Feature | None:
+    """B1 from the protein-localisation table."""
+    row = RT.row_for("protein_localisation", ctx.gene_symbol)
+    if not row:
+        return None
+    call = (row.get("localisation_class") or "").strip().lower()
+    if call not in (B1_SECRETED, B1_MEMBRANE, B1_INTRACELLULAR):
+        return None
+    accessible = call in B1_APTAMER_ACCESSIBLE
+    return Feature(
+        id="B1",
+        state=PRESENT if accessible else ABSENT,
+        probability=0.9 if accessible else 0.05,
+        provenance=ANNOTATION,
+        source=RT.provenance_of(row) or "protein localisation table",
+        call=call,
+        detail=(
+            f"{ctx.gene_symbol} classified as {call}"
+            + (" (signal peptide annotated)"
+               if (row.get("has_signal_peptide") or "").strip().lower()
+               in ("1", "true", "yes") else "")
+        ),
+    )
+
+
+def _expression_from_table(ctx: FeatureContext) -> Feature | None:
+    """P2 from the tissue-expression table, when a TPM was not passed in."""
+    row = RT.row_for("tissue_expression", ctx.gene_symbol)
+    if not row:
+        return None
+    try:
+        tpm = float(row.get("median_tpm"))
+    except (TypeError, ValueError):
+        return None
+    return _classify_expression(
+        tpm, RT.provenance_of(row) or "tissue expression table")
+
+
+def _dominant_negative_from_table(ctx: FeatureContext) -> Feature | None:
+    """P6 from the curated dominant-negative gene list.
+
+    Presence in this list SUPPRESSES the replacement flag: supplying more
+    wild-type protein does not fix a disease driven by a mutant product that
+    actively interferes.
+    """
+    row = RT.row_for("dominant_negative_genes", ctx.gene_symbol)
+    if not row:
+        return None
+    return Feature(
+        id="P6",
+        state=PRESENT,
+        probability=0.9,
+        provenance=ANNOTATION,
+        source=RT.provenance_of(row) or "curated dominant-negative list",
+        detail=(
+            f"{ctx.gene_symbol} is curated as having a documented "
+            f"dominant-negative mechanism"
+            + (f" (PMID {row.get('pmid')})" if row.get("pmid") else "")
+            + ". " + (row.get("evidence_summary") or "")
+        ).strip(),
+    )
+
+
+def _classify_expression(tpm: float, source: str) -> Feature:
+    """Turn a TPM into the three-way P2 call.
+
+    Three-way rather than binary because "expressed but low" and "not
+    expressed in this tissue at all" are different findings, and the second
+    is a much stronger signal that a boosting mechanism has nothing to act on.
+    """
+    if tpm >= P2_ABUNDANT_TPM:
+        call, state, prob, note = (
+            P2_ABUNDANT, PRESENT, 0.9,
+            "enough endogenous transcript for a boosting mechanism to act on",
+        )
+    elif tpm >= P2_ABSENT_TPM:
+        call, state, prob, note = (
+            P2_LOW, ABSENT, 0.2,
+            "expressed, but too low for boosting to have much to work with",
+        )
+    else:
+        call, state, prob, note = (
+            P2_ABSENT_IN_TISSUE, ABSENT, 0.02,
+            "effectively not expressed in this tissue — there is no "
+            "transcript to boost",
+        )
+    return Feature(
+        id="P2",
+        state=state,
+        probability=prob,
+        provenance=ANNOTATION,
+        source=source,
+        call=call,
+        detail=(
+            f"{tpm:.1f} TPM in the target tissue: {call} — {note} "
+            f"(cut points {P2_ABSENT_TPM} / {P2_ABUNDANT_TPM} TPM are de-novo "
+            f"parameters, SO-TG-09 / SO-DATA-01)"
+        ),
+    )
+
+
 def _residual_transcript(ctx: FeatureContext) -> Feature | None:
     """P2 — is there endogenous transcript left for a boosting mechanism?
 
-    This is the load-bearing feature for the TG02 correctness fix. Without
-    it, gene activation recommends transcript-boosting unconditionally,
+    This is the load-bearing feature for the gene-activation correctness fix.
+    Without it, upregulation recommends transcript-boosting unconditionally,
     including for genes where no boostable transcript exists.
     """
     if ctx.tissue_tpm is None:
         return None
-    boostable = ctx.tissue_tpm >= BOOSTABLE_TRANSCRIPT_TPM
-    return Feature(
-        id="P2",
-        state=PRESENT if boostable else ABSENT,
-        probability=0.9 if boostable else 0.05,
-        provenance=ANNOTATION,
-        source="tissue expression (TPM) supplied by the gene pipeline",
-        detail=(
-            f"{ctx.tissue_tpm:.1f} TPM in the target tissue — "
-            + (
-                "enough endogenous transcript for a boosting mechanism to act on"
-                if boostable
-                else "at or below the level where there is a transcript to boost"
-            )
-            + f" (threshold {BOOSTABLE_TRANSCRIPT_TPM} TPM, SO-TG-09)"
-        ),
-    )
+    return _classify_expression(
+        ctx.tissue_tpm, "tissue expression (TPM) supplied by the gene pipeline")
 
 
 def _dominant_negative(ctx: FeatureContext) -> Feature | None:
@@ -672,19 +810,45 @@ _ACCESSIBLE_LOCALISATIONS = (
 
 
 def _extracellular_target(ctx: FeatureContext) -> Feature | None:
-    """B1 — is the target protein reachable by an aptamer?"""
+    """B1 — is the target protein reachable by an aptamer?
+
+    Returns a localisation class, not a yes/no. The aptamer flag fires only
+    on `secreted` or `membrane`.
+    """
     loc = (ctx.protein_localisation or "").strip().lower()
     if not loc:
         return None
-    accessible = any(k in loc for k in _ACCESSIBLE_LOCALISATIONS)
+
+    if any(k in loc for k in ("secreted", "extracellular", "signal peptide")):
+        call = B1_SECRETED
+    elif any(k in loc for k in ("membrane", "cell surface", "cell_surface")):
+        call = B1_MEMBRANE
+    elif any(k in loc for k in ("cytoplasm", "nucleus", "nuclear",
+                                "mitochond", "intracellular", "cytosol")):
+        call = B1_INTRACELLULAR
+    else:
+        call = B1_UNKNOWN
+
+    if call == B1_UNKNOWN:
+        # An unrecognised localisation string is not a negative finding; it
+        # is an unread one. Leave it unresolved so the flag is withheld.
+        return _unresolved(
+            "B1",
+            f"Localisation '{ctx.protein_localisation}' could not be "
+            "classified, so whether an aptamer could reach the target is "
+            "unknown.",
+        )
+
+    accessible = call in B1_APTAMER_ACCESSIBLE
     return Feature(
         id="B1",
         state=PRESENT if accessible else ABSENT,
         probability=0.85 if accessible else 0.05,
         provenance=ANNOTATION,
         source="UniProt subcellular localisation",
+        call=call,
         detail=(
-            f"Localisation '{ctx.protein_localisation}' — "
+            f"Localisation '{ctx.protein_localisation}' classified as {call} — "
             + (
                 "reachable by a circulating or locally delivered aptamer"
                 if accessible
@@ -774,11 +938,11 @@ _LADDERS: dict[str, list[Callable[[FeatureContext], Feature | None]]] = {
     # Deliberately empty — plan §6.2 and §6.4.
     "F11": [],
     "F13": [],
-    "F12": [_from_repeat_text],
+    "F12": [_repeat_from_catalogue, _from_repeat_text],
     # Modality-flag family. Unresolved simply withholds the flag.
-    "P2": [_residual_transcript],
-    "P6": [_dominant_negative],
-    "B1": [_extracellular_target],
+    "P2": [_residual_transcript, _expression_from_table],
+    "P6": [_dominant_negative_from_table, _dominant_negative],
+    "B1": [_localisation_from_table, _extracellular_target],
 }
 
 _NO_SOURCE_REASON = {

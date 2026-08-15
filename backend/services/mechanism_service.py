@@ -36,7 +36,7 @@ Deleted here, and why:
       predictions, they were deterministic noise formatted to look like
       measurements. TG09 is now a rulebook lookup with no score and no rank.
 
-See docs/planning/therapeutic_goal_scope_plan.md.
+See docs/planning/therapeutic_goal_scope_plan_v3.md.
 """
 
 from __future__ import annotations

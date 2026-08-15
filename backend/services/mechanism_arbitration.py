@@ -36,7 +36,7 @@ Ranking is lexicographic over those, so a poorly-evidenced mechanism can
 never win on delivery precedent against a better-evidenced one, and nothing
 is blended into a single opaque number.
 
-See docs/planning/therapeutic_goal_scope_plan.md.
+See docs/planning/therapeutic_goal_scope_plan_v3.md.
 """
 
 from __future__ import annotations
