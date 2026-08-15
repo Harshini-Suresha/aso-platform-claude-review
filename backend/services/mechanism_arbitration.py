@@ -46,7 +46,7 @@ import os
 import re
 from dataclasses import dataclass, field
 
-from services.feature_service import (
+from .feature_service import (
     ABSENT,
     PRESENT,
     PROVENANCE_CAP,

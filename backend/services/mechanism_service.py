@@ -41,7 +41,7 @@ See docs/planning/therapeutic_goal_scope_plan.md.
 
 from __future__ import annotations
 
-from services.mechanism_arbitration import (  # noqa: F401  (re-exported)
+from .mechanism_arbitration import (  # noqa: F401  (re-exported)
     DELIVERY_CONTEXTS,
     DELIVERY_PRECEDENT,
     DELIVERY_TIER_WEIGHT,
@@ -54,7 +54,7 @@ from services.mechanism_arbitration import (  # noqa: F401  (re-exported)
     load_rule,
     parse_hgvs_substitution,
 )
-from services.feature_service import (  # noqa: F401  (re-exported)
+from .feature_service import (  # noqa: F401  (re-exported)
     KNOWN_REPEAT_UNITS,
     PATHOGENIC_REPEAT_THRESHOLD,
 )

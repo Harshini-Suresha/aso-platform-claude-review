@@ -43,6 +43,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from backend.services import mechanism_arbitration as A  # noqa: E402
 from backend.services import mechanism_service as M  # noqa: E402
 
 SOURCE = "Sang et al. BioDrugs 2024;38(4):511-526. PMID 38914784, Table 1."
@@ -112,6 +113,21 @@ def _rank_ids(results: list[dict]) -> list[str]:
     return [r["id"] for r in results]
 
 
+def _eligible_scores(results: list[dict]) -> dict[str, float]:
+    """Applicability of the mechanisms that actually survived the gates.
+
+    Mechanisms rejected at a gate are excluded rather than carried at a low
+    score: a gate failure is a rejection, not a weak candidate (plan §3.2),
+    and including them would let a rejected mechanism inflate or deflate the
+    tie count for the ones still in the running.
+    """
+    return {
+        r["id"]: r["applicability"]["upper"]
+        for r in results
+        if r["status"] == "ELIGIBLE"
+    }
+
+
 GOAL_MECHANISMS = {
     "TG01": {"A1", "A2", "A12", "A15", "A21"},
     "TG04": {"A7", "A8", "A9", "A10", "A11"},
@@ -140,7 +156,7 @@ def _evaluate(ranked_ids: list[str], scores: dict, truth: str,
                     top3_exact=False, rank=None, tied_at_top=0,
                     outright=False)
     rank = ranked_ids.index(truth) + 1
-    top_score = max(scores.values())
+    top_score = max(scores.values()) if scores else None
     tied = sum(1 for v in scores.values() if v == top_score)
     first = ranked_ids[0]
     return dict(top1_exact=(first == truth),
@@ -151,6 +167,84 @@ def _evaluate(ranked_ids: list[str], scores: dict, truth: str,
                 outright=(rank == 1 and tied == 1))
 
 
+# ---------------------------------------------------------------------------
+# Goal-agnostic scoring (plan item 10)
+#
+# The per-goal runs above tell the user's goal to the scorer before it ranks
+# anything. That is the setting in which nusinersen's correct answer is
+# invisible to a user who (correctly) thinks of SMA as an upregulation
+# problem. The runs below never mention a goal.
+#
+# Two conditions, because they answer different questions:
+#
+#   defect_only   the molecular defect is supplied, the goal is not.
+#                 Question: does removing goal routing break anything, and
+#                 does the right answer surface without being told where to
+#                 look?
+#
+#   gene_only     nothing but the gene is supplied. Question: what can the
+#                 system do with no user assertion at all? This is the
+#                 condition SpliceAI is meant to serve, and until it is
+#                 wired the answer is expected to be "nothing" — reported
+#                 rather than omitted, because it is the number that says
+#                 how much of the per-goal performance is the user's input
+#                 rather than the system's.
+# ---------------------------------------------------------------------------
+
+ALL_CASES = [dict(c, goal="TG01") for c in TG01_CASES] + \
+            [dict(c, goal="TG04") for c in TG04_CASES]
+
+
+def _goal_agnostic_row(case: dict, supply_defect: bool) -> dict:
+    ctx = A.ArbitrationContext(
+        gene_symbol=case["gene"],
+        molecular_defect=case["defect"] if supply_defect else None,
+        allele_selective=(case.get("scope") == "allele_specific")
+        if supply_defect else None,
+        delivery_context=case["delivery"],
+    )
+    out = A.arbitrate(ctx)
+    res = out["results"]
+    ids = _rank_ids(res)
+    scores = _eligible_scores(res)
+    ev = _evaluate(ids, scores, case["truth"], case["goal"],
+                   case.get("truth_family"))
+    eligible = [r for r in res if r["status"] == "ELIGIBLE"]
+    truth_row = next((r for r in res if r["id"] == case["truth"]), None)
+    return dict(
+        drug=case["drug"], gene=case["gene"], truth=case["truth"],
+        goal=case["goal"], ranked=ids[:5], n_eligible=len(eligible),
+        reported_goal=out["therapeuticGoal"],
+        goal_label_correct=(out["therapeuticGoal"] == case["goal"]),
+        truth_status=truth_row["status"] if truth_row else None,
+        # Did the winning answer rest entirely on the user's own form input?
+        stand_in_only=bool(eligible and eligible[0]["standInOnly"]),
+        **ev,
+    )
+
+
+def run_goal_agnostic() -> dict:
+    def agg(rs):
+        n = len(rs)
+        return dict(
+            n=n,
+            top1_exact=round(sum(r["top1_exact"] for r in rs) / n, 3),
+            outright_top1=round(sum(r["outright"] for r in rs) / n, 3),
+            top3_exact=round(sum(r["top3_exact"] for r in rs) / n, 3),
+            goal_label_correct=round(
+                sum(r["goal_label_correct"] for r in rs) / n, 3),
+            mean_eligible=round(sum(r["n_eligible"] for r in rs) / n, 2),
+            stand_in_only=round(sum(r["stand_in_only"] for r in rs) / n, 3),
+        )
+
+    defect_only = [_goal_agnostic_row(c, True) for c in ALL_CASES]
+    gene_only = [_goal_agnostic_row(c, False) for c in ALL_CASES]
+    return dict(
+        defect_only=dict(rows=defect_only, agg=agg(defect_only)),
+        gene_only=dict(rows=gene_only, agg=agg(gene_only)),
+    )
+
+
 def run() -> dict:
     rows = []
 
@@ -158,7 +252,7 @@ def run() -> dict:
         res = M.rank_gene_silencing_mechanisms(
             c["defect"], c["scope"], c["delivery"], None)
         ids = _rank_ids(res)
-        scores = {r["id"]: r["score"] for r in res}
+        scores = _eligible_scores(res)
         rows.append({**c, "goal": "TG01", "ranked": ids, "scores": scores,
                      **_evaluate(ids, scores, c["truth"], "TG01",
                                  c.get("truth_family"))})
@@ -167,7 +261,7 @@ def run() -> dict:
         res = M.rank_rna_processing_mechanisms(
             c["defect"], c.get("exon"), c["delivery"], None)
         ids = _rank_ids(res)
-        scores = {r["id"]: r["score"] for r in res}
+        scores = _eligible_scores(res)
         rows.append({**c, "goal": "TG04", "ranked": ids, "scores": scores,
                      **_evaluate(ids, scores, c["truth"], "TG04",
                                  c.get("truth_family"))})
@@ -188,6 +282,8 @@ def run() -> dict:
                                 alt_input=alt, base_ranking=base,
                                 alt_ranking=alt_ids,
                                 answer_changed=(base[0] != alt_ids[0])))
+
+    goal_agnostic = run_goal_agnostic()
 
     contested = [r for r in rows if r["input_note"]]
     clean = [r for r in rows if not r["input_note"]]
@@ -210,7 +306,8 @@ def run() -> dict:
     return dict(source=SOURCE, rows=rows, sensitivity=sensitivity,
                 n_drugs=len(rows), n_unique_gene_mechanism=len(unique_cases),
                 strict=agg(rows), unambiguous_only=agg(clean),
-                contested=agg(contested))
+                contested=agg(contested),
+                goal_agnostic=goal_agnostic)
 
 
 def main() -> None:
@@ -236,6 +333,40 @@ def main() -> None:
     for k in ("strict", "unambiguous_only", "contested"):
         if out[k]:
             print(f"{k:<18}", json.dumps(out[k]))
+
+    ga = out["goal_agnostic"]
+    print()
+    print("=" * 78)
+    print("GOAL-AGNOSTIC SCORING — every designable mechanism, no goal given")
+    print("=" * 78)
+    for cond, blurb in (
+        ("defect_only", "molecular defect supplied, therapeutic goal NOT"),
+        ("gene_only", "gene only — no defect, no goal"),
+    ):
+        print(f"\n{cond}  ({blurb})")
+        print(f"  {json.dumps(ga[cond]['agg'])}")
+        print(f"  {'drug':<13}{'truth':<7}{'status':<10}{'rank':<6}"
+              f"{'tied':<6}{'elig':<6}{'goal?':<7}ranking")
+        for r in ga[cond]["rows"]:
+            print(f"  {r['drug']:<13}{r['truth']:<7}"
+                  f"{str(r['truth_status']):<10}{str(r['rank']):<6}"
+                  f"{r['tied_at_top']:<6}{r['n_eligible']:<6}"
+                  f"{('yes' if r['goal_label_correct'] else 'NO'):<7}"
+                  f"{'>'.join(r['ranked'])}")
+
+    print()
+    print("READ THIS BEFORE QUOTING THE defect_only NUMBERS.")
+    print("stand_in_only reports the fraction of winning answers whose every")
+    print("supporting feature is the user's own form input echoed back. Where")
+    print("it is 1.0, the defect dropdown already contains the answer and the")
+    print("ranking is a lookup, not an arbitration. Wiring SpliceAI (F1-F3,")
+    print("checklist item 5) is what turns those rows into a real test.")
+    print()
+    print("The gene_only condition is the honest ceiling: with no defect")
+    print("supplied nothing gates, every mechanism stays eligible, and the")
+    print("ordering is whatever the rulebook evidence ratings and the")
+    print("deterministic id tie-break produce. A high top-1 there measures")
+    print("alphabetical luck, which is why tied and elig are printed beside it.")
 
     if out["sensitivity"]:
         print()
