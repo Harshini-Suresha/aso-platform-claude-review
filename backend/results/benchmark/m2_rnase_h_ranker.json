@@ -1,0 +1,84 @@
+{
+  "random_guessing": {
+    "mean": 0.17398850574712652,
+    "sd": 0.003900768899018821,
+    "n_trials": 50
+  },
+  "lambdarank-rank": {
+    "top10": 0.2959770114942529,
+    "top10_ci95": [
+      0.26752331294030407,
+      0.3201213352417009
+    ],
+    "pearson_pooled": 0.27756645431583793,
+    "pearson_per_experiment": 0.2853219403058396,
+    "n_test_rows": 47400,
+    "n_test_experiments_scored": 522,
+    "n_test_genes": 84
+  },
+  "regress-raw": {
+    "top10": 0.29846743295019157,
+    "top10_ci95": [
+      0.26814793028713746,
+      0.3231339131014261
+    ],
+    "pearson_pooled": 0.2704913114367924,
+    "pearson_per_experiment": 0.29747016462453996,
+    "n_test_rows": 47400,
+    "n_test_experiments_scored": 522,
+    "n_test_genes": 84
+  },
+  "regress-rank": {
+    "top10": 0.30191570881226054,
+    "top10_ci95": [
+      0.2724729979566022,
+      0.32546996755038526
+    ],
+    "pearson_pooled": 0.309244796684888,
+    "pearson_per_experiment": 0.3118686022345545,
+    "n_test_rows": 47400,
+    "n_test_experiments_scored": 522,
+    "n_test_genes": 84
+  },
+  "acceptance": {
+    "criterion": "top-10 materially above computed random guessing (0.174) under a gene split, judged by whether the lower bound of the 95% CI clears it",
+    "best_model": "regress-rank",
+    "best_top10": 0.30191570881226054,
+    "best_top10_ci95": [
+      0.2724729979566022,
+      0.32546996755038526
+    ],
+    "random_guessing_top10": 0.17398850574712652,
+    "passes": true
+  },
+  "provenance": {
+    "spec": "docs/planning/model_training_specs.md M2",
+    "data": "unified_benchmark.parquet",
+    "fixes_applied": [
+      "dropped 106 sequences present in >1 modality",
+      "restricted to modality == rnase_h (the only arm with real gene symbols in target_gene)",
+      "split by target_gene, effective n reported as unique genes"
+    ],
+    "effective_n_genes": 339,
+    "n_rows": 159109,
+    "seed": 42,
+    "hyperparameters": {
+      "objective": "lambdarank",
+      "metric": "ndcg",
+      "learning_rate": 0.1,
+      "num_leaves": 63,
+      "min_data_in_leaf": 20,
+      "verbosity": -1,
+      "seed": 42,
+      "num_boost_round": 200
+    },
+    "git_commit": "514a2ce325a807a952b6bca267482dbe5ae0aa4e",
+    "versions": {
+      "python": "3.9.6",
+      "lightgbm": "4.6.0",
+      "numpy": "2.0.2",
+      "pandas": "2.3.3"
+    },
+    "runtime_seconds": 32.0
+  }
+}

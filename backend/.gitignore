@@ -6,6 +6,10 @@ pretrained/
 data/*
 !data/benchmark/
 !data/raw/
+# Reference tables are the contract, not a dataset: schemas, a README and
+# (once verified) small curated lookups that the feature layer halts without.
+# They must be versioned with the code that reads them.
+!data/reference/
 checkpoints/*.pth
 logs/
 *.log
